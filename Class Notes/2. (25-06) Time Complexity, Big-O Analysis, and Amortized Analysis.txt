@@ -1,0 +1,719 @@
+What is Efficiency?
+===================
+- Efficiency tells us how well an algorithm solves a problem by using minimum resources (time and memory).
+- In DSA, we mainly focus on two resources:
+	- Time
+	- Memory (Space)
+
+Time Complexity
+================
+- Time Complexity is the measure of how the number of operations performed by an algorithm grows as the input size increases.
+- Notice carefully.
+- It does NOT say
+	"How many seconds"
+- It says
+	"How many operations."
+- This difference is extremely important.
+
+Why Don't We Measure Actual Execution Time?
+===========================================
+
+Let's understand why.
+
+Reason 1: Hardware Dependency
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- Suppose you wrote an algorithm.
+- You run it on
+		Intel i3
+	Execution Time
+		5 seconds
+
+- Your friend runs the same program on
+		Intel i9
+	Execution Time
+		1 second
+
+- Did the algorithm become better?
+No.
+- Only the computer became faster.
+
+Reason 2: Compiler Dependency
+==-=-=-=-=-=-=-=-=-=-=--=-=-=
+- Different compilers optimize code differently.
+
+Reason 3: Programming Language Dependency
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--==-=
+- The same algorithm can be written in different languages.
+- Algorithm
+	Linear Search
+- Implement in
+	Java
+	C++
+	Python
+- Execution time
+	C++  → Faster
+	Java → Medium
+	Python → Slower
+
+Reason 4: Input Dependency
+==-=--==-=-=-=-=-=-=-=-=-=
+- This is one of the biggest reasons.
+
+Reason 5: Background Processes
+=-=-=-=-=-=-=-=-=-=-=-=--=-=-=
+- Suppose, Chrome, VS Code, Spotify, are running together. Now execute your program. It becomes slower. Close everything. Run again. Program becomes faster. Algorithm didn't change. Computer workload changed.
+
+
+Then How Do We Compare Algorithms?
+=-=-=-=-=-=-=-=-=-=-=-=-=-=--=--=
+- Instead of measuring Seconds Computer Scientists count Operations.
+- Why?
+- Because Every computer performs
+	- Comparison
+	- Addition
+	- Assignment
+	- Increment
+	- Multiplication
+	- Division
+- These are called Basic Operations.
+- Instead of saying Algorithm A took 3.4 seconds we say Algorithm A performed 10,000 operations.
+- Now, whether the computer is slow or fast, the number of operations remains the same.
+
+Mathematical Analysis
+========================
+- This is why we use Mathematics.
+- Instead of measuring Time we calculate Number of Operations. 
+- Suppose 
+	- Algorithm A Operations = n
+	- Algorithm B Operations = n²
+
+Now compare.
+
+Input Size (n)		Algorithm A (n)		Algorithm B (n²)
+10			10			100
+100			100			10,000
+1,000			1,000			1,000,000
+100,000			100,000			10,000,000,000
+
+- Without running the code, we can clearly see that Algorithm A scales much better than Algorithm B as the input grows.
+- This is called mathematical analysis of algorithms.
+
+Function in Time Complexity:
+===========================
+- A function is a rule that takes an input and produces an output.
+Simply remember:
+	Input
+	↓
+	Function
+	↓
+	Output
+
+Example
+	f(x)=2x+3
+
+- The function tells us how the output changes when the input changes.
+
+How Does This Relate to DSA or Time Complexity?
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=
+- Now replace Input = x with Input = n where,
+	n = Number of Elements
+
+- Our function calculates
+- Number of Operations
+So,
+	our diagram becomes
+	Input Size (n)
+	↓
+	Algorithm
+	↓
+	Number of Operations
+
+
+Time Function:-
+=============
+
+- A Time Function is a mathematical function that represents the number of basic operations performed by an algorithm as a function of the input size n.
+			or
+- A Time Function tells us how the number of operations changes when the input size changes.
+
+- Mostly time we denoted Time Function as f(n).
+
+- It shows total how many operation performs.
+
+Time Function vs Time Complexity
+=--==-=-=-==-=-=-=--=-=-=-=-=-==-=
+This is where many people get confused.
+
+Time Function				Time Complexity
+----------------------------------------------------------------
+Exact mathematical expression		Simplified growth rate
+Includes constants			Ignores constants
+Includes lower-order terms		Ignores lower-order terms
+Example: 3n² + 2n + 1			Example: O(n²)
+
+
+
+Types of Time Functions
+-------------------------
+You should know the common Time Functions.
+
+Time Function			Name
+-------------------------------------------
+1				Constant
+log n				Logarithmic
+√n				Square Root
+n				Linear
+n log n				Linearithmic
+n²				Quadratic
+n³				Cubic
+2ⁿ				Exponential
+n!				Factorial
+
+
+
+TIME COMPLEXITY GROWTH ORDER (FASTEST → SLOWEST)
+=============================
+
+Constant (O(1))  <  Logarithmic (O(log n))   <  Square Root (O(√n))    <  Linear (O(n))   <  Linearithmic (O(n log n))  < Quadratic (O(n²))  < Cubic (O(n³))  < Polynomial (O(n⁴), O(n⁵), ..., )  < Exponential (O(2ⁿ))   < Factorial (O(n!))
+=====================================================================
+
++----------------------	+----------------	+------------------------------+
+| Complexity           	| Name           	| Example                      |
++----------------------	+----------------	+------------------------------+
+| O(1)                 	| Constant       	| Array Access                 
+| O(log n)             	| Logarithmic    	| Binary Search                
+| O(√n)                	| Square Root    	| Prime Checking               
+| O(n)                 	| Linear         	| Linear Search                
+| O(n log n)           	| Linearithmic   	| Merge Sort, Heap Sort        
+| O(n²)                	| Quadratic      	| Bubble Sort                  
+| O(n³)                	| Cubic          	| Matrix Multiplication           
+| O(2ⁿ)                	| Exponential    	| Subset Generation            
+| O(n!)                	| Factorial      	| Permutation Generation       
++----------------------	+----------------	+------------------------------+
+
+
+Relative Growth of Running Time
+====================
+
+Small Input (n = 10)
+
+O(1)      =        1
+O(log n)  ≈        3
+O(√n)     ≈        3
+O(n)      =       10
+O(nlogn)  ≈       33
+O(n²)     =      100
+O(n³)     =     1000
+O(2ⁿ)     =     1024
+O(n!)     =  3,628,800
+
+
+Large Input (n = 1,000,000)
+
+O(1)       =              1
+O(log n)   ≈             20
+O(√n)      =           1000
+O(n)       =      1,000,000
+O(nlogn)   ≈     20,000,000
+O(n²)      = 1,000,000,000,000
+O(n³)      = 10¹⁸
+O(2ⁿ)      = Impossible
+O(n!)      = Impossible
+
+
+  Memory Trick for Students
+=================
+
+Constant
+    ↓
+Logarithmic
+    ↓
+Square Root
+    ↓
+Linear
+    ↓
+Linearithmic
+    ↓
+Quadratic
+    ↓
+Cubic
+    ↓
+Exponential
+    ↓
+Factorial
+
+
+
+
+**"We now know that f(n) represents the number of operations. But how do we actually calculate Time Function (f(n)) for a real program?"**
+
+
+
+Frequency Count Method:-
+=======================
+
+- The Frequency Count Method is a technique used to determine the time complexity of an algorithm by counting how many times each statement is executed.
+
+					OR
+
+- Frequency Count Method means counting the number of times each line of code executes.
+
+
+Step by step counting steps and Taking how many operations perform by a code and derivate a function f(n):-
+=========================================================================================================
+
+
+Example 1: Single Loop
+=-=-=-=-=-=-=-=-=-=-=-=
+
+for(int i = 0; i < n; i++)
+      (1)     (n+1)   (n)
+{
+    System.out.println(i);
+          (n)
+}
+
+Time Function f(n) = 1 + (n+1) + n + n = 3n + 2  
+Big-Oh = O(n)
+
+
+Example 2: Sum of Array
+=-=-=-=-=-=-=-=-=-=-=-=
+int sum = 0;
+    (1)
+
+for(int i = 0; i < n; i++)
+      (1)      (n+1)  (n)
+{
+    sum += arr[i];
+          (n)
+}
+
+Time Function f(n) = 1 + 1 + (n+1) + n + n = 3n + 3
+Big-Oh = O(n)
+
+
+Example 3: Nested Loops
+=-=-=-=-=-=-=-=-=-=-=-=
+for(int i = 0; i < n; i++)
+      (1)   	(n+1)  (n)
+{
+    for(int j = 0; j < n; j++)
+          (n)      n(n+1)  n²
+    {
+        System.out.println("*");
+               (n²)
+    }
+}
+
+Time Function T(n) = 1 + (n+1) + n + n + n(n+1) + n² + n² ≈ 3n² + 3n + 2
+Big-Oh = O(n²)
+
+
+Example 4: Triangular Loop
+=-==-=-=-=-=-=-=-=-=-=-=-=
+for(int i = 0;      i < n; 	i++)
+           (1)                  (n+1)  	(n)
+{
+    for(int j = 0; j < i; j++)
+              (n)    ?     ?
+    {
+        System.out.println("*");
+             0+1+2+...+(n−1)
+    }
+}
+
+- derive how many steps or how many time a statment gets execute:
+
+0+1+2+...+(n−1) = n(n−1)/2
+
+Therefore
+
+Time Function f(n) ≈ n²/2
+Big-Oh = O(n²)
+
+Example 5: Logarithmic Loop
+=-=-=-=-=-=-=-=-=-=-==--=
+for(int i = 1;        i < n;         i *= 2)
+         (1)         (log₂n + 1)     (log₂n)
+{
+    System.out.println(i);
+               (log₂n)
+}
+
+Time Function f(n) = 1 + (log n + 1) + log n + log n = 3log n + 2
+Big-Oh = O(log n)
+
+Example 6: Two Independent Loops
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+for(int i = 0; 	i < n; 	i++)
+      (1)  	(n+1)  	(n)
+{
+    System.out.println(i);
+          (n)
+}
+
+
+for(int j = 0; 	j < n; 	j++)
+      (1)  	(n+1)  	(n)
+{
+    System.out.println(j);
+          (n)
+}
+Time Function f(n) = 3n+2 + 3n+2 = 6n+4
+Big-Oh = O(n)
+
+Code and their frequency count function(In the term of Big-Oh(O()):-
+==================================================================
+
+1.
+for(i = 0; i < n; i++)
+{
+    for(j = 0; j <= i; j++)
+    {
+        stmt;
+    }
+}
+
+
+2.
+i = 0;
+
+while(i < n)
+{
+    stmt;
+    i++;
+}
+
+3.
+for(i = 1; i <= n; i++)
+{
+    stmt1;
+    stmt2;
+}
+
+4.
+for(i = 0; i < n; i++)
+{
+    stmt;
+}
+
+for(j = 0; j < n; j++)
+{
+    stmt;
+}
+
+5.
+for(i = 0; i < n; i++)
+{
+    stmt;
+}
+
+stmt;
+
+for(j = 0; j < n; j++)
+{
+    stmt;
+}
+
+
+
+6.
+for(i = 0; i < n; i++)
+{
+    for(j = 0; j < n; j++)
+    {
+        stmt;
+    }
+}
+
+7.
+for(i = 1; i <= n; i++)
+{
+    for(j = 1; j <= i; j++)
+    {
+        stmt;
+    }
+}
+
+
+8.
+for(i = 0; i < n; i++)
+{
+    for(j = i; j < n; j++)
+    {
+        stmt;
+    }
+}
+
+9.
+for(i = 1; i < n; i *= 2)
+{
+    stmt;
+}
+
+10.
+for(i = n; i >= 1; i /= 2)
+{
+    stmt;
+}
+
+
+11.
+i = 1;
+
+while(i < n)
+{
+    stmt;
+    i = i * 3;
+}
+
+
+12.
+for(i = 1; i * i <= n; i++)
+{
+    stmt;
+}
+
+13.
+sum = 0;
+
+for(i = 1; sum <= n; i++)
+{
+    sum += i;
+}
+
+14. 
+for(i = 0; i < n; i++)
+{
+    for(j = 1; j < n; j *= 2)
+    {
+        stmt;
+    }
+}
+
+15.
+for(i = 1; i < n; i *= 2)
+{
+    for(j = 0; j < n; j++)
+    {
+        stmt;
+    }
+}
+
+
+16.
+for(i = 2; i < n; i = i * i)
+{
+    stmt;
+}
+
+17.
+for(i = 1; i < n; i *= 2)
+{
+    for(j = 1; j < i; j *= 2)
+    {
+        stmt;
+    }
+}
+
+18.
+for(i = 1; i <= n; i++)
+{
+    for(j = i; j <= n; j++)
+    {
+        stmt;
+    }
+}
+
+19.
+for(i = n; i >= 1; i--)
+{
+    for(j = 1; j <= i; j++)
+    {
+        stmt;
+    }
+}
+
+20.
+for(i = n; i > 1; i /= 2)
+{
+    for(j = 1; j <= i; j++)
+    {
+        stmt;
+    }
+}
+
+
+
+21.
+for(i = 1; i * i <= n; i++)
+{
+    stmt;
+}
+
+22.
+sum = 0;
+
+for(i = 1; sum <= n; i++)
+{
+    sum += i;
+}
+
+23.
+for(i = 1; i <= n; i++)
+{
+    for(j = 1; j <= i * i; j++)
+    {
+        stmt;
+    }
+}
+
+24.
+for(i = 1; i <= n; i++)
+{
+    for(j = 1; j <= n / i; j++)
+    {
+        stmt;
+    }
+}
+
+25.
+for(i = 1; i <= n; i *= 2)
+{
+    for(j = 1; j <= n; j += i)
+    {
+        stmt;
+    }
+}
+
+26.
+for(i = 1; i <= n; i++)
+{
+    for(j = 1; j <= n; j *= 2)
+    {
+        for(k = 1; k <= n; k++)
+        {
+            stmt;
+        }
+    }
+}
+
+27.
+for(i = 1; i <= n; i *= 2)
+{
+    for(j = 1; j <= i * i; j++)
+    {
+        stmt;
+    }
+}
+
+28.
+for(i = 1; i <= n; i++)
+{
+    if(i % 2 == 0)
+    {
+        for(j = 1; j <= n; j++)
+        {
+            stmt;
+        }
+    }
+}
+
+
+
+Asymptotic Notations
+===================
+
+- Why Do We Need Asymptotic Notations?
+
+	f(n) = 3n² + 2n + 1
+
+- Is it necessary to carry this entire expression forever?
+
+What is Asymptotic Analysis?
+=-=-=-=-=-=-=-=-=-=-=-=-=
+- Asymptotic Analysis is the study of an algorithm's growth as the input size becomes very large (n → ∞).
+
+
+- What Does "Asymptotic" Mean?
+
+"Asymptotic" simply means:
+	- Looking at the behavior when n becomes extremely large.
+
+For example,
+
+n = 10 is small.
+
+n = 1000000 is large.
+
+- Asymptotic analysis only cares about the second case.
+
+
+Why Ignore Constants?
+=-=-=-=-=-=-=-=-=-=
+f(n)=5n²+3n+10
+
+Let's substitute values.
+
+n	5n²	3n	10
+10	500	30	10
+100	50000	300	10
+1000	5000000	3000	10
+
+- Which term dominates?
+
+	5n²
+
+- The other terms become insignificant.
+
+- Why Ignore Constant Multipliers?
+
+- Suppose Algorithm A
+	3n²
+
+- Algorithm B
+
+	100n²
+
+- Do both algorithms grow quadratically?
+
+- The only difference is the multiplier.
+
+- Therefore,
+
+- Big-O ignores constant multipliers.
+
+Asymptotic Notation
+-==-=-=-=-=-=-=---=
+- Asymptotic Notations are mathematical tools used to describe the growth rate of an algorithm's time or space complexity for very large input sizes.
+				OR
+- Asymptotic Notations tell us how fast an algorithm grows as the input size (N) increases.
+
+- Asymptotic Notations don't tell us the exact running time, they tell us how the running time grows as the input size becomes very large.
+
+Three Major Notations
+Notation	Meaning
+Big-O		Upper Bound
+Big-Ω		Lower Bound
+Θ		Tight Bound
+
+Big-Oh (O)
+-----------
+Big-O gives an upper bound on the growth of an algorithm.
+OR
+The algorithm will never grow faster than this rate.
+
+
+Big-Omega (Ω)
+-------------
+Big-Ω gives the lower bound on the growth of an algorithm.
+OR
+The algorithm cannot grow slower than this rate.
+
+
+Big Theta
+----------
+Theta gives both an upper bound and a lower bound.
+OR
+The algorithm grows exactly at this rate asymptotically.
