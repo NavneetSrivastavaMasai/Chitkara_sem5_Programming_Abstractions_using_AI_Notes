@@ -809,3 +809,446 @@ Step 2
 	- are all mathematically correct.
 
 - But, O(n) is preferred because it is the smallest (tightest) or we can say closest upper bound.
+
+Big-Omega (Ω)
+=-=-=-=-=-=-=
+- Big-Ω (Omega) Notation is a mathematical notation used to describe the lower bound of an algorithm's time or space complexity as the input size approaches infinity.
+
+OR
+
+- Big-Ω (Omega) Notation is an asymptotic notation that represents the minimum growth rate of an algorithm by ignoring constants and lower-order terms.
+
+- The letter "Ω" stands for:
+-------------------------
+- Omega (Uppercase Greek Letter)
+- Lower Bound
+- At Least This Fast
+
+Mathematical Definition of Big-Ω
+------------------------------
+- A function f(n) belongs to Ω(g(n)) if there exist positive constants c and n₀ (n naught) such that
+	0 ≤ c·g(n) ≤ f(n)      ∀ n ≥ n₀
+
+Simple Interpretation of the Equation
+-----------------------------------
+- The equation
+	c·g(n) ≤ f(n)
+
+- means After some sufficiently large input n₀, the actual running time f(n) always stays above a constant multiple of g(n).
+
+- In other words, For large values of n, the actual running time never grows slower than Constant × Reference Function.
+
+- Or simply, The algorithm will take at least this much time for sufficiently large inputs.
+
+Understanding the Mathematical Equation
+--------------------------------------
+- Suppose
+	f(n) = 3n + 5
+
+Question
+---------
+- Can we say 3n + 5 ∈ Ω(n) ?
+
+- Let's verify using the definition.
+
+Step 1
+-------
+- Actual Function
+
+	f(n) = 3n + 5
+
+- Reference Function
+
+	g(n) = n
+
+Need to prove
+-------------
+	c·n ≤ 3n + 5	for all n ≥ n₀ and c > 0
+
+Step 2
+------
+- Find suitable constants.
+- Suppose
+	c = 3
+- Now check
+	3n ≤ 3n + 5
+
+- Is this true?
+	Yes.
+
+- Because 3n + 5 is always greater than 3n.
+
+- Therefore this inequality is true for every positive value of n.
+
+- Choose
+
+	c = 3
+
+	n₀ = 1
+
+(Any positive value of n₀ also works.)
+
+- Therefore
+	3n + 5 ∈ Ω(n)
+
+- Big-Ω does not tell us the exact running time. It only guarantees that the algorithm cannot grow slower than a constant multiple of the reference function after some sufficiently large input size. It represents the minimum asymptotic growth of the function.
+
+--------------------------------------
+
+- Suppose
+	f(n)=n
+- Then
+	f(n) ∈ Ω(n)
+	is the tightest lower bound.
+
+- However, since Big-Ω only provides a lower bound, every function that grows equal to or slower than n is also a valid lower bound.
+
+- Therefore,
+	f(n) ∈ Ω(n)
+
+	f(n) ∈ Ω(√n)
+
+	f(n) ∈ Ω(log n)
+
+	f(n) ∈ Ω(log log n)
+
+	f(n) ∈ Ω(1)
+	are all mathematically correct.
+
+- But, Ω(n) is preferred because it is the largest (tightest) or closest lower bound.
+
+--------------------------------------------------
+- In both your Big-O and Big-Ω notes, instead of writing:
+
+	"Worst-case growth" for Big-O" and "Best-case growth" for Big-Ω (if you were planning to), I recommend writing:
+
+		Big-O → Upper Bound
+		Big-Ω → Lower Bound
+
+Note:-
+- "Big-O and Big-Ω describe mathematical bounds, not execution cases. They can be applied to the best-case, average-case, or worst-case time function, depending on which time function you choose to analyze."
+
+- This wording is mathematically correct and prevents the common misconception that Big-O always means worst case or Big-Ω always means best case.
+
+
+----------------------------------------------------
+
+Big Theta 
+=-=-=-=-=
+
+- Big-Theta (Θ) Notation is a mathematical notation used to describe the tight bound (exact asymptotic growth) of an algorithm's time or space complexity as the input size approaches infinity.
+
+OR
+
+- Big-Theta (Θ) Notation is an asymptotic notation that represents both the upper bound and the lower bound of an algorithm's growth rate by ignoring constants and lower-order terms.
+
+The letter "Θ" stands for:
+-----------------------
+- Theta (Uppercase Greek Letter)
+- Tight Bound
+- Exact Asymptotic Growth
+
+Order of Growth
+--------------
+
+- A function f(n) belongs to Θ(g(n)) if there exist positive constants c₁, c₂, and n₀ (n naught) such that:-
+	
+	0 ≤ c₁·g(n) ≤ f(n) ≤ c₂·g(n)      ∀ n ≥ n₀
+
+Simple Interpretation of the Equation
+-----------------------------------
+- The equation
+
+	c₁·g(n) ≤ f(n) ≤ c₂·g(n)
+
+- means After some sufficiently large input n₀, the actual running time f(n) always stays between two constant multiples of g(n).
+
+- In other words, For large values of n, the actual running time grows at the same rate as the reference function.
+
+- Or simply, The actual function is neither much faster nor much slower than the reference function.
+
+Understanding the Mathematical Equation
+--------------------------------------
+- Suppose
+	f(n)=3n+5
+
+- Question Can we say
+	3n+5 ∈ Θ(n)?
+
+- verify:-
+
+Step 1
+-------
+- Actual Function
+
+	f(n)=3n+5
+
+- Reference Function
+
+	g(n)=n
+
+- Need to prove
+
+	c₁·n ≤ 3n+5 ≤ c₂·n for n ≥ n₀ where c₁>0 c₂>0.
+
+Step 2
+------
+- Find the Lower Bound
+- Choose
+	c₁=3
+- Now check
+	3n ≤ 3n+5
+
+- This is always true.
+
+- Find the Upper Bound
+- Choose
+	c₂=4
+- Need to verify
+	3n+5 ≤ 4n
+
+- Subtract
+	3n
+
+- from both sides Result
+
+	5 ≤ n
+
+- Therefore, if
+	n ≥ 5
+
+- the inequality is always true.
+
+- Hence choose
+	c₁ = 3
+	c₂ = 4
+	n₀ = 5
+
+- Therefore
+	3n+5 ∈ Θ(n)
+
+Why are we choosing c₁ and c₂ ourselves?
+-----------------------------------
+- Because Big-Theta only says "There must EXIST positive constants."
+
+- It never says c₁ must be 2 or c₂ must be 100. Any positive constants that satisfy both inequalities are acceptable.
+
+Big-O vs Big-Ω vs Big-Θ
+----------------------
+Big-O			Big-Ω			Big-Θ
+Only an Upper Bound	Only a Lower Bound	Tight Bound (exact asymptotic)
+At Most			At Least			Exactly Same Growth
+f(n)≤c⋅g(n)		c⋅g(n)≤f(n)		c1⋅g(n)≤f(n)≤c2⋅g(n)
+One-sided Bound		One-sided Bound		Two-sided Bound
+
+- Big-Theta does not give just an upper bound or just a lower bound. It guarantees that the algorithm grows at exactly the same asymptotic rate as the reference function. In other words, the actual running time is sandwiched between two constant multiples of the reference function for sufficiently large input sizes.
+
+
+==============================================================================================================
+
+Note:- This is actually one of the biggest misconceptions in DSA:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- Big-O = Worst Case ❌
+- Big-Ω = Best Case ❌
+- Big-Θ = Average Case ❌
+
+- This is not mathematically correct.
+
+- Big-O, Big-Ω, and Big-Θ describe the relationship between two functions. They do NOT describe the best case, worst case, or average case of an algorithm.
+
+- Best Case, Worst Case, and Average Case tell us which input we are analyzing.
+
+- Big-O, Big-Ω, and Big-Θ tell us how the running time grows.
+
+One line Statement:-
+=-==-=-=-=-=-=-=-=
+- Do not think of Big-O, Big-Ω, and Big-Θ as Best Case, Worst Case, or Average Case. These notations only describe the growth rate of a time function. Best, Worst, and Average Case first define which time function we are analyzing, and then Big-O, Big-Ω, or Big-Θ can be used to describe that function.
+
+- Best, Worst, and Average Case answer 'Which input are we analyzing?' Big-O, Big-Ω, and Big-Θ answer 'How does the running time grow for that chosen case?' Never confuse these two concepts.
+
+
+                   Algorithm
+                    	│
+      ┌─────────────┼─────────────┐
+      │             	 		  │             	 		│		   
+      ▼                	     ▼                 	      ▼
+ Best Case    	 Average Case   	Worst Case
+      │             				│             			│
+      ▼               	      ▼             	 	▼
+ Time Function 	 Time Function  	   Time Function
+      │                 			    │             	                    │
+      └─────────────┼─────────────┘
+                   	▼
+     		 Apply Asymptotic Notations
+        		O( )   Ω( )   Θ( )
+
+
+
+Properties of Asymptotic Notations:-
+==================================
+
+1. Reflexive Property
+---------------------
+- Every function belongs to its own asymptotic class.
+
+	f(n) ∈ O(f(n))
+
+	f(n) ∈ Ω(f(n))
+
+	f(n) ∈ Θ(f(n))
+
+2. Symmetric Property (Only for Theta(Θ))
+------------------------------
+- If two functions have the same asymptotic growth, then they can replace each other.
+- If f(n) ∈ Θ(g(n)) then g(n) ∈ Θ(f(n))
+
+3. Transitive Property
+--------------------
+- If the first function is related to the second, and the second is related to the third, then the first is also related to the third.
+- If 
+	f(n) ∈ O(g(n))
+
+	and
+
+	g(n) ∈ O(h(n))
+
+- then
+
+	f(n) ∈ O(h(n))
+
+- Similarly,
+
+	f(n) ∈ Ω(g(n))
+
+	and
+
+	g(n) ∈ Ω(h(n))
+
+	⇒
+
+	f(n) ∈ Ω(h(n))
+
+- Similarly,
+
+	f(n) ∈ Θ(g(n))
+
+	and
+
+	g(n) ∈ Θ(h(n))
+
+	⇒
+
+	f(n) ∈ Θ(h(n))
+
+
+4. Transpose Symmetry Property
+-----------------------------
+- An upper-bound relationship in one direction is equivalent to a lower-bound relationship in the opposite direction.
+
+	f(n) ∈ O(g(n)) ⇔ g(n) ∈ Ω(f(n))
+
+5. Tight Bound Property
+---------------------
+- A function belongs to Big-Theta only if it satisfies both Big-O and Big-Omega.
+
+	f(n) ∈ Θ(g(n)) ⇔ f(n) ∈ O(g(n))
+	AND
+	f(n) ∈ Ω(g(n))	Or,
+	Θ(g(n)) = O(g(n)) ∩ Ω(g(n))
+
+6. Constant Multiplication Property
+---------------------------------
+- Multiplying a function by a positive constant does not change its asymptotic growth.
+
+- For any constant
+
+	c > 0
+
+	O(c·f(n)) = O(f(n))
+
+	Ω(c·f(n)) = Ω(f(n))
+
+	Θ(c·f(n)) = Θ(f(n))
+
+7. Constant Addition Property
+---------------------------
+- Adding or subtracting a constant does not affect the asymptotic growth.
+
+- For any constant 'k'
+
+	O(f(n)+k) = O(f(n))
+
+	Ω(f(n)+k) = Ω(f(n))
+
+	Θ(f(n)+k) = Θ(f(n))
+
+8. Dominant Term Property
+-----------------------
+- The highest-growing term determines the asymptotic complexity.
+
+	Θ(f(n)+g(n)) = Θ(max(f(n),g(n)))
+
+- Examples
+	Θ(n²+n)=Θ(n²)
+	Θ(n³+n²+n)=Θ(n³)
+
+9. Addition Rule
+----------------
+- When two functions are added, the faster-growing function dominates.
+
+- If
+	f₁(n) ∈ O(g₁(n))
+	f₂(n) ∈ O(g₂(n))
+
+- then
+	f₁(n)+f₂(n) ∈ O(max(g₁(n),g₂(n)))
+
+- Similarly,
+	Θ(f₁+f₂)	= Θ(max(f₁,f₂))
+
+10. Multiplication Rule
+----------------------
+- The asymptotic complexity of the product equals the product of their complexities.
+
+- If
+	f(n) ∈ O(g(n))
+	h(n) ∈ O(k(n))
+
+- then
+
+	f(n)·h(n) ∈ O(g(n)·k(n))
+
+- Similarly, 
+	Θ(f·h) = Θ(g·k)
+
+11. Polynomial Rule
+------------------
+- For a polynomial, only the highest-degree term determines the asymptotic complexity.
+
+- For any polynomial
+	aₖnᵏ + aₖ₋₁nᵏ⁻¹ + ... + a₀
+
+- Θ(polynomial) = Θ(highest degree term)
+
+Example
+- Θ(4n⁴+2n²+5) = Θ(n⁴)
+
+================================================================================
+================================================================================
+Number-based questions
+======================
+
+| Topic                     		| LeetCode # 	| Problem Name              	| Difficulty 
+| ------------------------- 	| ---------: 		| ------------------------- 	| ---------- 
+| Palindrome Number         	|      **9** 	| Palindrome Number         	| Easy       
+| Reverse Integer           	|      **7** 	| Reverse Integer           	| Medium     
+| Plus One                  		|     **66**  	| Plus One                  		| Easy       
+
+Home Work for Leetcode and self understanding:-
+------------------------------------------------
+| Add Digits (Digital Root) |    **258** 	| Add Digits                	| Easy       
+| Happy Number              	|    **202** 	| Happy Number              	| Easy       
+| Count Primes              	|    **204** 	| Count Primes              	| Medium  
+
+================================================================================
+================================================================================
