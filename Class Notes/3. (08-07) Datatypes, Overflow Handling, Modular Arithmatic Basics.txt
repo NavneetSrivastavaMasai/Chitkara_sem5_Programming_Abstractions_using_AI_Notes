@@ -1,0 +1,436 @@
+Datatypes:-
+==========
+A Data Type specifies:
+- What type of value a variable can store.
+- How much memory should be allocated.
+- What operations can be performed on that value.
+- The valid range of values.
+
+OR
+-  Datatype tells "What kind of value am I going to store?"
+
+Why are Data Types Required?
+=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- Why can't Java simply store every value?
+
+	- Memory Management
+	- Data Validation
+	- Type Safety
+	- Compiler Error Detection
+	- Better Performance
+
+Classification of Data Types
+=-=-=-=-=-=-=-=-=-=-==--==-=
+Java divides data types into two categories.
+
+                         Data Types
+                              │
+         ┌───────────────┴───────────────┐
+         │                               		   │
+ Primitive Data Types        			Non-Primitive (Reference) Data Types
+
+
+Primitive Data Types
+=--==--=-=-==--=-==-
+- They store actual values directly.
+- Java has exactly 8 Primitive Data Types.
+
+	Integer Type:-
+	- byte
+	- short
+	- int
+	- long
+	Real Number:- 
+	- float
+	- double
+	Character:-
+	- char
+	Boolean:- 
+	- boolean
+
+Non-Primitive (Reference) Data Types
+-=-=-==--=-=-==-=-=-=-=-=-=-=-=-=--=
+- Non-Primitive Data Types are created using classes, interfaces, arrays, or other reference types.
+- They do not store the object itself. Instead, they store a reference (memory address) to an object.
+	- String
+	- Array
+	- Class
+	- Interface
+	- Enum
+	- Object
+
+Primitive vs Non-Primitive
+=-=--==-=-=-=-=-=-=-=-=-=-=
+
+| Feature           | Primitive     | Non-Primitive                    |
+| ----------------- | ------------- | -------------------------------- |
+| Number of Types   | 8             | Unlimited                        |
+| Defined By        | Java Language | Programmer / Java Library        |
+| Stores            | Actual Value  | Reference (Address)              |
+| Memory Size       | Fixed         | Dynamic                          |
+| Speed             | Faster        | Slightly Slower                  |
+| Can be null       | No            | Yes                              |
+| Methods Available | No            | Yes                              |
+| Default Value     | Predefined    | `null` (for reference variables) |
+
+
+Data
+   │
+   ▼
+Information to be stored
+   │
+   ▼
+Choose the correct Data Type
+   │
+   ├── Primitive
+   │      ├── byte
+   │      ├── short
+   │      ├── int
+   │      ├── long
+   │      ├── float
+   │      ├── double
+   │      ├── char
+   │      └── boolean
+   │
+   └── Non-Primitive
+          ├── String
+          ├── Array
+          ├── Class
+          ├── Interface
+          ├── Enum
+          └── Object
+
+Primitive Datatype:-
+=-=-=-=-=-=-==-=--=
+| Data Type 	| Category   	 | Size (Bytes)     | Size (Bits)     | Default Value               | Wrapper Class 	| Minimum Value      | Maximum Value 
+| ------------- | -------------- | ---------------- | --------------- | --------------------------- | ----------------- | ------------------ | ------------------
+| **byte**      | Integer        | 1 Byte           | 8 Bits          | `0`                         | `Byte`            | -128               | 127                 
+| **short**     | Integer        | 2 Bytes          | 16 Bits         | `0`                         | `Short`           | -32,768            | 32,767            
+| **int**       | Integer        | 4 Bytes          | 32 Bits         | `0`                         | `Integer`         | -2³¹ 		     | 2³¹−1 
+| **long**      | Integer        | 8 Bytes          | 64 Bits         | `0L`                        | `Long`            | -2⁶³		     | 2⁶³−1 
+| **float**     | Floating Point | 4 Bytes          | 32 Bits         | `0.0f`                      | `Float`           | ≈ -3.4028235 × 10³⁸| ≈ 3.4028235 × 10³⁸  
+| **double**    | Floating Point | 8 Bytes          | 64 Bits         | `0.0d`                      | `Double`          | ≈ -1.7976 × 10³⁰⁸  | ≈ 1.7976 × 10³⁰⁸      
+| **char**      | Character      | 2 Bytes          | 16 Bits         | `'\u0000'` (Null Character) | `Character`       | `'\u0000'` (0)     | `'\uFFFF'` (65,535)
+| **boolean**   | Boolean        | JVM Dependent*   | JVM Dependent   | `false`                     | `Boolean`         | `false`            | `true`             
+
+
+
+What is Type Casting?
+=-=-=-=-=-=-=-=-=-=-=
+- Type Casting means converting one data type into another data type.
+
+- OR
+
+- Type Casting is the process of converting a value from one primitive data type to another primitive data type.
+
+Classification of Type Casting:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+             Type Casting
+                   │
+      ┌────────────┴────────────┐
+      │                         		  │
+Widening Casting        	Narrowing Casting
+(Implicit)               	  (Explicit)
+
+
+
+
+Widening Casting (Implicit)  :-
+=-=-=-=-=-=-=-=--==-=-=-=-=-=
+- Converting a smaller data type into a larger data type automatically.
+
+
+Java Widening Conversion Table:-
+-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=
+| Source Type | Can be Promoted To                  
+| ------------| -------------------------------------
+| byte        | `short`, `int`, `long`, `float`, `double` 
+| short       | `int`, `long`, `float`, `double`          
+| char        | `int`, `long`, `float`, `double`          
+| int         | `long`, `float`, `double`                 
+| long        | `float`, `double`                         
+| float       | `double`                                  
+| double      | Not Promoted (Largest Primitive Type)     
+| boolean     | Cannot be Promoted to Any Other Type      
+
+Arithmetic Type Promotion Rules
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+During arithmetic operations, Java follows these rules:-
+
+|   Operands        |   Result Type |
+| ----------------- | --------------- |
+| `byte + byte`     | `int`           |
+| `byte + short`    | `int`           |
+| `byte + char`     | `int`           |
+| `short + short`   | `int`           |
+| `short + char`    | `int`           |
+| `char + char`     | `int`           |
+| `int + int`       | `int`           |
+| `int + long`      | `long`          |
+| `long + long`     | `long`          |
+| `long + float`    | `float`         |
+| `float + float`   | `float`         |
+| `float + double`  | `double`        |
+| `double + double` | `double`        |
+
+
+Type Casting vs Type Promotion
+=-=--==-=-===--=-==-=-=--=-==-
+| Type Casting                        | Type Promotion                                         |
+| ----------------------------------- | ------------------------------------------------------ |
+| Converts one data type into another | Converts smaller type automatically during expressions |
+| Assignment                          | Arithmetic Expressions                                 |
+| May require cast                    | Automatic                                              |
+| Programmer controlled               | Compiler controlled                                    |
+
+
+Narrowing Type Casting or Explicit Casting
+=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=
+- Converting a larger data type into a smaller data type.
+- The programmer must explicitly tell Java to perform the conversion.
+
+	smallerType variable = (smallerType) largerValue;
+
+
+- Data loss is the biggest disadvantage.
+
+Explicit Casting: int → char
+=-==-==--=-==--==-=-=-=-=-=-=
+- Why Do We Need Explicit Casting?
+- A char in Java stores a single Unicode character.
+- Its range is
+	0 to 65535
+- An int stores an integer.
+- Its range is
+	-2147483648 to 2147483647
+
+- Notice that the int range is much larger than the char range.
+- Therefore, Java cannot guarantee that every integer can safely become a character.
+- We only convert int to character when we required.
+- Syntax
+	char variable = (char) integerValue;
+
+Example:-
+==--=-==
+
+
+Wrapper Classes:-
+=--==-=-=-=-=-=
+- A Wrapper Class is a predefined Java class that wraps (encapsulates) a primitive data type into an object.
+OR
+- A Wrapper Class converts a primitive value into an object.
+
+
+| Primitive Data Type | Wrapper Class |
+| ------------------- | ------------- |
+| byte                | Byte          |
+| short               | Short         |
+| int                 | Integer       |
+| long                | Long          |
+| float               | Float         |
+| double              | Double        |
+| char                | Character     |
+| boolean             | Boolean       |
+
+
+Why Do We Need Wrapper Classes:-
+=-=-=-=-=-=-=-=-=-=--=-=-=-=-=
+1. Collections Framework:- Collections store only objects.
+2. Generics:- Generics also require objects.
+3. Utility Methods
+4. Object-Oriented Programming
+
+Primitive vs Wrapper Class
+=-=-=-=-=-=-=-=--==-=-=-=
+| Primitive           | Wrapper Class    |
+| ------------------- | ---------------- |
+| Stores value        | Stores object    |
+| Faster              | Slightly slower  |
+| Cannot call methods | Can call methods |
+| Cannot store null   | Can store null   |
+| Fixed size          | Object overhead  |
+| Stored directly     | Stored as object |
+
+
+Important Methods of Wrapper Classes
+=-=-=-=-=-=-=-=--==-=-=-=-=-=-=--=-=
+For Integer Class:-
+=================
+- parseInt()
+	- Converts String into int.
+
+	int x = Integer.parseInt("123");
+
+- compare()
+	- Compares two integers.
+
+	Integer.compare(10,20);
+
+- max()
+	Integer.max(50,90);
+
+- min()
+	Integer.min(10,20);
+
+- sum()
+	Integer.sum(10,20);
+
+- toString()
+	- Converts Integer into String.
+
+	Integer x = 100;
+	String s = x.toString();
+
+- MAX_VALUE
+	Integer.MAX_VALUE
+
+- MIN_VALUE
+	Integer.MIN_VALUE
+
+For Character Class:-
+===================
+- isDigit() - check if character is digit.
+	Character.isDigit('5');
+
+- isLetter() - check if character is letter.
+	Character.isLetter('A');
+ 
+- isUpperCase() - check if character is uppercase.
+	Character.isUpperCase('A');
+
+- isLowerCase() - check if character is lowercase.
+	Character.isLowerCase('a');
+
+- toUpperCase() - convert character into uppercase.
+	Character.toUpperCase('a');
+
+- toLowerCase() - convert character into lowercase.
+	Character.toLowerCase('A');
+
+- isWhitespace() - check if character is space.
+	Character.isWhitespace(' ');
+
+
+
+For Boolean Class:-
+==================
+- parseBoolean()
+	Boolean.parseBoolean("true");
+
+**This parseXXX method will work every wrapper class.**
+
+
+
+Autoboxing and Unboxing:-
+=- =-=-=-=-=-=-=-=--=-==-=
+
+- Autoboxing is the automatic conversion of a primitive data type into its corresponding Wrapper Class object.
+
+	- Primitive → Wrapper Object
+
+- Automatic conversion of a Wrapper Object into its primitive value.
+
+	- Wrapper Object → Primitive
+
+
+
+Note:-
+	One of the most common mistakes beginners make is assuming that Java will automatically increase the size of a variable when a number becomes too large.
+
+Provide example:-
+==============
+
+
+
+Overflow:-
+=-=-=-=-=
+- Overflow occurs when the result of an arithmetic operation exceeds the maximum value that a data type can store.
+
+OR
+
+- Overflow means the value becomes larger than the maximum capacity of the data type.
+
+- Why Does Overflow Happen?
+	Because computers store numbers using a fixed number of bits.
+
+
+Underflow:-
+-==-=-=-=-=
+
+- Underflow occurs when the result becomes smaller than the minimum value that a data type can store.
+
+
+Preventing Overflow
+====================
+- Method 1
+	Use a Larger Data Type
+
+public class Main {
+	public static void main(String[] args) {		
+		int i = Integer.MAX_VALUE-1;
+		
+		System.out.println(i);
+		int j = 10000;
+		System.out.println(j);
+		
+		long k = (long)i+(long)j;
+		System.out.println(k);
+
+	}
+
+}
+
+- Method 2
+
+	Use Math.addExact(), Math.multiplyExact(), Math.subtractExact()
+
+public class Main {
+	public static void main(String[] args) {		
+		int i = Integer.MIN_VALUE-1;
+		int j= 10;
+		 int k = Math.addExact(i, j);
+		 System.out.println(k);
+	}
+}
+
+Output:-
+Exception in thread "main" java.lang.ArithmeticException: integer overflow
+	at java.base/java.lang.Math.addExact(Math.java:911)
+	at com.chitkara.Main.main(Main.java:7)
+
+
+
+
+BigInteger
+==-=-=-=-=
+- BigInteger is a class that stores integers of unlimited size.
+
+- Unlike primitive data types, its size grows dynamically depending on the value.
+
+	BigInteger num = new BigInteger(999999999999999999999999);
+
+- This is not a primitive type so simple Arithmetic will not work on that.
+
+Important Method(Many more methods are there apart from following):-
+-==-==-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+| Method            | Description             |
+| ----------------- | ----------------------- |
+| add()             | Addition                |
+| subtract()        | Subtraction             |
+| multiply()        | Multiplication          |
+| divide()          | Division                |
+| remainder()       | Modulus                 |
+| compareTo()       | Compare two numbers     |
+
+
+Modular Arithmetic Basics:-
+=-=--==-=-=-=-=-=--==-=-=
+
+ 
+
+
+
+
+
+
+

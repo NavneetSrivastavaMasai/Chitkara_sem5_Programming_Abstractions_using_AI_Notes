@@ -1239,16 +1239,29 @@ Number-based questions
 ======================
 
 | Topic                     		| LeetCode # 	| Problem Name              	| Difficulty 
-| ------------------------- 	| ---------: 		| ------------------------- 	| ---------- 
-| Palindrome Number         	|      **9** 	| Palindrome Number         	| Easy       
-| Reverse Integer           	|      **7** 	| Reverse Integer           	| Medium     
-| Plus One                  		|     **66**  	| Plus One                  		| Easy       
+| ------------------------- 		| ---------: 	| ------------------------- 	| ---------- 
+| Palindrome Number         		|      **9** 	| Palindrome Number         	| Easy       
+| Reverse Integer           		|      **7** 	| Reverse Integer           	| Medium     
+| Plus One                  		|     **66**  	| Plus One                  	| Easy       
 
 Home Work for Leetcode and self understanding:-
 ------------------------------------------------
-| Add Digits (Digital Root) |    **258** 	| Add Digits                	| Easy       
+| Add Digits (Digital Root) 	|    **258** 	| Add Digits                	| Easy       
 | Happy Number              	|    **202** 	| Happy Number              	| Easy       
 | Count Primes              	|    **204** 	| Count Primes              	| Medium  
 
 ================================================================================
 ================================================================================
+
+Questions Practice in Class (06-07-2026):-
+=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+| Topic                    	| LeetCode # 	| Problem Name              	| Difficulty 
+| -------------------------	| ---------: 	| ------------------------- 	| ---------- 
+| Power of Two              	|    **231** 	| Power of Two              		| Easy       
+| Power of Three            	|    **326** 	| Power of Three            		| Easy       
+| Power of Four             	|    **342** 	| Power of Four             		| Easy       
+| Ugly Number               	|    **263** 	| Ugly Number               		| Easy       
+| Ugly Number II            	|    **264** 	| Ugly Number II            		| Medium     
+
+
