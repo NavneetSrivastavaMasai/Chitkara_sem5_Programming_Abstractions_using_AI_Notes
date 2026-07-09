@@ -1,0 +1,138 @@
+Pattern 1:-
+==========
+public class PatternOne {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Provide size:-");
+		int n = sc.nextInt();
+		for(int i=1; i<=n; i++) {
+			for(int j=1; j<=n; j++) {
+				System.out.print("*");
+			}
+			System.out.println();
+		}
+	}
+}
+
+Provide size:-
+5
+*****
+*****
+*****
+*****
+*****
+
+=======================================================================================
+Pattern 9:-
+=========
+public class PatternNine {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Provide size:-");
+		int n = sc.nextInt();
+
+		for(int i=1; i<=n; i++) {
+			for(int j=1; j<=n-i; j++) {
+				System.out.print(" ");
+			}
+			for(int j=1; j<=(2*i)-1; j++) {
+				System.out.print("*");
+			}
+			System.out.println();
+		}
+		for(int i=n; i>=1; i--) {
+			for(int j=1; j<=n-i; j++) {
+				System.out.print(" ");
+			}
+			for(int j=1; j<=(2*i)-1; j++) {
+				System.out.print("*");
+			}
+			System.out.println();
+		}
+	}
+}
+
+Provide size:-
+6
+     *
+    ***
+   *****
+  *******
+ *********
+***********
+***********
+ *********
+  *******
+   *****
+    ***
+     *
+===============================================================================================================
+Pattern 17:-
+===========
+public class PatternSeventeen {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Provide size:-");
+		int n = sc.nextInt();
+		for(int i=0; i<=n; i++) {
+			for(int j=0; j<=n-i; j++) {
+				System.out.print(" ");
+			}
+			for(int j=0; j<=i; j++) {
+				char ch = (char)('A'+j);
+				System.out.print(ch);
+			}
+			for(int j=i-1; j>=0; j--) {
+				char ch = (char)('A'+j);
+				System.out.print(ch);
+			}
+			System.out.println();
+		}
+	}
+}
+
+Provide size:-
+6
+       A
+      ABA
+     ABCBA
+    ABCDCBA
+   ABCDEDCBA
+  ABCDEFEDCBA
+ ABCDEFGFEDCBA
+================================================================================================
+Pattern 22:-
+=============
+public class PatternTwentyTwo {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Provide input");
+		int n = sc.nextInt();
+		int size = 2*n-1;
+		for(int i=0; i<size; i++) {
+			for(int j=0; j<size; j++) {
+				int top = i;
+				int left = j;
+				int bottom = size-i-1;
+				int right = size -j-1;
+				int diff = Math.min(Math.min(right, left), Math.min(top, bottom));
+				System.out.print(n-diff+" ");
+			}
+			System.out.println();
+			
+			
+		}
+	}
+}
+
+Provide input
+5
+5 5 5 5 5 5 5 5 5 
+5 4 4 4 4 4 4 4 5 
+5 4 3 3 3 3 3 4 5 
+5 4 3 2 2 2 3 4 5 
+5 4 3 2 1 2 3 4 5 
+5 4 3 2 2 2 3 4 5 
+5 4 3 3 3 3 3 4 5 
+5 4 4 4 4 4 4 4 5 
+5 5 5 5 5 5 5 5 5 
