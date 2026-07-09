@@ -1,0 +1,4703 @@
+Collection In Java:-
+===================
+
+Array:-
+=-=-=-=
+Arrays are a fundamental data structure used to store multiple values of the same type in a single variable. They have a fixed size and allow indexed access to elements.
+
+	int []arr = new int[5];
+	for(int i=1; i<=5; i++){
+		arr[i-1] = i;
+	}
+        System.out.println(Arrays.toString(arr));
+
+Output:-
+------
+[1, 2, 3, 4, 5]
+
+Examples:-
+----------
+- Can we store different types of data inside an Array???
+
+public class Main{
+    public static void main(String[] args) {
+       Object []arr = new Object[3];
+       arr[0] = 10;
+       arr[1] = "Aditya";
+       arr[2] = 5.56;
+       
+        System.out.println(Arrays.toString(arr));
+    }
+}
+Output:-
+--------
+[10, Aditya, 5.56]
+
+
+
+Limitations of an Array:-
+=-=-=-=-=-=--=--=-=--=-=
+1. Fixed Size:-
+- Once an array is created, its size cannot be changed.
+- You must know the size in advance.
+- Problem: If you need more space, you must create a new array and copy elements.
+
+2. Homogeneous Data
+- Arrays can only store elements of the same data type (except Object[] arrays).
+
+3. No Built-in Methods for Manipulation
+- Arrays lack rich utility methods like adding, removing, or searching elements.
+
+4. Memory Waste (for Large Arrays)
+- If you declare a large array but use only a few elements, memory is wasted.
+- Fixed size can lead to under-utilization.
+
+
+
+
+
+
+
+Let's create a Dynamic Array:-
+=-=-==-=-=-=-=-=-=-=-=-=-=-=
+Code:-
+-----
+public class DynamicArray {
+    Object arr[];
+    int size;
+    int capacity;
+    DynamicArray(){
+        capacity =10;
+        arr = new Object[capacity];
+        size=0;
+    }
+    DynamicArray(int capacity){
+        this.capacity =capacity;
+        arr = new Object[capacity];
+        size=0;
+    }
+    void increaseCapacity(){
+        int newCapa = capacity+(capacity/2);
+        Object[] newArr = new Object[newCapa];
+        for(int i=0; i<size; i++){
+            newArr[i] = arr[i];
+        }
+        arr = newArr;
+        capacity = newCapa;
+    }
+    void add(Object ele){
+        if(size==capacity){
+            increaseCapacity();
+        }
+        arr[size] = ele;
+        size++;
+    }
+    int searchEle(Object ele){
+        for(int i=0; i<size; i++){
+            if(arr[i]==ele){
+                return i;
+            }
+        }
+        return -1;
+    }
+    int getSize(){
+        return size;
+    }
+    void display(){
+        for(int i=0; i<size;i++){
+            System.out.print(arr[i]+" ");
+        }
+        System.out.println();
+    }
+}
+public class Demo {
+    public static void main(String[] args) {
+        DynamicArray da = new DynamicArray();
+        for(int i=0; i<20; i++){
+            da.add(i);
+        }
+
+        da.display();
+        System.out.println(da.getSize());
+        System.out.println(da.searchEle(10));
+        System.out.println(da.searchEle(30));
+    }
+}
+
+Output:-
+-------
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 
+20
+11
+-1
+
+
+Collection :-
+=-=-=-=-=-=-=
+A Collection in Java is a framework that provides a set of classes and interfaces to store, manage, and manipulate groups of objects dynamically.
+							or
+A collection is a group of individual data that are grouped together to form a single unit. Collections are containers that hold multiple data items as a single unit.
+
+The two root interfaces of java collection class are:
+	- Collection interface(java.util.collection)
+	- Map interface(java.util.Map)
+
+
+Collection Framework in Java:-
+=-=-=-=-=-=-=-=-=-=--==-=-=-=
+The Java Collection Framework (JCF) is a set of classes and interfaces that provide predefined data structures to store, retrieve, and manipulate groups of objects efficiently. It is part of the java.util package.
+
+
+Hierarchy of Collection F/W:-
+=-=-=-=-=-=-=-=-==-=-=-=-=-=
+Collection (Interface)
+|
+|----> List (Interface)
+|
+|----> Set (Interface)
+|
+|----> Queue (Interface)
+
+
+
+Basic Functionalities of List, Set, and Queue Interface:-
+=-=-=-=-=-=-=-==-=-=-=-=-=-=-==-=--=-=-=-=--=-=-=--=-=-=-=
+
+1. List Interface
+------------------
+Functionality
+- Ordered collection (maintain insertion order)
+- Duplicates allowed
+- Index-based access (0,1,2…)
+- Null values allowed
+
+Use Case
+- Order important ho
+- When need duplicate values
+- Element need access by Index
+
+
+2. Set Interface
+---------------
+Functionality
+- No duplicates allowed
+- Order generally not guaranteed (except some implementations)
+- No index-based access
+- Null allowed (usually only one)
+
+Use Case
+- Need unique elements 
+- Avoid duplicate 
+
+3. Queue Interface
+------------------
+Functionality
+- FIFO (First In First Out)
+- Elements process in Order
+- Mainly used for processing tasks
+- No index access
+
+Use Case
+- Use in Line/queue system (like ticket counter)
+- Need Task scheduling 
+
+
+Hierarchy of List interface or Implementation classes of List Interface:-
+=-=-=-=-=-==-=-=-=-=-=-=-=-=-==-=-=-=-=-==-=-=-=--=-=-==-=-=-=-=-=-=-=-=
+List (Interface)
+|
+|----> ArrayList (Implemented Class)
+|
+|----> LinkedList (Implemented Class)
+|
+|----> Vector (Implemented Class)-----> Stack(Implemented Class)
+
+
+1. ArrayList:-
+=-=-=-=-=-=-=
+- ArrayList is a resizable array implementation of the List interface.
+- It allows dynamic growth, unlike arrays which have fixed size.
+- It maintains insertion order, allows duplicate elements, and nulls.
+- Implements:
+	- List<E>
+	- Cloneable
+	- Serializable
+- RandomAccess (supports fast index-based access)
+
+Internal Storage of ArrayList
+-----------------------
+- Internally, ArrayList uses a dynamic array, specifically an Object[] array called elementData.
+- This array is not exposed directly; all operations like add, get, remove work through methods.
+
+Default Size and Capacity
+--------------------
+Default initial capacity (Java 8+): 10
+
+- ArrayList<Integer> list = new ArrayList<>(); // capacity = 10
+
+If you provide an initial capacity:
+
+- ArrayList<Integer> list = new ArrayList<>(20); // capacity = 20
+
+Key distinction:
+----------------
+size() → number of elements currently in list
+capacity → length of the internal array
+
+How ArrayList Grows (Resizing Behavior)
+---------------------------------
+- When an element is added and the internal array is full, ArrayList resizes:
+	- New Capacity Formula :
+		newCapacity = oldCapacity + (oldCapacity/2);
+
+- This means capacity increases by 50% each time.
+- Steps:
+	- Check if size < capacity → add element directly
+	- If full → create a new array with 1.5× capacity
+	- Copy old elements → new array
+	- Add the new element
+Example:
+- Default capacity = 10
+- Add 11th element → new capacity = 15
+- Add 16th element → new capacity = 22
+
+**Note: In Java 6-7, capacity increased by 100%, i.e., doubled.
+
+
+
+Creation of an ArrayList:-
+=-=-=-=-=-=-=-=-=-=-=-=
+1. Using default constructor without any type safety:-
+-----------------------------------------------------
+
+	List li = new ArrayList();
+
+2. Using default constructor with type safety:-
+-----------------------------------------------
+        List<String> li = new ArrayList<>();
+
+** We cannot provide primitive data inside angle brackets (Type safety--Generics) so for Primitive data we can pass Wrapper classes**** 
+
+3. Using overloaded constructor with initial capacity:-
+------------------------------------------------------
+        List<String> li = new ArrayList<>(66);
+
+
+Common methods of Collection Interface which are applied for All collection Hierarchy:-
+--------------------------------------------------------------------------------------
+1. Adding Elements
+- boolean add(E e); → adds single element
+Example:-
+-------
+a. With heterogeneous Data:-
+
+public class Demo {
+    public static void main(String[] args) {
+        List li = new ArrayList();
+        li.add(1);
+        li.add("String");
+        li.add(5.56);
+
+        for(Object x:li){
+            System.out.println(x);
+        }
+    }
+}
+Output:-
+------
+1
+String
+5.56
+
+b. With Homogeneous Data (Type safety):-
+-------------------------------------- 
+public class Demo {
+    public static void main(String[] args) {
+        List<String> li = new ArrayList<>();
+        li.add("String");
+        li.add("Java");
+        li.add("Python");
+        li.add("Java Script");
+
+        for(String x:li){
+            System.out.println(x);
+        }
+    }
+}
+Output:-
+-------
+String
+Java
+Python
+Java Script
+
+- boolean addAll(Collection<? extends E> c); → adds another collection
+Example:-
+--------
+public class Demo {
+    public static void main(String[] args) {
+        List<String> li = new ArrayList<>();
+        li.add("String");
+        li.add("Java");
+        li.add("Python");
+        li.add("Java Script");
+
+        List<String> li2 = new ArrayList<>();
+        li2.add("React");
+        li2.add("Spring");
+
+        li.addAll(li2);
+
+        for(String x:li){
+            System.out.println(x);
+        }
+    }
+}
+Output:-
+------
+String
+Java
+Python
+Java Script
+React
+Spring
+
+
+2. Removing Elements
+- boolean remove(Object o); → removes specific element
+- boolean removeAll(Collection<?> c); → removes all matching elements
+
+Example:-
+public class Demo {
+    public static void main(String[] args) {
+        List<String> li = new ArrayList<>();
+        li.add("String");
+        li.add("Java");
+        li.add("Python");
+        li.add("Java Script");
+        li.add("React");
+        li.add("Spring");
+
+        li.remove("String");
+
+        System.out.println(li);
+
+        List<String> remo = new ArrayList<>();
+        remo.add("Java");
+        remo.add("Python");
+        remo.add("Java Script");
+
+        li.removeAll(remo);
+        System.out.println(li);
+
+    }
+}
+Output:-
+-------
+[Java, Python, Java Script, React, Spring]
+[React, Spring]
+
+
+- boolean retainAll(Collection<?> c); → keeps only common elements
+Example:-
+-------
+public class Demo {
+    public static void main(String[] args) {
+        List<String> li = new ArrayList<>();
+        li.add("String");
+        li.add("Java");
+        li.add("Python");
+        li.add("Java Script");
+        li.add("React");
+        li.add("Spring");
+
+        List<String> reta = new ArrayList<>();
+        reta.add("Java");
+        reta.add("Python");
+        reta.add("Java Script");
+
+        li.retainAll(reta);
+        System.out.println(li);
+    }
+}
+Output:-
+-----
+[Java, Python, Java Script]
+
+
+- void clear(); → removes everything
+
+3. Searching / Checking
+boolean contains(Object o); → checks element
+boolean containsAll(Collection<?> c); → checks collection
+boolean isEmpty(); → check empty or not
+
+
+4. Size Operations
+int size(); →  Returns number of elements
+
+5. Traversal
+Iterator<E> iterator(); → Used for looping elements
+public class Demo {
+    public static void main(String[] args) {
+        List<String> li = new ArrayList<>();
+        li.add("String");
+        li.add("Java");
+        li.add("Python");
+        li.add("Java Script");
+        li.add("React");
+        li.add("Spring");
+
+        Iterator<String> i = li.iterator();
+        while(i.hasNext()){
+            System.out.println(i.next());
+        }
+    }
+}
+Output:-
+String
+Java
+Python
+Java Script
+React
+Spring
+
+6.Inserting data at the time of creation an ArrayList (two types using Arrays class and List class):-
+Code:-
+-----
+public class Demo {
+    public static void main(String[] args) {
+        List<String> li = Arrays.asList("String","Java","Python");
+        li.set(0, "Collection");
+        List<String> li1 = List.of("String","Java","Python");
+//        li1.set(0, "Collection");//Not allowed
+        System.out.println(li);
+        System.out.println(li1);
+
+    }
+}
+output:-
+------
+[Collection, Java, Python]
+[String, Java, Python]
+
+
+
+| Feature      | Arrays.asList() 	| List.of() |
+| ------------ | --------------- 	| --------- |
+| Add/Remove   |  No            	|  No       |
+| Modify (set) |  Yes           	|  No       |
+| Null allowed |  Yes           	|  No       |
+| Type         | Fixed-size      	| Immutable |
+
+Methods Specific to the List Interface:-
+-----------------------------------------
+- void add(int index, E element) →  Inserts element at a specific position.
+- E get(int index) →  Returns the element at a given index.
+- E set(int index, E element) →  Replaces the element at a given index.
+- E remove(int index) →  Removes the element at a given index.
+- int indexOf(Object o)	 →  Finds the first occurrence of an element.
+- int lastIndexOf(Object o) →  Finds the last occurrence of an element.
+- List<E> subList(int fromIndex, int toIndex) →  Returns a view of the list in a specific range.
+
+Example code:-
+------------
+public class Demo {
+    public static void main(String[] args) {
+        List<String> li = new ArrayList<>();
+        li.add("String");
+        li.add("Java");
+        li.add("Python");
+        li.add("Java");
+
+        li.add(0,"JavaScript");
+        System.out.println(li);
+
+        System.out.println(li.get(1));
+
+        li.set(1,"React");
+        System.out.println(li);
+
+        li.remove(1);
+        System.out.println(li);
+
+        System.out.println(li.indexOf("Java"));
+        System.out.println(li.lastIndexOf("Java"));
+
+        List<String> li1 = li.subList(1,3);
+        System.out.println(li1);
+
+    }
+}
+Output:-
+-------
+[JavaScript, String, Java, Python, Java]
+String
+[JavaScript, React, Java, Python, Java]
+[JavaScript, Java, Python, Java]
+1
+3
+[Java, Python]
+
+Methods Specific to ArrayList Class Only:-
+-----------------------------------------
+- void ensureCapacity(int minCapacity) →  Increases the internal array capacity to at least the specified minimum.
+- void trimToSize() →  Trims the capacity of the internal array to match the current size.
+
+Examples of User Defined Class:-
+-------------------------------
+public class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student(1,"Ishan");
+        Student s2 = new Student(2,"Krish");
+        Student s3 = new Student(3,"Sarthak");
+        Student s4 = new Student(4,"Khushi");
+        Student s5 = new Student(5,"Sargam");
+
+        List<Student> li = new ArrayList<>();
+        li.add(s1);
+        li.add(s2);
+        li.add(s3);
+        li.add(s4);
+        li.add(s5);
+        for(Student s : li){
+            System.out.println(s);
+        }
+    }
+
+public class Student {
+    int roll;
+    String name;
+    Student(int roll,String name){
+        this.roll = roll;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "roll=" + roll +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}
+Output:-
+------
+Student{roll=1, name='Ishan'}
+Student{roll=2, name='Krish'}
+Student{roll=3, name='Sarthak'}
+Student{roll=4, name='Khushi'}
+Student{roll=5, name='Sargam'}
+
+
+
+
+Student Task:-
+-=-=-=-=-=-=-
+Step 1: Create Employee Bean Class
+- Create a class Employee with:
+	- empId (int)
+	- name (String)
+	- salary (double)
+- Include:
+	- Constructors
+	- Getters & Setters
+	- toString() method
+Step 2: Store Objects in ArrayList
+- Create an ArrayList<Employee>
+- Add at least 5 employees
+Step 3: Perform Operations
+- Implement the following tasks:
+	- 1. Display All Employees
+		- Print all employee details using a loop.
+	- 2. Search Employee by ID
+		- Input: Employee ID
+		- Output: Display employee details if found
+	- 3. Find Highest Salary Employee
+		- Print employee with maximum salary
+	- 4. Increase Salary
+		- Increase salary of all employees by 10%
+	- 5. Remove Employee
+		- Remove employee using empId
+
+
+2. LinkedList:-
+=-=-=-=-=-=-=
+- LinkedList is a doubly linked list implementation of the List interface.
+- It allows dynamic memory allocation (no fixed size limitation).
+- It maintains insertion order, allows duplicate elements, and nulls.
+- Implements:
+	- List<E>
+	- Deque<E>
+	- Cloneable
+	- Serializable
+
+- Does NOT implement RandomAccess (slow index-based access)
+
+Internal Storage of LinkedList
+------------------------------
+- Internally, LinkedList uses a doubly linked list.
+- Each element is stored in a Node.
+- Each node contains:
+	- data (element)
+	- reference to next node
+	- reference to previous node
+
+Default Size and Capacity
+-------------------------
+- LinkedList does NOT have capacity concept like ArrayList.
+- It grows dynamically as elements are added.
+
+Key distinction:
+----------------
+- size() → number of elements currently in list
+- capacity →  Not applicable in LinkedList
+
+How LinkedList Grows (Memory Behavior)
+--------------------------------------
+- No resizing like ArrayList.
+- Each element is stored in a new node.
+
+Steps:
+- Create a new node
+- Link it with previous and next node
+- Update pointers
+
+Example:
+
+Add element → new node created
+No copying of old elements required
+
+Creation of a LinkedList:-
+=-=-=-=-=-=-=-=-=-=-=-=-=
+
+1. Using default constructor without any type safety:-
+2. Using default constructor with type safety:-
+Example:-
+	LinkedList li = new LinkedList();
+	LinkedList<String> li1 = new LinkedList<>();
+
+Methods Specific to LinkedList Class Only:-
+=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=
+Specific for Linked List:-
+-------------------------
+- void addFirst(E e) → Inserts element at the beginning.
+- void addLast(E e) → Inserts element at the end.
+- E getFirst() → Returns first element.
+- E getLast() → Returns last element.
+- E removeFirst() → Removes first element.
+- E removeLast() → Removes last element.
+- E push(E e) → Adds element at front.(Can help to implement Stack)
+- E pop() → Removes element from front.(Can help to implement Stack)
+
+Methods from Deque:-
+-------------------
+- boolean offer(E e) → Adds element at end (queue style).(Can help to implement Queue)
+- boolean offerFirst(E e) → Adds element at beginning.(Can help to implement deque)
+- boolean offerLast(E e) → Adds element at end.(Can help to implement deque)
+- E peek() → Retrieves head without removing.
+- E poll() → Retrieves and removes head. (Can help to implement Queue)
+
+Example code:-
+=-=-=-=-=-=-=
+public class LinkedListExample {
+    public static void main(String[] args) {
+        LinkedList<String> li1 = new LinkedList<>();
+        
+        //Adding elements at the last Methods
+        li1.add("Krish");
+        li1.offer("Himanshu");
+        li1.addLast("Satyam");
+        li1.offerLast("Koushik");
+        System.out.println(li1);
+
+        //Adding elements at the first Methods
+        li1.addFirst("Nikita");
+        li1.push("Khushi");
+        li1.offerFirst("Sargam");
+
+        System.out.println(li1);
+
+        //Other Methods
+
+        System.out.println(li1.getFirst());
+        System.out.println(li1.getLast());
+        System.out.println(li1.peek());
+        System.out.println(li1.removeFirst());
+        System.out.println(li1.removeLast());
+        System.out.println(li1.poll());
+
+        System.out.println(li1);
+    }
+}
+
+Output:-
+-------
+[Krish, Himanshu, Satyam, Koushik]
+[Sargam, Khushi, Nikita, Krish, Himanshu, Satyam, Koushik]
+Sargam
+Koushik
+Sargam
+Sargam
+Koushik
+Khushi
+[Nikita, Krish, Himanshu, Satyam]
+
+Why we can use LinkedList as Queue, Deque, and Stack Operations:-
+--------------------------------------------------------
+- LinkedList is a data structure that allows fast insertion/deletion at both ends, which perfectly matches the Deque contract.
+- ArrayList cannot efficiently implement Deque because adding/removing from head requires shifting all elements.
+
+
+
+Student Task:-
+-=-=-=-=-=-=-
+Implement Stack and Queue using LinkedList Class.
+
+
+
+
+
+
+Basic difference btw ArrayList and LinkedList:-
+------------------------------------------------
+Feature			ArrayList								LinkedList
+-------                 ---------                       ----------
+Data Structure		Dynamic Array						Doubly Linked List
+Memory Storage		Continuous (array)					Non-contiguous (nodes)
+Access Time			Fast (O(1))							Slow (O(n))
+Insertion			Slow (O(n))							Fast (O(1) at ends)
+Deletion			Slow (O(n))							Fast (O(1) at ends)
+Memory Usage		Less (no extra pointers)			More (extra prev & next pointers)
+Resizing			Required (1.5x growth)				Not required
+Implements			List, RandomAccess					List, Deque
+
+
+Why we need LinkedList when we have ArrayList:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Even though ArrayList is faster in many cases, LinkedList is useful in specific scenarios :-
+------------------------------------------------------------------------------------------
+- Frequent Insertions/Deletions
+- When Data Size Changes Frequently
+- No resizing overhead (ArrayList needs copying)
+- When Insertion in Middle is Frequent, Faster than ArrayList (no shifting of all elements)
+
+
+
+Vector
+=-=-=-=
+- Vector is a resizable array implementation of the List interface.
+- It is synchronized (thread-safe) unlike ArrayList.
+- Maintains insertion order, allows duplicate elements, and nulls.
+- Implements:
+	- List<E>
+	- Cloneable
+	- Serializable
+
+Internal Storage of Vector
+---------------------------
+- Internally, Vector uses an Object[] array to store elements.
+- Initial capacity can grow dynamically.
+- Default Size and Capacity
+	- Default initial capacity = 10
+		- Vector<Integer> v = new Vector<>(); // capacity = 10
+	- If you provide an initial capacity:
+		- Vector<Integer> v = new Vector<>(20); // capacity = 20
+
+Key distinction:
+----------------
+- size() → number of elements currently in vector
+- capacity → length of the internal array
+
+How Vector Grows (Resizing Behavior)
+-------------------------------------
+- When elements exceed capacity, Vector doubles the capacity (100% increase).
+Steps:
+- Create a new array with double size
+- Copy old elements → new array
+- Add new element
+
+Example:
+
+- Default capacity = 10
+- Add 11th element → new capacity = 20
+- Add 21st element → new capacity = 40
+
+Creation of a Vector
+=-=-=-=-=-=-=-=-=-=
+
+- Using default constructor:
+	Vector<Integer> v = new Vector<>();
+
+- Using constructor with initial capacity:
+	Vector<Integer> v = new Vector<>(50);
+
+- Using constructor with another collection:
+	Vector<Integer> v = new Vector<>(Arrays.asList(1,2,3));
+
+Methods Specific to Vector Class Only
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+- void ensureCapacity(int minCapacity) → Increases internal array capacity if needed
+- void trimToSize() → Trims capacity to match current size
+- synchronized methods for thread-safety, e.g., add(), remove(), get(), etc.
+
+
+Stack
+=-=-=
+- Stack is a LIFO (Last In First Out) data structure implemented as a subclass of Vector.
+- Maintains insertion order, allows duplicates and nulls.
+- Implements:
+	- List<E>
+	- Cloneable
+	- Serializable
+
+Internal Storage of Stack
+--------------------------
+- Internally, Stack uses Vector for storage.
+- Elements are stored in an array (dynamic).
+
+Default Size and Capacity
+-------------------------
+- Inherits Vector’s default capacity = 10
+- Resizes automatically when full (doubles capacity).
+
+How Stack Works (Memory Behavior)
+----------------------------------
+- Stack follows LIFO (Last In First Out).
+- Push → adds element at top
+- Pop → removes element from top
+- Peek → returns element at top without removing
+
+Creation of a Stack
+=-=-=-=-=-=-=-=-=-=
+- Using default constructor:
+	- Stack<Integer> s = new Stack<>();
+
+Methods Specific to Stack Class Only
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- void push(E e) - Adds element at top of stack
+- E pop() - Removes and returns element from top
+- E peek() - Returns element at top without removing
+- boolean empty() - Returns true if stack is empty
+- int search(Object o) - Returns 1-based position from top; -1 if not found
+
+
+Example Code:-
+------------
+public class Demo {
+	public static void main(String[] args) {
+		Stack<String> st = new Stack<String>();
+		st.push("String");
+		st.push("Collection");
+		st.push("Generics");
+		st.push("Abstraction");
+		for(int i=0; i<st.size();i++) {
+			System.out.println(st.get(i));
+		}
+		System.out.println("**********************************");
+		System.out.println(st.peek());
+		System.out.println("**********************************");
+		System.out.println(st.search("Abstraction"));
+		System.out.println("**********************************");
+		while(!st.isEmpty()) {
+			String str = st.pop();
+			System.out.println(str);
+			
+		}
+	}
+}
+Output:-
+-------
+String
+Collection
+Generics
+Abstraction
+**********************************
+Abstraction
+**********************************
+1
+**********************************
+Abstraction
+Generics
+Collection
+String
+
+
+Basic difference between Stack and LinkedList:-
+-----------------------------------------------
+
+| Feature      		| Stack 		| LinkedList  
+| ------------ 		| ----- 		| ------------ 
+| Performance  		| Slow  		| Good         
+| Thread-safe  		| Yes   		| No           
+| Modern Usage 		| No  			| Yes       
+| Recommended  		| Not Recommended	| Sometimes 
+
+
+
+Student Tasks:-
+=-=-=-=-=-=-=-=
+1. Train Reservation Queue (Using LinkedList)
+---------------------------------------------
+- Problem Statement
+- Create a Train Reservation System using LinkedList.
+- Program should:
+	- Add passenger names
+	- Display all passengers
+	- Remove first passenger (boarding)
+	- Add new passenger at beginning
+	- Display updated list
+- Requirements
+- Use:
+	- LinkedList<String>
+- Must include:
+	- add()
+	- addFirst()
+	- removeFirst()
+	- getFirst()
+
+
+2. Browser History System (Using Stack)
+---------------------------------------
+- Problem Statement
+- Create a Browser History System using Stack.
+- Program should:
+	- Visit 5 websites
+	- Display current page
+	- Go back (pop)
+	- Show remaining history
+	- Check if stack is empty
+- Requirements
+- Use:
+	- Stack<String>
+- Must include:
+	- push()
+	- pop()
+	- peek()
+	- isEmpty()
+
+************************************************************************************************************************************************************
+Iterator interface:
+===================
+--This interface gives us a standardize way of accessing the elements from any Collection object.
+--while iterating objects by iterator we can perform remove operation in addition to read operation.
+--It is a Universal cursor (Works with List, Set and Queue).
+
+Methods in Iterator interface:
+-----------------------------
+
+public boolean hasNext();  // check if next element exists
+public E next();           // get next element
+void remove();      // remove current element safely
+
+
+
+
+-To get the Iterator object, we need to call iterator() method on any Collection object.
+
+Example:
+	Iterator itr= al.iterator();
+
+--It creates an iterator object that points to the same ArrayList object.
+
+
+Example:
+-------
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		//find the element "b" AND "c" from list and remove it.
+		Iterator itr = list.iterator();
+		while(itr.hasNext()) {
+			System.out.print(itr.next()+" ");
+		}
+	}
+}
+Output:-
+-------
+a b c d e f 
+
+
+Note: If we are trying to remove the element while iterating for enhanced for loop, It will throw the ConcurrentModificationException.
+
+Example for removing an element while iterating from list using enhanced loop: 
+------------------------------------------------------------------------------
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		//find the element "b" AND "c" from list and remove it.
+		for(String str : list) {
+			if(str.equals("b")||str.equals("c")) {
+				list.remove(str);
+			}
+		}
+		System.out.println(list);
+	}
+}
+Output:-
+Exception in thread "main" java.util.ConcurrentModificationException
+	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1095)
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:1049)
+	at Demo4/com.chitkara.Main.main(Main.java:9)
+
+
+Reason:
+--Enhanced for-loop internally uses Iterator
+--Direct modification breaks iterator consistency (fail-fast)
+
+
+Fail-Fast behavior: 
+------------------
+
+--Most collection classes (ArrayList, HashSet, etc.) are fail-fast. They throw
+ConcurrentModificationException if the collection is structurally modified while iterating, except through the iterator’s own remove() method.
+
+Note: while iterating with normal for loop if we try to remove the element, it will be removed but the normal for-loop is not the universal way to iterating any collection object, it will not work with the Set or Queue objects, because they do not support the index (We can see in above example).
+	
+
+
+Experiment: Remove element using simple for loop.
+-----------
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		//find the element "b" AND "c" from list and remove it.
+		for(int i=0; i<list.size();i++) {
+			String str = list.get(i);
+			if(str.equals("b") || str.equals("c")) {
+				list.remove(str);
+			}
+		}
+		System.out.println(list);
+	}
+}
+Output:-
+-------
+[a, c, d, e, f]
+
+Here the output: [a, c, d, e, f]: not expected, because after removing "b" the next element "c" shifted to the previous index.
+
+--To fix this problem we can use the following approaches:
+
+Approach1: Decrement the index after removing.
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		for(int i= 0; i<list.size();i++) {
+			String str = list.get(i);
+			if(str.equals("b")||str.equals("c")) {
+				list.remove(str);
+				i--;
+			}
+		}
+		System.out.println(list);
+	}
+}
+Output:-
+--------
+[a, d, e, f]
+
+Approach2: Use list from the last index.
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		for(int i= list.size()-1; i>=0;i--) {
+			String str = list.get(i);
+			if(str.equals("b")||str.equals("c")) {
+				list.remove(str);
+			}
+		}
+		System.out.println(list);
+	}
+}
+Output:-
+[a, d, e, f]
+		
+Approach3: Using Iterator:
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		Iterator itr = list.iterator();
+		
+		while(itr.hasNext()) {
+			String str = (String) itr.next();
+			if(str.equals("b")||str.equals("c")) {
+				itr.remove();
+			}
+		}
+		System.out.println(list);
+	}
+}
+
+
+limitations of Iterator:
+----------------------
+
+1. By using Iterator we can always move forward direction, but can't move backward direction, it is a single direction cursor.
+
+2. By using the Iterator we can perform only read and remove operation, but we can't perform the replace and add operation.
+
+
+
+
+ListIterator interface:
+========================
+
+--It is the child interface of the Iterator interface.
+
+--By using ListIterator we can move either to the forward direction or to the backward direction. It is a bi-directional cursor.
+
+--By using ListIterator we can also perform replace or add operation while iterating over the List elements.
+
+Note: ListIterator is the most powerful cursor but its limitation is, It is not a universal cursor, we can use it only with List objects not with the Set or Queue objects.
+
+
+
+ListIterator interface contains the following 9-methods:
+
+1. public boolean hasNext()
+
+2. public Object next()
+
+3. public int nextIndex()
+
+4. public boolean hasPrevious()
+
+5. public Object previous()
+
+6. public int previousIndex()
+
+7. public void remove()
+
+8. public void set(Object o)
+
+9. public void add(Object o)
+
+
+
+--To get the ListIterator object, we need to call listIterator() method on the List object.
+
+
+ListIterator ltr= al.listIterator();
+
+
+
+
+Example:
+--------
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		ListIterator liItr = list.listIterator();
+		
+		while(liItr.hasNext()) {
+			String str = (String)liItr.next();
+			System.out.print(str+" ");
+		}
+		System.out.println();
+		System.out.println("+++++++++++++++++++++++++++");
+		while(liItr.hasPrevious()) {
+			System.out.print(liItr.previous()+" ");
+		}
+	}
+}
+		
+Output:-
+-------
+a b c d e f 
++++++++++++++++++++++++++++
+f e d c b a 
+
+--First move forward then move backward. because when the ListIterator object is created, Cursor is at the start (before first element)
+
+So to go backward:
+
+--First move to end using next()
+--Then use previous()
+
+
+Shortcut (Start from End)
+=-=-=-===-=-=-=-=-=-=-=-=-=
+ListIterator<String> ltr = al.listIterator(al.size()); // we can pass any number from where we want to move backward.
+
+Example:-
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","c","d","e","f"));
+		ListIterator liItr = list.listIterator(list.size());
+		
+		while(liItr.hasPrevious()) {
+			String str = (String)liItr.previous();
+			System.out.print(str+" ");
+		}
+	}
+}
+
+Output:-
+f e d c b a 
+		
+
+Example: Adding the new element while iterating:
+------------------------------------------------
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","d","e","f"));
+		ListIterator liItr = list.listIterator();
+		
+		while(liItr.hasNext()) {
+			String str = (String)liItr.next();
+			if(str.equals("b")) {
+				liItr.add("c");
+			}
+			
+		}
+		System.out.println(list);
+	}
+}
+
+Output:-
+[a, b, c, d, e, f]
+
+
+
+Example: Replacing the new element while iterating:
+---------------------------------------------------
+public class Main {
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>(List.of("a","b","d","e","f"));
+		ListIterator liItr = list.listIterator();
+		
+		while(liItr.hasNext()) {
+			String str = (String)liItr.next();
+			if(str.equals("b")) {
+				liItr.set("c");
+			}
+			
+		}
+		System.out.println(list);
+	}
+}
+Output:-
+-------
+[a, c, d, e, f]
+
+
+
+************************************************************************************************************************************************************
+
+Time Complexity of various methods of Collection and List interface:
+====================================================================
+
+add(E e) : O(1) amortized : May become O(n) during resizing.
+
+add(index, e): O(n): shift elements
+
+remove(Object o) : O(n): Need to search the element.
+
+remove(index): O(n): Shift elements
+
+contains(Object o): O(n): linear search
+
+addAll(Collection c): O(n): Depends on size of input
+
+removeAll(Collection c): O(n * m): worst case
+
+retainAll(Collection c): O(n * m): comparison required
+
+get(index): O(1)
+
+set(index, e): O(1)
+
+indexOf(): O(n): Linear serach
+
+lastIndexOf(): O(n): Reverse serach
+
+
+************************************************************************************************************************************************************
+Commonly used methods of the Collections class:
+===============================================
+1. sort():
+=-=-=-=-=-=
+--It sort the original List objects
+
+Collections.sort(list); 
+Collections.sort(List list, Comparator c);
+
+
+Example:-
+public class CollectionsClassUse {
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<>(List.of(4,5,6,1,3,5,1));
+		Collections.sort(list);
+		System.out.println(list);
+		
+		List<String> list1 = new ArrayList<>(List.of("A","Z","X","B","C"));
+		Collections.sort(list1);
+		System.out.println(list1);
+	}
+}
+Output:-
+[1, 1, 3, 4, 5, 5, 6]
+[A, B, C, X, Z]
+	
+
+
+2. reverse():
+=-=-=-=-=-=-=
+--To reverse the elements of the List
+
+Collections.reverse(List list);
+
+Example:
+Prefer list data from above Collection.sort() method:-
+
+		Collections.reverse(list);
+		Collections.reverse(list1);
+		System.out.println(list);
+		System.out.println(list1);
+
+
+Output:-
+[6, 5, 5, 4, 3, 1, 1]
+[Z, X, C, B, A]
+
+
+3. max() and min():
+=-=-=-=-=-=-=-=-=
+--To find min and max elements from a List
+
+
+Example:
+Prefer list data from above Collection.sort() method:-
+
+		int x = Collections.min(list);
+		System.out.println(x);
+		int y = Collections.max(list);
+		System.out.println(y);
+
+Output:-
+1
+6
+
+
+
+4. binarySearch():
+=-==-=-=-=-=-=-=-=
+--Search element (list must be sorted)
+
+int index = Collections.binarySearch(list, element);
+
+Example:
+public class CollectionsClassUse {
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<>(List.of(4,5,6,1,3,5,1));
+		Collections.sort(list);
+//		System.out.println(list);
+		
+		int x = Collections.binarySearch(list, 6);
+		System.out.println(x);
+		
+	}
+}
+Output:-
+6
+
+5. frequency():
+=-=-=-=-=-=-=-=
+--Counts occurrences of an element
+
+int count = Collections.frequency(list, element);
+
+
+Example:
+		List<Integer> li = new ArrayList<>(List.of(1,2,23,43,4,45,5,1,1));
+		System.out.println(Collections.frequency(li, 1));
+
+Otput:-
+3
+
+
+5. fill():
+=-=-=-=-=
+--Replaces all elements with given value.
+
+Collections.fill(list, GivenValue);
+
+Example:
+			List<Integer> li = new ArrayList<>(List.of(1,2,23,43,4,45,5,1,1));
+			Collections.fill(li, 0);
+			System.out.println(li);
+
+Output:-
+[0, 0, 0, 0, 0, 0, 0, 0, 0]
+	
+
+
+6. disjoint():
+=-=-=-=-=-=-=
+--Checks if two collections have no common elements
+
+Collections.disjoint(list1, list2) //return Boolean value based on if two values are same or not.
+
+Example:
+			List<Integer> li = new ArrayList<>(List.of(1,2,23,43,4,45,5,1,1));
+			List<Integer> li1 = new ArrayList<>(List.of(10,20));
+			System.out.println(Collections.disjoint(li, li1));
+			
+Output:-
+true
+
+
+7. swap():
+=-=-=-=-=-=
+--Swaps two elements inside the List using index
+
+Collections.swap(list, index_1,  index_2);
+
+
+
+8. unmodifiableList():
+==-=-=-=-==-=-=-=-=-==
+--To convert an existing List to the unmodifiableList (Immutable collections)
+
+List<String> unmod = Collections.unmodifiableList(list);
+		
+Example:
+public class Demo {
+	public static void main(String[] args) {
+			List<Integer> list = new ArrayList<>(List.of(10,20,30,40));
+			List<Integer> list2 = Collections.unmodifiableList(list);
+			list2.set(0,100);
+			System.out.println(list);		
+	}
+}
+Output:-
+Exception in thread "main" java.lang.UnsupportedOperationException
+	at java.base/java.util.Collections$UnmodifiableList.set(Collections.java:1504)
+	at com.chitkara.Demo.main(Demo.java:9)
+
+
+9. synchronizedList():
+=-=-=-=-=-=-=-=-=-=-=-=-=
+--To make a Thread-safe list:
+
+List<Integer> syncList = Collections.synchronizedList(list);
+
+
+10. shuffle():
+=-=-=-=-===-=-=
+--It randomly shuffle the elements of the List
+
+Collections.shuffle(list);
+
+Example:
+public class Demo {
+	public static void main(String[] args) {
+			List<Integer> list = new ArrayList<>(List.of(10,20,30,40));
+			System.out.println(list);
+			Collections.shuffle(list);
+			System.out.println(list);
+	}
+}
+
+Output:-
+[10, 20, 30, 40]
+[30, 40, 10, 20]
+
+
+Which method allowed on Which Collection:-
+=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+| Method               | List 	| Set 	| Queue 	| Reason                  |
+| -------------------- | ---- 	| --- 	| ----- 	| ----------------------- |
+| `sort()`             | ✅    	| ❌   	| ❌     	| Requires List indexing  |
+| `reverse()`          | ✅    	| ❌   	| ❌     	| Works on List positions |
+| `max()`              | ✅    | ✅   	| ✅     	| Accepts Collection      |
+| `min()`              | ✅    | ✅   	| ✅     	| Accepts Collection      |
+| `binarySearch()`     | ✅    | ❌   	| ❌     	| Needs sorted List       |
+| `frequency()`        | ✅    | ✅   	| ✅     	| Accepts Collection      |
+| `fill()`             | ✅    | ❌   	| ❌     	| Replaces List elements  |
+| `disjoint()`         | ✅    | ✅   	| ✅     	| Works on Collection     |
+| `swap()`             | ✅    | ❌   	| ❌     	| Uses index              |
+| `unmodifiableList()` | ✅    | ❌   	| ❌     	| List-specific wrapper   |
+| `synchronizedList()` | ✅    | ❌   	| ❌     	| List-specific wrapper   |
+| `shuffle()`          | ✅    | ❌   	| ❌     	| Randomizes List order   |
+
+
+************************************************************************************************************************************************************
+
+
+Hierarchy of Set Interface or Implementation classes of Set Interface:-
+=======================================================================
+
+Set (Interface)
+|
+|----> HashSet (Implemented Class) ----> LinkedHashSet (Implemented Class)
+|
+|----> SortedSet (Interface) -----> Navigable Set (Interface) ----> TreeSet (Implemented Class)
+
+1. HashSet:-
+=-=-=-=-=-=
+- HashSet is a class that implements the Set interface.
+- It does not allow duplicate elements.
+- It does not maintain insertion order.
+- It allows one null value.
+- Internally uses a HashMap.
+- Implements:
+	- Set<E>
+	- Cloneable
+	- Serializable
+
+Internal Working of HashSet
+---------------------------
+- It is internally implemented using a HashMap.
+- In HashSet, elements are stored as keys of HashMap and a dummy value is used. Like key-value pair but at the place value used a dummy value.
+- When an element is added, first its hashCode() method is called to generate their hashCode value.
+- The hashCode() method generates an integer value that helps in finding the bucket location.
+- Based on this hashCode, the element is placed into a specific bucket.
+- If the bucket is empty, the element is stored directly.
+- If the bucket already contains elements, a collision occurs.
+- In case of collision, equals() method is used to compare the new element with existing elements in that bucket.
+- If equals returns true, the element is considered duplicate and is not added.
+- If equals returns false, the element is added in the same bucket.
+
+- So, hashCode() is always checked first to find the location.
+- equals() is checked only when multiple elements have the same hashCode.
+
+- If both hashCode is same and equals returns true, the element is treated as duplicate.
+- If hashCode is same but equals returns false, both elements are stored.
+
+- HashSet allows only one null value because all nulls have the same hashCode and are considered equal.
+
+Default Capacity and Load Factor
+--------------------------------
+- Default initial capacity: 16
+- Load factor: 0.75 (Capacity expansion happens when the number of elements exceeds 75% of the current capacity. This threshold is called the load factor limit.)
+- Capacity doubled after reached at Load factor.
+- During resizing, all existing elements are rehashed and placed into new buckets based on the new capacity.
+- This process is called rehashing and it helps maintain efficient performance of HashSet operations.
+
+Creation of HashSet:-
+=-=-=-=-=-=-=-=-=-=-=-=
+- Without type safety:
+	Set s = new HashSet();
+
+- With type safety:
+	Set<String> s = new HashSet<>();
+
+- With initial capacity:
+	Set<String> s = new HashSet<>(20);
+
+Specific Methods of Set Interface or HashSet class:-
+=-=-=-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-
+There are no any specific methods of Set Interface or HashSet class, all methods use from Collection interface.:-
+
+1. Adding Elements
+- boolean add(E e); → adds single element
+- boolean addAll(Collection<? extends E> c); → adds another collection
+
+2. Removing Elements
+- boolean remove(Object o); → removes specific element
+- boolean removeAll(Collection<?> c); → removes all matching elements
+- boolean retainAll(Collection<?> c); → keeps only common elements
+- void clear(); → removes everything
+
+3. Searching / Checking
+boolean contains(Object o); → checks element
+boolean containsAll(Collection<?> c); → checks collection
+boolean isEmpty(); → check empty or not
+
+
+Example:-
+=-=-=-=
+1.
+public class Demo {
+	public static void main(String[] args) {
+			Set<Integer> set = new HashSet<>();
+			set.add(1);
+			set.add(2);
+			set.add(3);
+			set.add(1);
+			set.add(3);
+			set.add(null);
+			System.out.println(set);
+			Set<Integer> set1 = new HashSet<>();
+			set1.addAll(set);
+			set.remove(1);
+			System.out.println(set);
+			System.out.println(set1);
+			
+	}
+}
+
+Output:-
+------
+[null, 1, 2, 3]
+[null, 2, 3]
+[null, 1, 2, 3]
+
+
+Example with user Define Class:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- As we know, a HashSet is a collection that does not allow duplicate elements.
+- It stores elements using a hashing mechanism, which internally relies on two important methods from the Object class:
+	- hashCode()
+	- equals()
+
+- When we store user-defined objects in a HashSet, we must override these methods to ensure correct duplicate detection.
+- First object will use hashCode() to find the Bucket location and after that if there is no element in Bucket it will store the data directly or if there is any element, then first it will check the content using equals() method after, if equals() method returns false then store data inside the Bucket or equals() returns true then data will not be added due to duplicate data.
+
+Why Both Methods Must Be Overridden Together:-
+=-=-===-=-==-=-=--==--=-==-=--==--=-==-=-=-=-
+
+- It is mandatory to override both methods because:
+
+Rule 1
+-------
+- If two objects are equal using equals(),
+- then their hashCode() must also be equal.
+
+Rule 2
+-------
+- If only equals() is overridden
+- but hashCode() is not overridden:
+	- HashSet may place objects in different buckets
+	- Duplicate detection fails
+
+Code Example with overridden hashCode() and equals() method:-
+-------------------------------------------------------------
+public class Employee {
+	private int empId;
+	private String name;
+	public Employee(int empId, String name) {
+		this.empId = empId;
+		this.name = name;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(empId);
+	}	
+	@Override
+	public boolean equals(Object obj) {
+		if(this==obj)return true;
+		if(getClass()!=obj.getClass())return false;
+		Employee emp = (Employee)obj;
+		return this.empId==emp.empId;
+	}
+	public int getEmpId() {
+		return empId;
+	}
+	public String getName() {
+		return name;
+	}
+	@Override
+	public String toString() {
+		return "[Id=" + empId + ", Name=" + name + "]\n";
+	}
+}
+
+public class Demo {
+	public static void main(String[] args) {
+			Set<Employee> set = new HashSet<>();
+			set.add(new Employee(1, "Raghav"));
+			set.add(new Employee(2, "Navjot"));
+			set.add(new Employee(3, "Aditya"));
+			set.add(new Employee(4, "Nikhil"));
+			set.add(new Employee(3, "Aditya"));
+			set.add(new Employee(4, "Nikhil"));
+			set.add(null);
+			
+			System.out.println(set);	
+	}
+}
+
+Output:-
+------
+[[Id=1, Name=Raghav]
+, null, [Id=2, Name=Navjot]
+, [Id=3, Name=Aditya]
+, [Id=4, Name=Nikhil]
+]
+
+
+
+LinkedHashSet:-
+=-=-=-=-=-=-=-=-
+- LinkedHashSet is a class that implements the Set interface.
+- It does not allow duplicate elements.
+- It maintains insertion order of elements.
+- It allows one null value.
+- Internally uses a HashMap along with a doubly linked list to maintain order.
+- Implements:
+	- Set<E>
+	- Cloneable
+	- Serializable
+
+Internal Working of LinkedHashSet
+---------------------------------
+- LinkedHashSet internally uses LinkedHashMap.
+- LinkedHashMap internally uses HashMap + Doubly Linked List.
+- HashMap part stores elements using hashing (hashCode)(same as above we have studied in HashSet).
+- At the same time, elements are linked using a doubly linked list.
+- This doubly linked list maintains insertion order.
+- Iteration over LinkedHashSet happens through the linked list, not the hash table.
+- Duplicate elements are prevented using equals() method.
+- Removal deletes element from both hash table and linked list.
+- Searching is fast because hashing is used (O(1) average time).
+
+
+Default Capacity of LinkedHashSet
+----------------------------------
+
+- Same as HashSet / HashMap.
+	- Default Capacity = 16
+	- Default Load Factor = 0.75
+
+- Meaning:
+	- Initially 16 buckets created.
+	- When 75% full → resize happens.
+
+Creation of LinkedHashSet:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Without type safety:
+Set s = new LinkedHashSet();
+With type safety:
+Set<String> s = new LinkedHashSet<>();
+With initial capacity:
+Set<String> s = new LinkedHashSet<>(20);
+
+Specific Methods of Set Interface or LinkedHashSet class:-
+=-=-=-===-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+There are no any specific methods of Set Interface or LinkedHashSet class, all methods are used from Collection interface.
+
+* Adding Elements
+- boolean add(E e); → adds single element
+- boolean addAll(Collection<? extends E> c); → adds another collection
+
+* Removing Elements
+- boolean remove(Object o); → removes specific element
+- boolean removeAll(Collection<?> c); → removes all matching elements
+- boolean retainAll(Collection<?> c); → keeps only common elements
+- void clear(); → removes everything
+
+* Searching / Checking
+- boolean contains(Object o); → checks element
+- boolean containsAll(Collection<?> c); → checks collection
+- boolean isEmpty(); → checks empty or not
+
+Student Task:-
+=-=-=-=-=-=-=
+===== Student Management Application =====
+
+- Create a menu-driven program using Scanner class.
+
+Student Record Management using LinkedHashSet
+------------------------------------------------
+- Create a Student class and use LinkedHashSet to:
+	- Store student objects
+	- Prevent duplicate students
+	- Maintain insertion order
+
+- Create a Student class with:
+	- studentID:
+	- name:
+	- email:
+	- course:
+- Override:
+	- equals()
+	- hashCode()
+	- toString()
+- Perform operations:
+	1. Add Student
+	2. Get Student By ID
+	3. Remove Student By ID
+	4. Show All Students
+	5. Check Student Exists
+	6. Display Total Students
+	7. Exit
+
+
+Some Technical questions to Practice:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Question :1.
+=-=-=-=--==
+Problem Statement
+- You are given a list of String values that may contain duplicate elements.
+- Your task is to remove duplicate elements from the list while preserving the original insertion order.
+- The final result should maintain the same order in which elements first appeared in the list.
+
+Input
+- A list of String values:
+["Java", "Python", "Java", "C++", "Python", "JavaScript"]
+
+Expected Output
+- A list with duplicates removed while maintaining insertion order:
+[Java, Python, C++, JavaScript]
+
+
+Question :2
+=-=-=-=-=-=
+Problem Statement
+- You are given a String containing lowercase alphabet characters.
+- Your task is to find the third non-repeating character in the given string.
+- A non-repeating character is a character that appears only once in the string.
+
+You must use:
+- HashSet → to track repeating characters
+- LinkedHashSet → to maintain insertion order of characters
+
+Input
+	programming
+
+Expected Output
+	a
+
+Solution:-
+---------
+public class Demo {	
+	public static void main(String[] args) {
+		String str = "programming";
+		Set<Character> repeat = new HashSet<>();
+		Set<Character> unique = new LinkedHashSet<>();
+		for(int i = 0; i<str.length();i++) {
+			char ch = str.charAt(i);
+			if(repeat.contains(ch)) {
+				continue;
+			}
+			if(unique.contains(ch)) {
+				unique.remove(ch);
+				repeat.add(ch);
+			}else {
+				unique.add(ch);
+			}
+		}
+		int i = 0;
+		for(char x : unique) {
+			i++;
+			if(i==3) {
+				System.out.println(x);
+				break;
+			}
+		}
+	}
+}
+
+Output:-
+a
+
+Question : 3.
+=-=-=-=-=-=-=
+Problem Statement
+- You are given two lists of integers.
+- Your task is to find all unique elements that exist in only one list but not in both lists.
+- In other words, you need to return elements that are present:
+	- In List1 but not in List2, and
+	- In List2 but not in List1
+- You must use HashSet and the removeAll() method to solve this problem.
+
+Input
+- Two integer lists:
+	List1 = [1, 2, 3, 4]
+	List2 = [3, 4, 5, 6]
+
+Expected Output
+- Unique Elements:
+	[1, 2, 5, 6]
+
+Question :-4
+=-=-=-=-=-=-=
+Problem Statement
+- You are given a String that may contain duplicate characters.
+- Your task is to remove duplicate characters from the string while keeping the last occurrence of each character.
+
+This means:
+- If a character appears multiple times, only its last occurrence should remain
+- The relative order of the last occurrences must be preserved
+
+You must use:
+
+LinkedHashSet to maintain insertion order
+
+Input
+	programming
+
+Expected Output
+	poraming
+
+
+
+***************************************************************************************************
+
+Revisiting Collections.sort() method:-
+=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+The Collections.sort() method is used to sort elements of a List either:
+- According to their natural ordering, or
+- According to a custom ordering defined by the programmer. 
+
+Internal Working of Collections.sort():-
+---------------------------------------
+
+When Collections.sort(list) is called:
+- Elements of the list are compared.
+- Comparison is done using:
+	- compareTo() (Comparable) (Natural sorting)
+	- compare() (Comparator) (Custom sorting)
+- Elements are rearranged into sorted order.
+- An efficient sorting algorithm is used internally.
+
+Requirement for Sorting:-
+-----------------------
+
+- To use Collections.sort():
+	- Elements must implement Comparable
+		OR
+	- A Comparator must be provided.
+- If neither Comparable nor Comparator is available:
+	- A runtime exception occurs
+	 (ClassCastException).
+
+Comparable Interface:-
+=--=-=-=-=-=-=-=-=-=
+- The Comparable interface in Java is used to define the natural ordering of objects.
+- It is part of the java.lang package and is widely used in sorting operations.
+- When objects of a user-defined class need to be sorted, the class must implement the Comparable interface and override its compareTo() method.
+- The Comparable interface contains only one method, making it a single-method interface.
+- Method Declaration
+	public interface Comparable<T> {
+    		int compareTo(T obj);
+	}
+The Comparable interface is used to:
+- Define natural sorting order of objects
+- Allow objects to be sorted automatically
+- Enable sorting using methods like:
+	Collections.sort()
+	Arrays.sort()
+	TreeSet
+	TreeMap
+
+- Without Comparable, Java cannot determine how objects should be ordered.
+
+- What is Natural Ordering?
+	- Natural ordering means the default sorting order defined by the class itself.
+
+Examples:
+
+Class		|  Natural Order
+Integer		|  Numerical order
+String		|  Alphabetical order
+Character	|  Alphabetical order
+
+** Note:- Built-in classes like Integer, String, and Double already implement Comparable.
+
+Understanding compareTo() Method:-
+---------------------------------
+The compareTo() method is used to compare current object with another object.
+
+Syntax
+	public int compareTo(T obj)
+
+The method returns:
+------------------
+Return Value			Meaning
+Negative value			Current object is smaller
+Zero				Objects are equal
+Positive value			Current object is greater
+
+Meaning:
+--------
+If result < 0 → smaller
+If result = 0 → equal
+If result > 0 → greater
+
+When sorting is performed using:
+---------------------------------
+	Collections.sort(list);
+
+Java internally:
+----------------
+- Calls compareTo() method
+- Compares objects
+- Rearranges elements
+- Produces sorted order
+- So sorting depends completely on the compareTo() logic.
+
+Steps to Implement Comparable Interface
+-----------------------------------------
+To implement Comparable in a user-defined class:
+
+Step 1
+- Implement Comparable interface
+	class Student implements Comparable<Student>
+
+Step 2
+- Override compareTo() method
+	@Override
+	public int compareTo(Student s) {
+    		return this.id - s.id;
+	}
+
+Step 3
+- Use sorting method
+	Collections.sort(list);
+
+Example:-
+=-=-=-=
+public class Main {
+	public static void main(String[] args) {
+		List<Student> list = new ArrayList<>();
+		list.add(new Student(4,"C_Satvik"));
+		list.add(new Student(2,"A_Krsih"));
+		list.add(new Student(1,"B_Shiwang"));
+		list.add(new Student(3,"D_Sarthak"));
+		Collections.sort(list);
+		System.out.println(list);
+	}
+}
+public class Student implements Comparable<Student>{
+	int id;
+	String name;
+	public Student(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "[id=" + id + ", name=" + name + "]\n";
+	}
+	@Override
+	public int compareTo(Student o) { // Compare based on names in descending order 
+		return o.name.compareTo(this.name);
+	}
+
+}
+
+Output:-
+=-=-=-=-
+[[id=3, name=D_Sarthak]
+, [id=4, name=C_Satvik]
+, [id=1, name=B_Shiwang]
+, [id=2, name=A_Krsih]
+]
+
+
+
+
+Comparator Interface
+=-=-=-=-=-=-=--=-=-=
+- The Comparator interface in Java is used to define a custom sorting order for objects.
+- It belongs to the java.util package and is widely used when multiple sorting criteria are required.
+- Unlike Comparable, which defines natural ordering inside the class, Comparator allows sorting outside the class, making it more flexible and reusable.
+- Comparator is a functional interface (contains one abstract method), which means it can also be implemented using lambda expressions.
+
+Method Declaration
+-------------------
+	public interface Comparator<T> {
+    		int compare(T o1, T o2);
+	}
+Purpose of Comparator Interface
+--------------------------------
+- Define custom sorting logic
+- Provide multiple sorting orders
+- Sort objects without modifying the original class
+- Compare two different objects
+- Provide flexible sorting strategies
+
+Comparator is commonly used with:
+- Collections.sort()
+- List.sort()
+- Arrays.sort()
+- TreeSet
+- TreeMap
+
+Understanding compare() Method
+--------------------------------
+- The compare() method compares two objects and determines their order.
+
+Syntax:-
+	public int compare(T o1, T o2)
+
+Return Values of compare()
+--------------------------
+Return Value		Meaning
+Negative value		First object is smaller
+Zero				Objects are equal
+Positive value		First object is greater
+
+Meaning:
+--------
+- If result < 0 → o1 comes before o2
+- If result = 0 → both equal
+- If result > 0 → o1 comes after o2
+
+***Sorting behavior depends entirely on the compare() method logic.
+
+Steps to Implement Comparator Interface
+---------------------------------------
+Step 1 — Create Comparator Class
+	class NameComparator implements Comparator<Student>
+
+Step 2 — Override compare() Method
+	@Override
+	public int compare(Student s1, Student s2) {
+    		return s1.name.compareTo(s2.name);
+	}
+	
+Step 3 — Use Comparator in Sorting
+	Collections.sort(list, new NameComparator());
+
+
+Example:- for a normal integer list (In reverse order)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+public class Demo {
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<>();
+		list.add(1);
+		list.add(2);
+		list.add(3);
+		list.add(4);
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		Collections.sort(list,new ReverseOrder());
+//		Collections.sort(list, Collections.reverseOrder());//predefined method for reverse the list
+		System.out.println(list);
+	}
+}
+public class ReverseOrder implements Comparator<Integer>{
+	@Override
+	public int compare(Integer o1, Integer o2) {
+		return o2-o1;
+	}
+
+}
+
+Output:-
+-------
+[7, 6, 5, 4, 3, 2, 1]
+
+Example:- for User-defined Class :- Multiple Comparators for Same Class
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- One major advantage of Comparator is that multiple sorting logics can be defined.
+
+Code:-
+-----
+public class Employee implements Comparable<Employee>{
+	int id;
+	String name;
+	double salary;
+	public Employee(int id, String name, double salary) {
+		this.id = id;
+		this.name = name;
+		this.salary = salary;
+	}
+	@Override
+	public String toString() {
+		return "Employee [Id=" + id + ", Name=" + name + ", Salary=" + salary + "]\n";
+	}
+
+	//Natural Sorting --Comparable
+	@Override
+	public int compareTo(Employee o) { 
+		if(this.id==o.id) {
+			return this.name.compareTo(o.name);
+		}
+		return this.id-o.id;
+	}
+}
+
+//Custom sorting on Name
+public class NameComparator implements Comparator<Employee>{ 
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		return o1.name.compareTo(o2.name);
+	}
+}
+
+//Custom sorting on Salary
+public class SalaryComparator implements Comparator<Employee>{
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		return Double.compare(o1.salary,o2.salary);
+	}
+}
+public class Main {
+	public static void main(String[] args) {
+		List<Employee> list = new ArrayList<>();
+		list.add(new Employee(1,"Sarthak", 100000));
+		list.add(new Employee(2,"Abhishek", 200000));
+		list.add(new Employee(5,"Bhargav", 50000));
+		list.add(new Employee(3,"Chatur", 10000));
+		list.add(new Employee(4,"Shiwang", 500000));
+		list.add(new Employee(1,"Anuj", 10000));
+		list.add(new Employee(2,"Bikesh", 500000));
+
+		// Natural sorting by ID by using comparable inside the Class
+		System.out.println("Sorted by ID in ascending order...");
+		Collections.sort(list);
+		System.out.println(list);
+		
+		System.out.println("============================");
+
+		// Custom sorting by name by using a comparator outside the Class
+		System.out.println("Sorted by name in ascending order...");
+		NameComparator nc = new NameComparator();
+		Collections.sort(list,nc);
+		System.out.println(list);
+		
+		System.out.println("============================");
+
+		// Custom sorting by salary by using a comparator outside the Class
+		System.out.println("Sorted by salary in ascending order...");
+		SalaryComparator sc = new SalaryComparator();
+		Collections.sort(list,sc);
+		System.out.println(list);
+	}
+
+}
+Output:-
+-------
+Sorted by ID in ascending order...
+[Employee [Id=1, Name=Anuj, Salary=10000.0]
+, Employee [Id=1, Name=Sarthak, Salary=100000.0]
+, Employee [Id=2, Name=Abhishek, Salary=200000.0]
+, Employee [Id=2, Name=Bikesh, Salary=500000.0]
+, Employee [Id=3, Name=Chatur, Salary=10000.0]
+, Employee [Id=4, Name=Shiwang, Salary=500000.0]
+, Employee [Id=5, Name=Bhargav, Salary=50000.0]
+]
+============================
+Sorted by name in ascending order...
+[Employee [Id=2, Name=Abhishek, Salary=200000.0]
+, Employee [Id=1, Name=Anuj, Salary=10000.0]
+, Employee [Id=5, Name=Bhargav, Salary=50000.0]
+, Employee [Id=2, Name=Bikesh, Salary=500000.0]
+, Employee [Id=3, Name=Chatur, Salary=10000.0]
+, Employee [Id=1, Name=Sarthak, Salary=100000.0]
+, Employee [Id=4, Name=Shiwang, Salary=500000.0]
+]
+============================
+Sorted by salary in ascending order...
+[Employee [Id=1, Name=Anuj, Salary=10000.0]
+, Employee [Id=3, Name=Chatur, Salary=10000.0]
+, Employee [Id=5, Name=Bhargav, Salary=50000.0]
+, Employee [Id=1, Name=Sarthak, Salary=100000.0]
+, Employee [Id=2, Name=Abhishek, Salary=200000.0]
+, Employee [Id=2, Name=Bikesh, Salary=500000.0]
+, Employee [Id=4, Name=Shiwang, Salary=500000.0]
+]
+
+
+Example:- With a lambda expression
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- Since Comparator is a functional interface, lambda expressions can be used.
+Code:-
+-----
+public class Demo {	
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<>();
+		list.add(11);
+		list.add(22);
+		list.add(13);
+		list.add(41);
+		list.add(15);
+		list.add(61);
+		list.add(17);
+
+		//***Here we are using a lambda expression because our Comparator is a functional interface(Have Single Abstract Methods, so we can apply a lambda expression)***
+		Collections.sort(list,(a,b)->b-a);
+		System.out.println(list);
+	}
+}
+Output:-
+-------
+[61, 41, 22, 17, 15, 13, 11]
+
+
+Key Difference between Comparable and Comparator:-
+=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=
+Comparable → Natural Sorting
+-----------
+- Sorting logic is defined inside the class
+- Used when only one default sorting order is needed
+- Uses:
+	compareTo()
+
+
+Comparator → Custom Sorting
+----------
+- Sorting logic is defined outside the class
+- Used when multiple sorting orders are needed
+- Uses:
+	compare()
+
+
+Core Rule:-
+=-=-=-=-=
+If Comparator is provided → Comparator used  
+If a Comparator is not provided → Comparable is used
+******************************************************************************
+
+TreeSet:-
+=-=-=-=-=-=
+- TreeSet is a class that implements the NavigableSet interface.
+- It does not allow duplicate elements.
+- It maintains sorted order (ascending by default).
+- It does not allow null values.
+- Internally uses a Red-Black Tree (Self-balancing Binary Search Tree).
+- Elements are stored in sorted order automatically.
+- Implements:
+	- NavigableSet<E>
+	- SortedSet<E>
+	- Set<E>
+	- Cloneable
+	- Serializable
+
+Internal Working of TreeSet:-
+-----------------------------
+- TreeSet stores elements using a self-balancing binary search tree called Red-Black Tree.
+- When an element is added, TreeSet does not use hashCode().
+- Instead, TreeSet uses:
+	- compareTo() method (if Comparable used)
+			OR
+	- compare() method (if Comparator used)
+
+- When an element is inserted, TreeSet compares the new element with existing elements.
+- If the tree is empty, the element becomes the root node.
+- If the tree already contains elements, comparison starts from the root.
+- Based on comparison result:
+	- If result < 0 → element goes to left side
+	- If result > 0 → element goes to right side
+	- If result = 0 → element is treated as duplicate and not added
+- After insertion, TreeSet automatically balances the tree using Red-Black Tree rules.
+- Because of balancing, search, insert, and delete operations are efficient.
+ 
+
+*******Note***********
+- TreeSet internally uses the Comparable interface for natural sorting of elements and the Comparator interface for custom sorting.
+- Whenever an element is added into TreeSet, it compares elements using compareTo() (Comparable) or compare() (Comparator) methods to maintain sorted order and to prevent duplicate elements. 
+- Built-in classes like Integer, String, Double already implement's Comparable Interface.
+- But for user defined classes we need to implement Comparable interface for natural sorting of that particular class or provide Comparator object (Comparator implemented class object) for custom sorting.
+**********************
+
+
+Creation or Constructor of TreeSet:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+1. Default Constructor
+	TreeSet<Integer> set = new TreeSet<>();
+
+2. Collection Constructor 
+		ArrayList<Integer> list = new ArrayList<>(List.of(1,1,1,2,3,42,4,1,6,7));
+		TreeSet<Integer> set = new TreeSet<>(list);
+
+3. Comparator Constructor
+		// We can pass comparator object inside the constructor
+		TreeSet<Integer> set = new TreeSet<>(new NameComparator());
+
+Capacity of TreeSet:-
+---------------------
+- TreeSet does not have any default capacity. In TreeSet, capacity does not increase like array-based collections. Whenever a new element is added, a new node is dynamically created in the tree structure, allowing TreeSet to grow automatically as elements are inserted.
+
+Adding element in Tree set:-
+---------------------------
+Adding simple elements(Using Integer and Strings):-
+-------------------------------------------------
+For Integers :-
+public class Demo {
+	public static void main(String[] args) {
+		TreeSet<Integer> set = new TreeSet<>();
+		set.add(10);
+		set.add(6);
+		set.add(9);
+		set.add(1);
+		set.add(10);
+		set.add(14);
+		set.add(100);
+		set.add(10);
+		System.out.println(set);
+	}
+}
+Output:-
+[1, 6, 9, 10, 14, 100]
+
+For Strings:-
+----------
+public class Demo {
+	public static void main(String[] args) {
+		TreeSet<String> set = new TreeSet<>();
+		set.add("Ram");
+		set.add("Shyam");
+		set.add("Abhishek");
+		set.add("Krish");
+		set.add("Ram");
+		set.add("Shiwang");
+		System.out.println(set);
+	}
+}
+Output:-
+[Abhishek, Krish, Ram, Shiwang, Shyam]
+
+
+Adding User Define class elements(for Natural order sorting)(Implements Comparable):-
+-----------------------------------------------------------------------------------
+public class Product implements Comparable<Product>{
+	private int proId;
+	private String proName;
+	private double proPrice;
+	private int proRating;
+	public Product(int proId, String proName, double proPrice, int proRating) {
+		this.proId = proId;
+		this.proName = proName;
+		this.proPrice = proPrice;
+		this.proRating = proRating;
+	}
+	public int getProId() {
+		return proId;
+	}
+	public String getProName() {
+		return proName;
+	}
+	public double getProPrice() {
+		return proPrice;
+	}
+	public int getProRating() {
+		return proRating;
+	}
+	@Override
+	public String toString() {
+		return "Product [Product Id=" + proId + ", Product Name=" + proName + ", Product Price=" + proPrice + ", Product Rating="
+				+ proRating + "]\n";
+	}
+
+	//Compare on Product Id base:-
+	@Override
+	public int compareTo(Product o) {
+		return Integer.compare(this.proId, o.proId);
+	}
+}
+public class Demo {
+	public static void main(String[] args) {
+		TreeSet<Product> set = new TreeSet<>();
+		set.add(new Product(1,"Earbuds",2000, 5));
+		set.add(new Product(3,"Bottle",200, 3));
+		set.add(new Product(4,"Mobile",30000, 4));
+		set.add(new Product(2,"Watch",2500, 2));
+		set.add(new Product(5,"Laptop",100000, 5));
+		set.add(new Product(7,"Shoes",3000, 1));
+		set.add(new Product(6,"Bag",5000, 4));		
+		System.out.println(set);
+	}
+}
+
+Output:-
+------
+[Product [Product Id=1, Product Name=Earbuds, Product Price=2000.0, Product Rating=5]
+, Product [Product Id=2, Product Name=Watch, Product Price=2500.0, Product Rating=2]
+, Product [Product Id=3, Product Name=Bottle, Product Price=200.0, Product Rating=3]
+, Product [Product Id=4, Product Name=Mobile, Product Price=30000.0, Product Rating=4]
+, Product [Product Id=5, Product Name=Laptop, Product Price=100000.0, Product Rating=5]
+, Product [Product Id=6, Product Name=Bag, Product Price=5000.0, Product Rating=4]
+, Product [Product Id=7, Product Name=Shoes, Product Price=3000.0, Product Rating=1]
+]
+
+
+
+Adding User Define class elements(for Custom sorting)(Implements Comparator):-
+------------------------------------------------------------------------------
+Using same above Product class:-
+public class Product implements Comparable<Product>{
+	private int proId;
+	private String proName;
+	private double proPrice;
+	private int proRating;
+	public Product(int proId, String proName, double proPrice, int proRating) {
+		this.proId = proId;
+		this.proName = proName;
+		this.proPrice = proPrice;
+		this.proRating = proRating;
+	}
+	public int getProId() {
+		return proId;
+	}
+	public String getProName() {
+		return proName;
+	}
+	public double getProPrice() {
+		return proPrice;
+	}
+	public int getProRating() {
+		return proRating;
+	}
+	@Override
+	public String toString() {
+		return "Product [Product Id=" + proId + ", Product Name=" + proName + ", Product Price=" + proPrice + ", Product Rating="
+				+ proRating + "]\n";
+	}
+	@Override
+	public int compareTo(Product o) {
+		return Integer.compare(this.proId, o.proId);
+	}
+}
+
+public class NameComparator implements Comparator<Product>{
+
+	@Override
+	public int compare(Product o1, Product o2) {
+		return o1.getProName().compareTo(o2.getProName());
+	}
+
+}
+
+public class PriceComparator implements Comparator<Product>{
+
+	@Override
+	public int compare(Product o1, Product o2) {
+		return Double.compare(o1.getProPrice(), o2.getProPrice());
+	}
+
+}
+
+public class RatingComparator implements Comparator<Product>{
+
+	@Override
+	public int compare(Product o1, Product o2) {
+		if(o1.getProRating()==o2.getProRating()) {
+			return Integer.compare(o1.getProId(), o2.getProId());
+		}
+		return Integer.compare(o1.getProRating(),o2.getProRating());
+	}
+
+}
+
+public class Demo {
+	public static void main(String[] args) {
+		TreeSet<Product> set = new TreeSet<>();
+		set.add(new Product(1,"Earbuds",2000, 5));
+		set.add(new Product(3,"Bottle",200, 3));
+		set.add(new Product(4,"Mobile",30000, 4));
+		set.add(new Product(2,"Watch",2500, 2));
+		set.add(new Product(5,"Laptop",100000, 5));
+		set.add(new Product(7,"Shoes",3000, 1));
+		set.add(new Product(6,"Bag",5000, 4));	
+		
+		//Natural sorting by id(Comparable):-
+		System.out.println(set);
+		System.out.println("******************************************");
+		//Custom sorting by Name(Comparator):-
+		TreeSet<Product> nameSet = new TreeSet<>(new NameComparator());
+		nameSet.addAll(set);
+		System.out.println(nameSet);
+		System.out.println("******************************************");
+		
+		//Custom sorting by Price(Comparator):-
+		TreeSet<Product> priceSet = new TreeSet<>(new PriceComparator());
+		priceSet.addAll(set);
+		System.out.println(priceSet);
+		System.out.println("******************************************");
+		
+		//Custom sorting by Rating(Comparator):-
+		TreeSet<Product> ratingSet = new TreeSet<>(new RatingComparator());
+		ratingSet.addAll(set);
+		System.out.println(ratingSet);
+	}
+}
+
+Output:-
+[Product [Product Id=1, Product Name=Earbuds, Product Price=2000.0, Product Rating=5]
+, Product [Product Id=2, Product Name=Watch, Product Price=2500.0, Product Rating=2]
+, Product [Product Id=3, Product Name=Bottle, Product Price=200.0, Product Rating=3]
+, Product [Product Id=4, Product Name=Mobile, Product Price=30000.0, Product Rating=4]
+, Product [Product Id=5, Product Name=Laptop, Product Price=100000.0, Product Rating=5]
+, Product [Product Id=6, Product Name=Bag, Product Price=5000.0, Product Rating=4]
+, Product [Product Id=7, Product Name=Shoes, Product Price=3000.0, Product Rating=1]
+]
+******************************************
+[Product [Product Id=6, Product Name=Bag, Product Price=5000.0, Product Rating=4]
+, Product [Product Id=3, Product Name=Bottle, Product Price=200.0, Product Rating=3]
+, Product [Product Id=1, Product Name=Earbuds, Product Price=2000.0, Product Rating=5]
+, Product [Product Id=5, Product Name=Laptop, Product Price=100000.0, Product Rating=5]
+, Product [Product Id=4, Product Name=Mobile, Product Price=30000.0, Product Rating=4]
+, Product [Product Id=7, Product Name=Shoes, Product Price=3000.0, Product Rating=1]
+, Product [Product Id=2, Product Name=Watch, Product Price=2500.0, Product Rating=2]
+]
+******************************************
+[Product [Product Id=3, Product Name=Bottle, Product Price=200.0, Product Rating=3]
+, Product [Product Id=1, Product Name=Earbuds, Product Price=2000.0, Product Rating=5]
+, Product [Product Id=2, Product Name=Watch, Product Price=2500.0, Product Rating=2]
+, Product [Product Id=7, Product Name=Shoes, Product Price=3000.0, Product Rating=1]
+, Product [Product Id=6, Product Name=Bag, Product Price=5000.0, Product Rating=4]
+, Product [Product Id=4, Product Name=Mobile, Product Price=30000.0, Product Rating=4]
+, Product [Product Id=5, Product Name=Laptop, Product Price=100000.0, Product Rating=5]
+]
+******************************************
+[Product [Product Id=7, Product Name=Shoes, Product Price=3000.0, Product Rating=1]
+, Product [Product Id=2, Product Name=Watch, Product Price=2500.0, Product Rating=2]
+, Product [Product Id=3, Product Name=Bottle, Product Price=200.0, Product Rating=3]
+, Product [Product Id=4, Product Name=Mobile, Product Price=30000.0, Product Rating=4]
+, Product [Product Id=6, Product Name=Bag, Product Price=5000.0, Product Rating=4]
+, Product [Product Id=1, Product Name=Earbuds, Product Price=2000.0, Product Rating=5]
+, Product [Product Id=5, Product Name=Laptop, Product Price=100000.0, Product Rating=5]
+]
+
+
+Core Rule:-
+=-=-=-=-=
+If Comparator is provided → Comparator used  
+If Comparator not provided → Comparable used
+
+
+Methods of TreeSet:-
+=-=-=-=-=-=-=-=-=-=
+All methods from Set Interface will work like add(), addAll(), remove(), contains(), size(), clear(), isEmpty() etc...
+
+Specific Methods from SortedSet Interface:-
+-----------------------------------------
+1. first() — Return Smallest Element from the Set.
+
+2. last() — Return Largest Element.
+
+3. headSet() — Return Set of elements less than the given value.
+
+4. tailSet() — Return Set of Elements Greater or Equal of Given Value.
+
+5. subSet() — Return Set of Elements Between Range
+
+Example Code:-
+public class Main {
+	public static void main(String[] args) {
+		TreeSet<Integer> set = new TreeSet<>(List.of(1,2,3,4,5,9,12,18));
+		System.out.println(set);
+//		Methods of sorted set
+		System.out.println(set.first());
+		System.out.println(set.last());
+		System.out.println(set.headSet(10));
+		System.out.println(set.tailSet(10));
+		System.out.println(set.subSet(0, 9));
+	}
+}
+Output:-
+[1, 2, 3, 4, 5, 9, 12, 18]
+1
+18
+[1, 2, 3, 4, 5, 9]
+[12, 18]
+[1, 2, 3, 4, 5]
+
+Specific Methods from NavigableSet Interface:-
+---------------------------------------------
+These methods find the nearest elements:-
+
+1. lower() — Just Smaller Element of Given element.
+
+2. higher() — Just Greater Element of Given element.
+
+3. floor() — Equal element if available or smaller than given element.
+
+4. ceiling() — Equal element if available or greater than the given element.
+
+5. pollFirst() — Remove the first element from the set and return it.
+
+6. pollLast() — Remove the last element from the set and return it.
+
+7. descendingSet() — Return set in Reverse Order of Given TreeSet
+
+8. descendingIterator() - Return an Iterator that provides iteration in reverse order.
+
+Example code:-
+------------
+
+public class Main {
+	public static void main(String[] args) {
+		TreeSet<Integer> set = new TreeSet<>(List.of(1,2,3,4,5,9,12,18));
+		System.out.println(set.lower(10));
+		System.out.println(set.higher(10));
+		System.out.println(set.descendingSet());
+	}
+}
+Output:-
+9
+12
+[18, 12, 9, 5, 4, 3, 2, 1]
+
+TreeSet Time Complexity Table:-
+=-=--=-==-=-=-=-=--==-=-=-=-=-=
+Operation		Method			Time Complexity		Explanation
+---------               --------                ----------------        ------------
+Add Element		add(E e)		O(log n)		Finds correct position and rebalances tree
+Remove Element		remove(Object o)	O(log n)		Searches element and removes it
+Search Element		contains(Object o)	O(log n)		Traverses tree to find element
+Get First Element	first()			O(log n)		Traverses leftmost node
+Get Last Element	last()			O(log n)		Traverses rightmost node
+Find Greater Element	higher(E e)		O(log n)		Tree traversal required
+Find Smaller Element	lower(E e)		O(log n)		Tree traversal required
+Find Ceiling		ceiling(E e)		O(log n)		Finds ≥ element
+Find Floor		floor(E e)		O(log n)		Finds ≤ element
+Range Query		subSet()		O(log n)		Finds start position
+Head Set		headSet()		O(log n)		Finds range start
+Tail Set		tailSet()		O(log n)		Finds range start
+Get Size		size()			O(1)			Stored internally
+Check Empty		isEmpty()		O(1)			Simple check
+Clear All Elements	clear()			O(n)			Removes all elements
+Iteration		iterator()		O(n)			Visits all elements
+
+
+Checking time element adding in the middle using ArrayList and LinkedList:-
+---------------------------------------------------------------------
+public class Main {
+	public static void main(String[] args) {
+		ArrayList<Integer> al = new ArrayList<>(List.of(1,2,3,4));
+		LinkedList<Integer> ll = new LinkedList<>(List.of(1,2,3,4));
+		
+		long t1=  System.currentTimeMillis();
+		for(int i=0; i<10000;i++) {
+			al.add(al.size()/2,i);
+		}
+		long t2=  System.currentTimeMillis();
+		
+		long t3=  System.currentTimeMillis();
+		for(int i=0; i<10000;i++) {
+			ll.add(ll.size()/2,i);
+		}
+		long t4=  System.currentTimeMillis();
+		
+		System.out.println("ArrayList time:- "+(t2-t1));
+		System.out.println("LinkedList time:- "+(t4-t3));
+	}
+}
+Output:-
+ArrayList time:- 10
+LinkedList time:- 109
+
+**ArrayList taking lesser time than LinkedList because ArrayList is cache-friendly.
+
+****************************************************************************************************************************
+************************************************************************************************************************************************
+
+Hierarchy of Queue Interface or Implementation classes of Queue Interface:-
+===========================================================================
+
+
+Queue (Interface)
+|
+|----> Deque (Interface) -----> ArrayDeque (Implemented Class)
+|
+|----> PriorityQueue (Implemented Class)
+
+
+Queue:-
+======
+- Queue is an interface in the Java Collection Framework.
+- It is used to store elements in FIFO order (First In First Out).
+- The element that is inserted first will be removed first.
+- Queue allows duplicate elements.
+- Queue generally does not allow null values (most implementations).
+- It is mainly used for processing elements in order.
+
+ArrayDeque:-
+=-=-=-=-=-=
+- ArrayDeque is a class that implements the Deque interface.
+- It allows insertion and deletion of elements from both ends.
+- duplicates allowed.
+- It does not allow null values.
+- It maintains insertion order logically.
+- Internally uses a Resizable Circular Array.
+- It is faster than LinkedList when used as Stack or Queue.
+- Implements:
+	- Deque<E>
+	- Queue<E>
+	- Iterable<E>
+	- Cloneable
+	- Serializable
+
+Internal Working of ArrayDeque
+-----------------------------------
+- ArrayDeque is internally implemented using an Object[] array.
+- It works using a circular array mechanism.
+- Two important indexes are maintained internally:
+	- head → points to first element
+	- tail → points to next empty position
+
+How Elements Are Stored:-
+
+- When an element is added at the rear, it is stored at:
+		elements[tail] = ele;
+	After storing:
+		tail = (tail + 1) % capacity
+
+- When an element is added at the front, first head moves:
+		head = (head - 1 + capacity) % capacity
+	Then element is stored:
+		elements[head] = ele;
+
+How Elements removed:-
+
+- When element remove at the rear:
+		tail = (tail - 1 + capacity) % capacity
+		result = elements[tail]
+		elements[tail] = null
+
+- When element remove at the front:
+		result = elements[head]
+		elements[head] = null;
+		head = (head + 1) % capacity
+
+- Iteration logic:-
+	index = head
+	while(index != tail) {
+    		print(elements[index])
+    		index = (index + 1) % capacity
+	}
+
+
+Default Capacity of ArrayDeque
+-----------------------------------
+Default Initial Capacity:
+16
+
+Growth of An ArrayDeque:-
+------------------------
+newCapacity = oldCapacity × 2
+
+
+Creation of ArrayDeque:-
+=-=-=-=-=-=-=-=-=-=-=-=
+ArrayDeque<Integer> dq = new ArrayDeque<>();
+
+Using Deque reference:
+Deque<Integer> dq = new ArrayDeque<>();
+
+With initial capacity:
+ArrayDeque<Integer> dq =
+        new ArrayDeque<>(20);
+
+
+Specific Methods of Deque Interface or ArrayDeque class:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+There are so many methods in ArrayDeque for add (front and rear) and remove (front and rear), but we are going to learn those safe methods which are important.
+
+Methods we need to Implement Double ended Queue or Only for Queue:-
+-----------------------------------------------------------------
+1. For adding elements in Dequeue:-
+	a. offerFirst() - adding element at front.
+	b. offerLast() - adding element at rear.
+
+2. For removing elements in Dequeue:-
+	a. pollFirst() - removing element at front.
+	b. pollLast() - removing element at rear.
+
+3. For only seeing element:-
+	a. peekFirst() - return only element from the front.
+	b. peekLast() - return only element from the rear.
+
+Code:-
+-----
+public class DequeImpl {
+	public static void main(String[] args) {
+		ArrayDeque<Integer> dq = new ArrayDeque<>();
+		dq.offerLast(10);
+		dq.offerLast(20);
+		dq.offerLast(30);
+		System.out.println(dq);
+		System.out.println("=====================");
+		dq.offerFirst(40);
+		dq.offerFirst(50);
+		dq.offerFirst(60);
+		System.out.println(dq);
+		System.out.println("=====================");
+		System.out.println(dq.peekFirst());
+		System.out.println(dq.peekLast());
+		System.out.println("=====================");
+		while(!dq.isEmpty()) {
+			int x = dq.pollFirst();
+			int y = dq.pollLast();
+			System.out.println(x+y);
+		}
+	}
+}       
+Output:-
+[10, 20, 30]
+=====================
+[60, 50, 40, 10, 20, 30]
+=====================
+60
+30
+=====================
+90
+70
+50
+
+Methods we need to Implement Queue:-
+-----------------------------------------------------------------
+1. For adding elements in Queue:-
+	a. offer() - adding element at front.
+
+2. For removing elements in Queue:-
+	a. poll() - removing element at front.
+
+3. For only seeing element:-
+	a. peek() - return only element from the front.
+
+Code:-
+----
+public class QueueImpl {
+	public static void main(String[] args) {
+		ArrayDeque<Integer> queue = new ArrayDeque<>();
+		queue.offer(10);
+		queue.offer(20);
+		queue.offer(30);
+		queue.offer(40);
+		queue.offer(50);
+		System.out.println(queue);
+		System.out.println("==================");
+		while(!queue.isEmpty()) {
+			System.out.println(queue.poll());
+		}
+	}
+}
+
+Output:-
+------
+[10, 20, 30, 40, 50]
+==================
+10
+20
+30
+40
+50
+
+
+Methods we need to Implement Stack:-
+------------------------------------
+1. Adding element into Stack:-
+	a. push() :- internally uses offerFirst().
+
+2. Remove element from the Stack:-
+	a. pop() :- internally uses pollFirst().
+
+3. Seeing last element:-
+ 	a. peek():- internally uses peekFirst().
+
+Code:-
+-----
+public class StackImpl {
+	public static void main(String[] args) {
+		ArrayDeque<Integer> stack = new ArrayDeque<>();
+		stack.push(10);
+		stack.push(20);
+		stack.push(30);
+		stack.push(40);
+		stack.push(50);
+		stack.push(60);
+		System.out.println(stack);
+		System.out.println("=======================");
+		while(!stack.isEmpty()) {
+			int x = stack.peek();
+			stack.pop();
+			System.out.println(x);
+		}
+	}
+}
+Code:-
+-----
+[60, 50, 40, 30, 20, 10]
+=======================
+60
+50
+40
+30
+20
+10
+
+Note:- We can also perform same above operations with methods like addFirst(), addLast(), removeFirst(), removeLast(), getFirst(), getLast() but they are considered as unsafe methods because they will throw Exception  at runtime.
+
+Some other important methods:-
+---------------------------
+1. boolean removeFirstOccurrence(Object o)
+2. boolean removeLastOccurrence(Object o)
+3. boolean contains(Object o)
+4. void clear()
+5. isEmpty()
+
+
+Important Rules of ArrayDeque
+-----------------------------
+
+- ArrayDeque does NOT allow null values.
+- Head always points to first element.
+- Tail always points to next empty slot.
+- Uses circular indexing.
+- Capacity doubles automatically when full.
+
+
+Time Complexity of ArrayDeque Operations
+--------------------------------------------
+
+Operation	Time Complexity
+---------       --------------- 
+addFirst()	O(1)
+addLast()	O(1)
+removeFirst()	O(1)
+removeLast()	O(1)
+peekFirst()	O(1)
+peekLast()	O(1)
+resize()	O(n)
+search()	O(n)
+
+| Feature               | **ArrayDeque**           	| **LinkedList**     
+| --------------------- | ------------------------ 	| -------------------
+| Memory Layout         | Contiguous               	| Scattered          
+| Cache-Friendly        | Yes                    	|  No                
+| Null Elements         | Not allowed            	| Allowed            
+| Traversal Speed       | Faster                   	| Slower              
+| Memory Usage          | Less                     	| More                
+| Garbage Collection    | Less                     	| More                
+| Recommended for Stack | Best                   	| Good                
+| Recommended for Queue | Best                   	| Good               
+| Recommended for Deque | Best                   	| Good              
+| Java Recommendation   | Preferred              	| Only if needed    
+
+
+PriorityQueue:-
+=-=-=-=-=-=-=
+- PriorityQueue is a class that implements the Queue interface.
+- It allows duplicate elements.
+- It does not allow null values.
+- It does not maintain insertion order.
+- Elements are stored based on priority order.
+- By default, elements are arranged in natural ascending order.
+- Internally uses a Binary Heap (Min Heap).
+- The smallest element always remains at the front (root).
+- It is mainly used when priority-based processing is required.
+- Implements:
+	- Queue<E>
+	- Iterable<E>
+	- Serializable
+	- Cloneable
+
+Internal Working of PriorityQueue
+-----------------------------------
+- It is internally implemented using a Binary Heap.
+- By default, it uses a Min Heap structure.
+- In Min Heap, parent element is always smaller than its children.
+- PriorityQueue internally stores elements in an array.
+- When an element is added, it is first inserted at the end of the array.
+- After insertion, UpHeapify (Bubble Up) process is performed to maintain heap property.
+- During UpHeapify:
+	- The inserted element is compared with its parent.
+	- If the element is smaller than parent, swapping happens.
+	- This process continues until heap property is satisfied.
+- When an element is removed using poll():
+	- The root element (smallest) is removed.
+	- The last element is moved to root position.
+	- DownHeapify (Bubble Down) process is performed.
+- During DownHeapify:
+	- Root element is compared with its children.
+	- It is swapped with the smaller child.
+	- This continues until heap property is restored.
+- The root element is always stored at index 0 of the array.
+
+Index Relation in Heap:
+-------------------------
+- Parent Index = Floor((i - 1) / 2)
+- Left Child Index = (2 * i) + 1
+- Right Child Index = (2 * i) + 2
+
+
+
+Min Heap Tree (Example)
+=-=-=-=-=-=-=-=-=-=-=
+Rule: Parent node is smaller than or equal to its children.
+
+Example Numbers: 5, 10, 20, 30, 40, 50, 35
+
+             5
+         /      \
+      10          20
+    /    \      /       \
+ 30      40   50        35
+
+Array Representation:
+
+[5, 10, 20, 30, 40, 50, 35]
+
+
+Max Heap Tree (Example)
+=-=-=-=-=--=-=-=-=-=
+
+Rule: Parent node is greater than or equal to its children.
+
+Example Numbers: 50, 30, 40, 10, 5, 20, 35
+
+              50
+          /       \
+        30        40
+    /      \     /    \
+ 10         5   20     35
+
+Array Representation:
+
+[50, 30, 40, 10, 5, 20, 35]
+
+
+
+
+
+
+
+Default Capacity and Growth:-
+=-=-=-=-==-=-=-=-=-=-=-=-=-=
+- Default initial capacity: 11
+- Capacity increases automatically when elements exceed current capacity.
+- Capacity grows dynamically as elements are added.
+- After resizing new Array capacity is:-
+	New Size = 1.5 × Old Size
+- During resizing, a new larger array is created.
+- Existing elements are copied into the new array.
+- Heap structure is maintained after resizing.
+
+Creation of PriorityQueue:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Default Constructor:
+Queue<Integer> q = new PriorityQueue<>();
+
+With initial capacity:
+Queue<Integer> q = new PriorityQueue<>(20);
+
+With custom ordering (Max Heap):
+Queue<Integer> q =
+        new PriorityQueue<>(WithComparatorObject);
+
+Methods we mostly use on PriorityQueue class:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- Adding Elements
+	- boolean offer(E e); → adds element
+- Removing Elements
+	- E poll(); → removes highest priority element
+	- void clear(); → removes all elements
+- Accessing Elements
+	- E peek(); → returns top element
+- Searching / Checking
+	- boolean contains(Object o);
+- Others
+	- boolean isEmpty();
+	- int size();
+
+
+Example:-
+=-=-=-=-=
+public class PriorityQueueImpl {
+	public static void main(String[] args) {
+		PriorityQueue<Integer> pq = new PriorityQueue<>();
+		pq.offer(20);
+		pq.offer(30);
+		pq.offer(5);
+		pq.offer(40);
+		pq.offer(50);
+		pq.offer(1);
+		pq.offer(4);
+		System.out.println(pq);
+		System.out.println("===================");
+		while(!pq.isEmpty()) {
+			System.out.println(pq.poll());
+		}
+	}
+}
+Output:-
+-------
+[1, 30, 4, 40, 50, 20, 5]
+===================
+1
+4
+5
+20
+30
+40
+50
+
+
+
+
+(Note: Printing order may not be fully sorted, but smallest element always comes first.)
+
+Example with Custom Ordering (Max Heap):-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+public class PriorityQueueImpl {
+	public static void main(String[] args) {
+		PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+		pq.offer(20);
+		pq.offer(30);
+		pq.offer(5);
+		pq.offer(40);
+		pq.offer(50);
+		pq.offer(1);
+		pq.offer(4);
+		System.out.println(pq);
+		System.out.println("===================");
+		while(!pq.isEmpty()) {
+			System.out.println(pq.poll());
+		}
+	}
+}
+Output:-
+------
+[50, 40, 5, 20, 30, 1, 4]
+===================
+50
+40
+30
+20
+5
+4
+1
+
+
+Example with User Define Class:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- When we store user-defined objects in PriorityQueue, we must define ordering.
+- Ordering can be defined using:
+	- Comparable
+	- Comparator
+- PriorityQueue compares objects based on defined ordering rule.
+
+Code:-
+-----
+public class Patient {
+	private int patientId;
+	private String patientName;
+	private int priority;
+	
+	public Patient(int patientId, String patientName, int priority) {
+		this.patientId = patientId;
+		this.patientName = patientName;
+		this.priority = priority;
+	}
+	public int getPatientId() {
+		return patientId;
+	}
+	public String getPatientName() {
+		return patientName;
+	}
+	public int getPriority() {
+		return priority;
+	}
+	String getPriorityType() {
+		if(priority==1) {
+			return "Emergency";
+		}else if(priority==2) {
+			return "Critical";
+		}else {
+			return "Normal";
+		}
+	}
+	@Override
+	public String toString() {
+		return "Patient [Patient Id=" + patientId + ", Patient Name=" + patientName
+				+ ", Priority Type=" + getPriorityType() + "]\n";
+	}
+}
+public class Hospital {
+	public static void main(String[] args) {
+		//Implementing Comparator using Lambda Expression.....
+		PriorityQueue<Patient> patients = new PriorityQueue<>((p1,p2)->p1.getPriority()-p2.getPriority());
+		patients.offer(new Patient(1, "Ram", 1));
+		patients.offer(new Patient(2, "Shyam", 2));
+		patients.offer(new Patient(3, "Sita", 3));
+		patients.offer(new Patient(4, "Gita", 2));
+		patients.offer(new Patient(5, "Shankar", 1));
+		patients.offer(new Patient(6, "Vishnu", 3));
+		System.out.println(patients);
+		System.out.println("++++++++++++++++++++++++++++++++++");
+		while(!patients.isEmpty()) {
+			System.out.println(patients.poll());
+			System.out.println("+++++++++++++++++++++++++++++");
+		}
+	}
+}
+
+Output:-
+[Patient [Patient Id=1, Patient Name=Ram, Priority Type=Emergency]
+, Patient [Patient Id=5, Patient Name=Shankar, Priority Type=Emergency]
+, Patient [Patient Id=3, Patient Name=Sita, Priority Type=Normal]
+, Patient [Patient Id=4, Patient Name=Gita, Priority Type=Critical]
+, Patient [Patient Id=2, Patient Name=Shyam, Priority Type=Critical]
+, Patient [Patient Id=6, Patient Name=Vishnu, Priority Type=Normal]
+]
+++++++++++++++++++++++++++++++++++
+Patient [Patient Id=1, Patient Name=Ram, Priority Type=Emergency]
+
++++++++++++++++++++++++++++++
+Patient [Patient Id=5, Patient Name=Shankar, Priority Type=Emergency]
+
++++++++++++++++++++++++++++++
+Patient [Patient Id=2, Patient Name=Shyam, Priority Type=Critical]
+
++++++++++++++++++++++++++++++
+Patient [Patient Id=4, Patient Name=Gita, Priority Type=Critical]
+
++++++++++++++++++++++++++++++
+Patient [Patient Id=3, Patient Name=Sita, Priority Type=Normal]
+
++++++++++++++++++++++++++++++
+Patient [Patient Id=6, Patient Name=Vishnu, Priority Type=Normal]
+
++++++++++++++++++++++++++++++
+
+
+Basic T.C. of some Operation:-
+----------------------------
+Operation	Complexity
+offer()		O(log n)
+poll()		O(log n)
+peek()		O(1)
+
+Why we should use PriorityQueue:-
+--------------------------------
+- No Need to Sort Entire Data Again and Again, Much faster than repeated sorting.
+- Automatically Maintains Priority Order
+- Efficient for Continuous Data Processing
+
+Summary:-
+-------
+- We use PriorityQueue when elements need to be processed based on priority rather than insertion order. It provides efficient access to the highest priority element, avoids repeated sorting, and is widely used in scheduling systems and graph algorithms.
+
+*********************************************************************************************************************
+***************************************************************************************************************************
+
+
+Map in Java
+============
+
+--If we want to represent data in the form of key-value pair, then we use Map.
+
+Example:
+--------
+	RollNo → Student Name
+	ProductID → Product Name
+	Username → Password
+
+--So instead of storing only objects, we store mapping between key and value.
+
+Example:
+---------
+Map<Integer,String> map = new HashMap<>();
+
+map.put(101,"Rahul");
+map.put(102,"Aman");
+map.put(103,"Neha");
+
+Here:
+------
+Key      Value
+101   -> Rahul
+102   -> Aman
+103   -> Neha
+
+Map Framework:
+--------------
+- Map is also a part of Java Collection Framework, but it is separate from Collection Interface.
+
+- Map Framework contains classes and interfaces that help us store and manage key-value pair data.
+
+- Each Map class works like a dictionary.
+
+Example:
+---------
+Dictionary:
+-----------
+Word → Meaning
+
+Map:
+----
+	Key → Value
+	Important Note:
+
+-Map does not extend Collection interface.
+
+-Both Collection and Map are root level interfaces of Collection Framework.
+
+Structure:
+------------
+Collection Framework
+        |
+   -------------------
+   |                 |
+Collection          Map
+(Single Objects)   (Key-Value Pair)
+
+Features of Map Interface:
+
+- Map stores data in key-value pair.
+
+- Key must be unique.
+
+- Value can be duplicate.
+
+- Each key maps to only one value.
+
+- Map does not allow duplicate keys.
+ 
+- Map supports different implementations based on requirement.
+
+- Map supports generic types.
+
+
+Main Interfaces and Classes of Map:
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=
+Map (Interface)
+ |
+ |--- HashMap
+ |       |
+ |       |--- LinkedHashMap
+ |
+ |--- TreeMap
+ |
+ |--- Hashtable
+
+
+1. HashMap:-
+=-=-=-=-=-=-=
+
+HashMap is a class that implements the Map interface.
+- It stores data in key-value pair format.
+- It does not allow duplicate keys.
+- It allows duplicate values.
+- It does not maintain insertion order.
+- It allows one null key.
+- It allows multiple null values.
+- It is not synchronized.
+- Internally uses Hash Table (Array + Linked List / Tree).
+- Implements:
+	- Map<K,V>
+	- Cloneable
+	- Serializable
+
+Internal Working of HashMap
+---------------------------
+- HashMap stores data in the form of key-value pairs.
+- When a key-value pair is added, the hashCode() method of the key is called to generate hashCode.
+- The hashCode() method generates an integer value that helps determine the bucket location.
+- Based on this hashCode, the key-value pair is placed into a specific bucket.
+- If the bucket is empty, the key-value pair is stored directly.
+- If the bucket already contains elements, collision occurs.
+- In case of collision, equals() method is used to compare the new key with existing keys in that bucket.
+- If equals() returns true, the old value is replaced with new value.
+- If equals() returns false, the new entry is added into the same bucket.
+
+Important Points:
+- hashCode() is always checked first to find bucket location.
+- equals() is checked only when multiple keys have same hashCode.
+- If both hashCode is same and equals returns true → value replaced.
+- If hashCode same but equals returns false → new entry added.
+
+Collision Handling (Java 8+)
+- Before Java 8 → Collision handled using Linked List.
+After Java 8 →
+- If number of elements in bucket > 8
+- Linked List converted into Balanced Tree (Red-Black Tree).
+- This improves performance.
+
+Default Capacity and Load Factor
+--------------------------------
+- Default initial capacity: 16
+- Load factor: 0.75 (When number of elements exceeds 75% of capacity, resizing happens.)
+
+Example:
+
+16 × 0.75 = 12 (After 12 entries → resizing occurs.)
+
+Capacity Expansion:
+--------------------
+- Capacity is doubled after reaching load factor limit.
+
+Example:
+16 → 32 → 64 → 128
+
+- During resizing, all existing entries are rehashed.
+- Rehashing means:
+	- Recalculate bucket location
+	- Place entries into new buckets
+
+- This helps maintain efficient performance.
+
+Creation of HashMap:-
+=-=-=-=-=-=-=-=-=-=
+With type safety:
+Map<Integer,String> map = new HashMap<>();
+
+With initial capacity:
+Map<Integer,String> map = new HashMap<>(20);
+
+With capacity and load factor:
+Map<Integer,String> map = new HashMap<>(20,0.75f);
+
+Methods of Map Interface which will work with all Implemented Map Classes so Practice them very carefully :-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-==-=-=--=-==-=-=-=
+
+1. Adding Elements:-
+	- V put(K key, V value):-
+		→ Adds key-value pair
+	
+	- void putAll(Map<? extends K, ? extends V> m);
+
+	- All key-value directly in the Map:-
+		- Map.of(key1 , value1,
+			 Key2 , value2,
+			 key3, value3);
+		- Features:
+			- Immutable
+			- No null key
+			- No duplicate key	
+
+Code:-
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "Aditya");
+		map.put(2, "Rachit");
+		map.put(3, "Raghav");
+		
+		System.out.println(map);
+
+		Map<Integer, String> map1 = new HashMap<>();
+		
+		map1.putAll(map);
+		map1.put(1, "Riya");
+		System.out.println(map1);
+		
+
+		Map<Integer, String> map2 = Map.of(
+				1, "Abhishek",
+				2, "Rahul",
+				3, "Raghav"				
+				);
+		
+//		map2.put(1, "Rakesh");//Giving error due to java.lang.UnsupportedOperationException (Immutable Map)
+		System.out.println(map2);
+		
+	}
+}
+Output:-
+{1=Aditya, 2=Rachit, 3=Raghav}
+{1=Riya, 2=Rachit, 3=Raghav}
+{2=Rahul, 1=Abhishek, 3=Raghav}
+
+2. Removing Elements
+	- V remove(Object key);
+		→ Removes mapping
+
+	- void clear();
+		→ Removes all entries
+
+3. Searching / Checking
+	 - boolean containsKey(Object key);
+		→ Checks key existence
+
+	- boolean containsValue(Object value);
+		→ Checks value existence
+	
+	- boolean isEmpty();
+		→ Check empty or not
+	
+	- int size();
+		→ Number of entries
+
+4. Accessing Elements
+	- V get(Object key);
+		→ Returns value
+
+5. View Methods (Very Important)
+	- Set<K> keySet();
+		→ Returns all keys
+
+	- Collection<V> values();
+		→ Returns all values
+
+	- Set<Map.Entry<K,V>> entrySet();
+		→ Returns key-value pairs
+
+Example:-
+=-=-=-=-=
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "Aditya");
+		map.put(2, "Rachit");
+		map.put(3, "Raghav");
+		
+		map.remove(1);
+		System.out.println(map);	
+		
+		System.out.println(map.containsKey(2));
+		System.out.println(map.containsValue("Aditya"));
+		System.out.println(map.isEmpty());
+		System.out.println(map.size());
+		
+		System.out.println(map.get(2));
+	}
+}
+
+Output:-
+{2=Rachit, 3=Raghav}
+true
+false
+false
+2
+Rachit
+
+
+Iterating HashMap
+=-=-=-=-=-=-=-=-=
+
+1. Using entrySet()
+-------------------
+- entrySet() is a method of Map interface that returns all key-value pairs of a Map as a Set.
+		
+		Set<Map.Entry<K,V>> entrySet();
+		- entrySet() → returns Set of key-value pairs
+
+Example Map:
+	
+	1 → A  
+	2 → B  
+	3 → C  
+
+After calling:
+
+- map.entrySet();
+
+Result:
+
+	[1=A, 2=B, 3=C]
+
+Each item:
+
+	Key + Value = One Entry
+
+
+
+- Map.Entry is an inner interface inside Map.
+
+It represents:
+
+- One single key-value pair
+
+Structure:
+
+	Map.Entry<K,V>
+
+Important methods of Map.Entry:
+
+	getKey()      → Returns key
+
+	getValue()    → Returns value
+
+	setValue()    → Updates value
+
+Example:-
+--------
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "Aditya");
+		map.put(2, "Rachit");
+		map.put(3, "Raghav");
+		map.put(4, "Ram");
+		map.put(5, "Shyam");
+		map.put(6, "Sita");
+		
+		Set<Map.Entry<Integer, String>> set = map.entrySet();
+		for(Map.Entry<Integer, String> x : set) {
+			if(x.getKey()==3) {
+				x.setValue("Rakesh");
+			}
+			System.out.println(x.getKey()+" :- "+x.getValue());
+		}
+	}
+}
+Output:-
+
+1 :- Aditya
+2 :- Rachit
+3 :- Rakesh
+4 :- Ram
+5 :- Shyam
+6 :- Sita
+
+
+2. Using keySet()
+------------------
+Code:-
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "Aditya");
+		map.put(2, "Rachit");
+		map.put(3, "Raghav");
+		map.put(4, "Ram");
+		map.put(5, "Shyam");
+		map.put(6, "Sita");
+		
+		for(Integer x : map.keySet() ) {
+			System.out.println(x+" :- "+map.get(x));
+		}
+	}
+}
+
+Output:-
+1 :- Aditya
+2 :- Rachit
+3 :- Raghav
+4 :- Ram
+5 :- Shyam
+6 :- Sita
+
+
+Fail fast and Fail safe behaviour:-
+=-=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=
+Fail-Fast Behaviour:-
+------------------
+- A Fail-Fast iterator throws an exception if the Map is structurally modified while iterating.
+
+- Structural modification means:
+	- Adding elements
+	- Removing elements
+
+- Except when modification is done using iterator's own remove() method.
+
+- When such modification happens, Java throws:
+	- ConcurrentModificationException
+
+Example:-
+--------
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "Aditya");
+		map.put(2, "Rachit");
+		map.put(3, "Raghav");
+		map.put(4, "Ram");
+		map.put(5, "Shyam");
+		map.put(6, "Sita");
+		for(Integer x : map.keySet() ) {
+			if(x ==4) {
+				map.remove(x);
+			}
+		}
+		System.out.println(map);
+	}
+}
+Output:-
+Exception in thread "main" java.util.ConcurrentModificationException
+	at java.base/java.util.HashMap$HashIterator.nextNode(HashMap.java:1605)
+	at java.base/java.util.HashMap$KeyIterator.next(HashMap.java:1628)
+	at com.chitkara.Main.main(Main.java:14)
+
+
+Fail-Safe behaviour:
+---------------------
+When we iterate over a Map, and the Map is modified at the same time, no exception is thrown, and the program continues normally.
+
+Achieving fail-safe behaviour using iterator:-
+ public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "Aditya");
+		map.put(2, "Rachit");
+		map.put(3, "Raghav");
+		map.put(4, "Ram");
+		map.put(5, "Shyam");
+		map.put(6, "Sita");
+		
+		Iterator itr = map.keySet().iterator();
+		
+		while(itr.hasNext()) {
+			int x = (Integer)itr.next();
+			if(x==3) {
+				itr.remove();
+			}
+		}
+		System.out.println(map);
+	}
+}
+
+Output:-
+{1=Aditya, 2=Rachit, 4=Ram, 5=Shyam, 6=Sita}
+
+
+
+Example with User Define Class:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- As we know HashMap stores key-value pairs.
+- If we use user-defined object as key, we must override:
+	- hashCode()
+	- equals()
+- Because HashMap internally uses hashing mechanism.
+
+
+Why Both Methods Must Be Overridden Together:-
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Rule 1
+- If two objects are equal using equals()
+- Then their hashCode() must also be equal.
+
+Rule 2
+If equals() overridden but hashCode() not overridden:
+- HashMap may store duplicate keys
+- Data inconsistency occurs
+
+Code Example with overridden hashCode() and equals() method:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Can we add Multiple data with Single key?
+
+
+
+Code:-
+-----
+public class Student {
+	private int studentId;
+	private String name;
+	private String technology;
+	public Student(int studentId, String name, String technology) {
+		this.studentId = studentId;
+		this.name = name;
+		this.technology = technology;
+	}
+	public int getStudentId() {
+		return studentId;
+	}
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTechnology() {
+		return technology;
+	}
+	public void setTechnology(String technology) {
+		this.technology = technology;
+	}
+	@Override
+	public String toString() {
+		return "Student [Student Id=" + studentId + ", Name=" + name + ", Technology=" + technology + "]";
+	}
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return Objects.hash(studentId);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if(this==obj)return true;
+		if(getClass()!=obj.getClass())return false;
+		Student st = (Student)obj;
+		return st.studentId==this.studentId;
+	}
+	
+	
+}
+
+public class Collage {
+	public static void main(String[] args) {
+		List<String> java = List.of("Core Java", "Advanced Java", "Database", "JDBC", "Spring");
+		List<String> webDev = List.of("CSS", "HTML", "JavaScript", "ReactJS");
+		List<String> aiml = List.of("Python", "Data Structure", "OOP", "Algorithm");
+		
+		Map<Student, List<String>> mapStudent = new HashMap<>();
+		mapStudent.put(new Student(1,"Aditya","Java"),java);
+		mapStudent.put(new Student(2,"Rahul","AIML"),aiml);
+		mapStudent.put(new Student(3,"Riya","Web Development"),webDev);
+		mapStudent.put(new Student(4,"Puneet","Java"),java);
+		mapStudent.put(new Student(5,"Rachit","AIML"),aiml);
+		mapStudent.put(new Student(6,"Niyamat","Web Development"),webDev);
+		mapStudent.put(new Student(6,"Niyamat","Web Development"),java);
+		
+		Set<Map.Entry<Student, List<String>>> set = mapStudent.entrySet();
+		for(Map.Entry<Student, List<String>> x : set) {
+			System.out.println(x.getKey());
+			System.out.println(x.getValue());
+			System.out.println("=================================");
+		}		
+	}
+}
+
+Output:-
+--------
+Student [Student Id=1, Name=Aditya, Technology=Java]
+[Core Java, Advanced Java, Database, JDBC, Spring]
+=================================
+Student [Student Id=2, Name=Rahul, Technology=AIML]
+[Python, Data Structure, OOP, Algorithm]
+=================================
+Student [Student Id=3, Name=Riya, Technology=Web Development]
+[CSS, HTML, JavaScript, ReactJS]
+=================================
+Student [Student Id=4, Name=Puneet, Technology=Java]
+[Core Java, Advanced Java, Database, JDBC, Spring]
+=================================
+Student [Student Id=5, Name=Rachit, Technology=AIML]
+[Python, Data Structure, OOP, Algorithm]
+=================================
+Student [Student Id=6, Name=Niyamat, Technology=Web Development]
+[Core Java, Advanced Java, Database, JDBC, Spring]
+=================================
+
+
+Sorting Map According to their values:-
+=-=-=-=-=-=--=-==-=-=-=-=--==-=-=-=--=
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new HashMap<Integer, String>();
+		map.put(1, "M");
+		map.put(2, "E");
+		map.put(3, "F");
+		map.put(4, "Z");
+		map.put(5, "C");
+		map.put(6, "B");
+		map.put(7, "A");
+		
+		Set<Map.Entry<Integer, String>> set = map.entrySet();
+		List<Map.Entry<Integer, String>> list = new ArrayList<>(set);
+		System.out.println(list);
+		
+		//Sorting by value ascending order
+		Collections.sort(list,(a,b)->a.getValue().compareTo(b.getValue()));
+		System.out.println(list);
+
+		//Sorting by value descending order
+		Collections.sort(list,(a,b)->b.getValue().compareTo(a.getValue()));
+		System.out.println(list);
+	}
+}
+Output:-
+[1=M, 2=E, 3=F, 4=Z, 5=C, 6=B, 7=A]
+[7=A, 6=B, 5=C, 2=E, 3=F, 1=M, 4=Z]
+[4=Z, 1=M, 3=F, 2=E, 5=C, 6=B, 7=A]
+
+
+Time Complexity Table of HashMap Operations:-
+--------------------------------------------
+Operation		Average Case		Worst Case		Explanation
+put()			O(1)			O(n)			Insert key-value pair
+get()			O(1)			O(n)			Retrieve value
+remove()		O(1)			O(n)			Remove entry
+containsKey()		O(1)			O(n)			Check key exists
+containsValue()		O(n)			O(n)			Search value
+size()			O(1)			O(1)			Returns size
+isEmpty()		O(1)			O(1)			Check empty
+clear()			O(n)			O(n)			Remove all entries
+keySet()		O(1)			O(1)			Returns view
+values()		O(1)			O(1)			Returns view
+entrySet()		O(1)			O(1)			Returns view
+iteration (loop)	O(n)			O(n)			Traverse all elements
+
+
+==============================================================================================
+2. LinkedHashMap:-
+=-=-=-=-=-=-=-=-=
+LinkedHashMap is a class that implements the Map interface.
+- Most of the property are same as HashMap.
+- The basic difference is:-
+	- It maintains insertion order.
+	- Internally uses Hash Table + Linked List.
+- Implements:
+	- Map<K,V>
+	- Cloneable
+	- Serializable
+
+Internal Working of LinkedHashMap:-
+-----------------------------------
+- LinkedHashMap works similar to HashMap, but it also maintains insertion order.
+- LinkedHashMap internally uses:
+	Hash Table + Doubly Linked List
+- When a key-value pair is added:
+- hashCode() method of key is called.
+- Bucket location is calculated.
+- Entry stored in HashMap bucket.
+- Entry also connected using Linked List to maintain order.
+
+Default Capacity and Load Factor
+---------------------------------
+Same as HashMap:
+- Default initial capacity: 16
+- Load factor: 0.75
+
+Example:
+
+16 × 0.75 = 12 (After 12 entries → resizing occurs.)
+
+Capacity Expansion:
+- Capacity is doubled after reaching load factor.
+
+Example:
+
+16 → 32 → 64 → 128 (All entries are rehashed.)
+
+Rehashing means:
+- Recalculate bucket index
+- Move entries to new buckets
+
+Creation of LinkedHashMap:-
+=-=-=-=-=-=-=-=-=-=-=-=-=
+
+With type safety:
+
+	Map<Integer,String> map = new LinkedHashMap<>();
+
+With initial capacity:
+
+	Map<Integer,String> map = new LinkedHashMap<>(20);
+
+With capacity and load factor:
+
+	Map<Integer,String> map = new LinkedHashMap<>(20,0.75f);
+
+Methods:-
+=-=-=-=
+(Same methods as HashMap — because LinkedHashMap also implements Map interface.)
+
+
+Example:-
+=-=-=-=-=
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new LinkedHashMap<Integer, String>();
+		map.put(1, "M");
+		map.put(2, "E");
+		map.put(3, "F");
+		map.put(4, "Z");
+		map.put(5, "C");
+		map.put(6, "B");
+		map.put(7, "A");
+		System.out.println(map);
+		
+	}
+}
+
+Output:-
+{1=M, 2=E, 3=F, 4=Z, 5=C, 6=B, 7=A}
+
+
+Difference Between HashMap and LinkedHashMap:-
+=-=-=-=--=-==-=--=-==-=--==-=-=-=-=-=-=--==-=
+Feature			HashMap				LinkedHashMap
+Order			No order			Maintains insertion order
+Performance		Faster				Slightly slower
+Internal Structure	Hash Table			Hash Table + Linked List
+Null Key		Yes				Yes
+Null Value		Yes				Yes
+
+For User-defined Class:-
+-----------------------
+Same as HashMap:
+- If a user-defined object is used as a key:
+
+Must override:
+- hashCode()
+- equals()
+
+Because LinkedHashMap internally uses a hashing mechanism.
+
+
+
+======================================================
+
+TreeMap:-
+=-=-=-=-=
+TreeMap is a class that implements the Map interface.
+- It stores data in key-value pair format.
+- It does not allow duplicate keys.
+- It allows duplicate values.
+- It maintains the sorted order of keys.
+- It does not allow a null key.
+- It allows multiple null values.
+- It is not synchronized.
+- Internally uses Red-Black Tree.
+- It sorts keys using:
+	Natural Sorting (Comparable)
+	OR
+	Custom Sorting (Comparator)
+- Implements:
+	NavigableMap<K,V>
+	SortedMap<K,V>
+	Map<K,V>
+	Cloneable
+	Serializable
+
+Internal Working of TreeMap
+----------------------------
+- TreeMap stores data using Red-Black Tree.
+- Red-Black Tree is a type of:
+	- Self-Balancing Binary Search Tree
+	- Keys are stored in sorted order.
+
+- When a key-value pair is added:
+- TreeMap compares keys.
+- Finds the correct position.
+- Inserts entry into tree.
+- Tree re-balances automatically.
+- TreeMap does not use hashing.
+- TreeMap uses:
+	compareTo() (Inside Comparable interface for Natural Sorting)
+  	OR  
+	compare() (Inside Comparator interface for Custom Sorting)
+	(methods to compare keys)
+
+- Elements are arranged based on:
+	- Sorted order of keys
+
+Default Capacity and Load Factor
+--------------------------------
+- TreeMap does not use capacity or load factor.
+
+Because:
+- It does not use hashing
+- It uses tree structure
+
+So:
+- No resizing like HashMap
+
+Creation of TreeMap:-
+=-=-=-=-=-=-=-=-=-=-=
+Deafault Constructor:-
+	Map<Integer,String> map = new TreeMap<>();
+
+With custom Comparator:
+	Map<Integer,String> map = new TreeMap<>((a,b) -> b - a); //Uisng Lambda Expression
+
+With existing Map:
+	Map<Integer,String> map2 = new TreeMap<>(map1);
+
+
+Methods:-
+=--==-=-
+(Same Map methods — because TreeMap implements Map interface.)
+
+Example:-
+---------
+public class Main {
+	public static void main(String[] args) {
+		
+		Map<Integer, String> map = new TreeMap<Integer, String>();
+		map.put(3, "M");
+		map.put(1, "E");
+		map.put(8, "F");
+		map.put(2, "Z");
+		map.put(4, "C");
+		map.put(10, "B");
+		map.put(7, "A");
+		System.out.println(map);
+	}
+}
+Output:-
+{1=E, 2=Z, 3=M, 4=C, 7=A, 8=F, 10=B} // Sorted order based on the Key...
+
+Example 2:-
+----------
+public class Main {
+	public static void main(String[] args) {
+		Map<Integer, String> map = new TreeMap<Integer, String>();
+		map.put(1, "Abhishek");
+		map.put(3, "Ratnesh");
+		map.put(2, "Rahul");
+		map.put(4, "Neeraj");
+		
+		System.out.println(map);
+		System.out.println("================");
+		for(Integer x : map.keySet()) {
+			System.out.println(x+" : "+map.get(x));
+		}
+
+		System.out.println("================");
+		for(Map.Entry<Integer, String> x : map.entrySet()) {
+			System.out.println(x.getKey()+" : "+x.getValue());
+		}
+	}
+}
+Output:-
+{1=Abhishek, 2=Rahul, 3=Ratnesh, 4=Neeraj}
+================
+1 : Abhishek
+2 : Rahul
+3 : Ratnesh
+4 : Neeraj
+================
+1 : Abhishek
+2 : Rahul
+3 : Ratnesh
+4 : Neeraj
+
+Specific Methods of TreeMap:-
+-----------------------------
+- TreeMap provides extra methods from NavigableMap.
+- These are TreeMap specific useful methods:
+
+1. firstKey() - First (smallest) key
+
+
+2. lastKey() - Last (largest) key
+
+
+3. higherKey(K key) - Next higher key
+
+
+4. lowerKey(K key) - Next lower key
+
+
+5. ceilingKey(K key) - Equal or next higher key
+
+
+6. floorKey(K key) - Equal or next lower key
+
+
+Example:-
+=-=-=-=-=
+public class Main {
+	public static void main(String[] args) {
+		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
+		map.put(1, "Abhishek");
+		map.put(3, "Ratnesh");
+		map.put(2, "Rahul");
+		map.put(4, "Neeraj");
+		map.put(6, "Shubham");
+		map.put(5, "Shiva");
+		
+		System.out.println(map.firstKey());
+		System.out.println(map.lastKey());
+		System.out.println(map.get(map.higherKey(3)));
+		System.out.println(map.lowerKey(3));
+	}
+}
+
+Output:-
+1
+6
+Neeraj
+2
+
+
+
+Difference Between HashMap, LinkedHashMap, and TreeMap
+-----------------------------------------------------
+Feature			HashMap			LinkedHashMap			TreeMap
+Order			No order		Insertion order			Sorted order
+Speed			Fastest			Slightly slower			Slower
+Null Key		Yes			Yes				No
+Internal Structure	Hash Table		Hash + Linked List		Red-Black Tree
+
+
+
+Example with User-Defined Class:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+If using a user-defined class as a key:
+- Must implement:
+	- Comparable
+	OR 
+	provide Comparator
+
+- Otherwise "ClassCastException" will occur.
+
+Why is Comparable Required in TreeMap?
+
+- Because TreeMap needs to compare keys. Without comparison Sorting not possible.
+
+
+Example Code (Transaction Details)(By Using Comparable on Date and Time):-
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-
+public class TransactionDetails implements Comparable<TransactionDetails>{
+	private int transactinId;
+	private LocalDateTime dataAndTime;
+	private String transactionType;
+	private double transactionAmmount;
+	public TransactionDetails(String transactionType,
+			double transactionAmmount) {
+		this.transactinId = (int)(10000+(Math.random()*10000));
+		this.dataAndTime = LocalDateTime.now();
+		this.transactionType = transactionType;
+		this.transactionAmmount = transactionAmmount;
+	}
+	public int getTransactinId() {
+		return transactinId;
+	}
+	public LocalDateTime getDataAndTime() {
+		return dataAndTime;
+	}
+	public String getTransactionType() {
+		return transactionType;
+	}
+	public double getTransactionAmmount() {
+		return transactionAmmount;
+	}
+	@Override
+	public String toString() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+		return "[Transaction Id=" + transactinId + ", Data And Time=" + dataAndTime.format(dtf)
+				+ ", Transaction Type=" + transactionType + ", Transaction Ammount=" + transactionAmmount + "]";
+	}
+	//Natural Sorting -- Comparable implements based on Date and Time
+	@Override
+	public int compareTo(TransactionDetails o) {
+		return this.dataAndTime.compareTo(o.dataAndTime);
+	}
+}
+
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		double balance = 500000;
+		TreeMap<TransactionDetails, String> map = new TreeMap<>();
+		
+		while(true) {
+			System.out.println("Transaction");
+			System.out.println("Please select your option...");
+			System.out.println("1. Add transaction..");
+			System.out.println("2. Show All transaction...");
+			System.out.println("3. Show Remaining Balance");
+			System.out.println("4. Get out..");
+			int choice = sc.nextInt();
+			switch (choice) {
+			case 1: {
+				System.out.println("Please select option:-\n1. For Deposit\n2. For Withdraw");
+				int c = sc.nextInt();
+				System.out.println("Please provide ammount..");
+				double amt = sc.nextDouble();
+				String type = "None";
+				String res = "Transaction Failed";
+				if(c==1) {
+					balance = balance+amt;
+					res = "Transaction Successfull";
+					type = "Deposit";
+				}else if(c==2) {
+					if(amt<=balance) {
+						balance = balance - amt;
+						res = "Transaction Successfull";
+						type = "Withdraw";
+					}else {
+						type = "Withdraw";
+						res = "Transaction Failed due to insufficient Balance..";
+					}
+				}
+				TransactionDetails td = new TransactionDetails(type, amt);
+				map.put(td, res);
+				break;
+			}
+			case 2: {
+				if(map.isEmpty()) {
+					System.out.println("No Transaction happen...");
+				}else {
+					for(Map.Entry<TransactionDetails, String> t : map.entrySet()) {
+						System.out.println(t.getKey());
+						System.out.println(t.getValue());
+						System.out.println("===================");
+					}
+				}
+				break;
+			}
+			case 3: {
+				System.out.println("Remaining Balance: "+balance);
+				break;
+			}
+			case 4: {
+				System.exit(0);
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + choice);
+			}
+		}		
+	}
+
+}
+
+Output:-
+------
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+1
+Please select option:-
+1. For Deposit
+2. For Withdraw
+1
+Please provide ammount..
+1000
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+1
+Please select option:-
+1. For Deposit
+2. For Withdraw
+1
+Please provide ammount..
+100
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+1
+Please select option:-
+1. For Deposit
+2. For Withdraw
+2
+Please provide ammount..
+10000
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+2
+[Transaction Id=15993, Data And Time=30-04-2026 08:31:56, Transaction Type=Deposit, Transaction Ammount=1000.0]
+Transaction Successfull
+===================
+[Transaction Id=10060, Data And Time=30-04-2026 08:32:03, Transaction Type=Deposit, Transaction Ammount=100.0]
+Transaction Successfull
+===================
+[Transaction Id=18073, Data And Time=30-04-2026 08:32:12, Transaction Type=Withdraw, Transaction Ammount=10000.0]
+Transaction Successfull
+===================
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+3
+Remaining Balance: 491100.0
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+4
+
+
+Example with same TransactionsDetails Class but With Custom Comparator based on Ammount:-
+=--=-==--=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		double balance = 500000;
+		//Provided Custom Comparator based on Ammount--This is the only change in Main class or main Method from above
+		TreeMap<TransactionDetails, String> map = new TreeMap<>(new AmmountComparator()); // Custom Comparator in Constructor
+		
+		............
+	}
+}
+Custom Comparator Class:-
+----------------------
+public class AmmountComparator implements Comparator<TransactionDetails>{
+
+	@Override
+	public int compare(TransactionDetails o1, TransactionDetails o2) {
+		int res = Double.compare(o1.getTransactionAmmount(), o2.getTransactionAmmount());
+		if(res==0) {
+			return o1.getDataAndTime().compareTo(o2.getDataAndTime());
+		}
+		return res;
+	}
+
+}
+Output:-
+------
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+1
+Please select option:-
+1. For Deposit
+2. For Withdraw
+1
+Please provide ammount..
+400
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+1
+Please select option:-
+1. For Deposit
+2. For Withdraw
+2
+Please provide ammount..
+200
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+1
+Please select option:-
+1. For Deposit
+2. For Withdraw
+1
+Please provide ammount..
+100
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+2
+
+[Transaction Id=13143, Data And Time=30-04-2026 08:41:00, Transaction Type=Deposit, Transaction Ammount=100.0]
+Transaction Successfull
+===================
+[Transaction Id=19272, Data And Time=30-04-2026 08:40:55, Transaction Type=Withdraw, Transaction Ammount=200.0]
+Transaction Successfull
+===================
+[Transaction Id=16227, Data And Time=30-04-2026 08:40:50, Transaction Type=Deposit, Transaction Ammount=400.0]
+Transaction Successfull
+===================
+Transaction
+Please select your option...
+1. Add transaction..
+2. Show All transaction...
+3. Show Remaining Balance
+4. Get out..
+
+Time Complexity Table of TreeMap Operations:-
+--------------------------------------------
+Operation		Time Complexity
+put()			O(log n)
+get()			O(log n)
+remove()		O(log n)
+containsKey()		O(log n)
+containsValue()		O(n)
+size()			O(1)
+isEmpty()		O(1)
+clear()			O(n)
+iteration		O(n)
+
+
+
+
+=================================================================
+
+
+Hashtable:-
+=-=-=-=-=
+
+Hashtable is a class that implements the Map interface.
+- It stores data in key-value pair format.
+- It does not allow duplicate keys.
+- It allows duplicate values.
+- It does not maintain insertion order.
+- It does not allow null key.
+- It does not allow null value.
+- It is synchronized (Thread-safe).
+- It internally uses Hash Table.
+- It is considered legacy class (old class from early Java versions).
+- Implements:
+	- Map<K,V>
+	- Cloneable
+	- Serializable
+
+Internal Working of Hashtable:-
+------------------------------
+- Hashtable works similar to HashMap, but it is synchronized.
+
+
+Default Capacity and Load Factor
+-------------------------------
+- Default initial capacity: 11
+- Load factor: 0.75
+
+Example:
+
+11 × 0.75 ≈ 8 (After about 8 elements → resizing occurs.)
+
+Capacity Expansion:
+---------------------
+- Capacity increases using:
+	- (Old Capacity × 2) + 1
+
+Example:
+11 → 23 → 47 → 95
+All existing entries are rehashed.
+
+Creation of Hashtable:-
+=-=-=-=-=-=-=-=-=-=-=-=
+
+Default Constructor:-
+
+	Map<Integer,String> map = new Hashtable<>();
+
+With initial capacity:-
+	
+	Map<Integer,String> map = new Hashtable<>(20);
+
+With capacity and load factor:
+
+	Map<Integer,String> map = new Hashtable<>(20,0.75f);
+
+Example:-
+=-=-=-=-=
+public class HashTableImpl {
+	public static void main(String[] args) {
+		Hashtable<String, Integer> table = new Hashtable<String, Integer>();
+		table.put("Ram", 1);
+		table.put("Shyam", 2);
+		table.put("Sita", 3);
+		table.put("Gita", 4);
+		table.put(null, 5);//Exception in thread "main" java.lang.NullPointerException
+		table.put("Rakesh", null);//Exception in thread "main" java.lang.NullPointerException
+		System.out.println(table);
+	}
+}
+
+Output:-
+Exception in thread "main" java.lang.NullPointerException
+	at java.base/java.util.Hashtable.put(Hashtable.java:476)
+	at com.chitkara4.HashTableImpl.main(HashTableImpl.java:13)
+
+
+
+Difference Between HashMap and Hashtable
+-----------------------------------------
+Feature			HashMap			Hashtable
+--------		--------		----------
+Thread-safe		No			Yes
+Null Key		Yes			No
+Null Value		Yes			No
+Performance		Faster			Slower
+Synchronization		No			Yes
+Introduced		Java 1.2		Java 1.0
+
+
+Student Task:-
+=-=-=-=-=-=-=
+1. Create a Bank Account System where:
+	- Account Number → Key
+	- Account Holder Name → Value
+	- Search account by account number
+	- Display all accounts
+	- Remove account
+	- Use HashTable<String AccountNumber, String AccountName
+

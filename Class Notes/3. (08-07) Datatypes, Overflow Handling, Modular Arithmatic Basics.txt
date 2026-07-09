@@ -339,6 +339,23 @@ Note:-
 
 Provide example:-
 ==============
+public class Main1 {
+
+	public static void main(String[] args) {
+		
+		byte b = 127;
+		b++;
+		System.out.println(b);
+		
+		int x  = Integer.MAX_VALUE;
+		x = x+10;
+		System.out.println(x);
+	}
+}
+
+Output:-
+-128
+-2147483639
 
 
 
@@ -423,8 +440,201 @@ Important Method(Many more methods are there apart from following):-
 | compareTo()       | Compare two numbers     |
 
 
-Modular Arithmetic Basics:-
-=-=--==-=-=-=-=-=--==-=-=
+
+Modular Arithmetic:-
+=-=--==-=-=-=-=-=-=
+- Modular Arithmetic is a system of arithmetic where numbers "wrap around" after reaching a fixed value called the modulus.
+
+- Instead of storing the complete number, we keep only its remainder after division by a fixed number.
+ 
+Why is it called "Modulo"?
+--------------------------
+- The word Modulo comes from the mathematical operation of finding the remainder after division.
+
+- Modulo operator:- Java provides the operator '%' called the Modulo Operator.
+
+Example
+	17 ÷ 5
+
+	Quotient = 3
+
+	Remainder = 2
+
+- Therefore
+
+	17 mod 5 = 2
+
+- In Java 17 % 5 also returns 2.
+
+Modulus
+-------
+- The number by which we divide is called the Modulus.
+
+Example
+
+	17 mod 5
+
+- Here 5 is the modulus.
+
+Real-Life Examples of Modular Arithmetic:-
+=-=-==--=-==--=-==-=--==-=-=-=-=-=-=-=-=
+:- Let understand where we already use Modular Arithmetic in daily life.
+
+Example 1 : Clock
+-----------------
+- Suppose the current time is 10 O'clock After 5 hours 10 + 5 = 15 But there is no 15 O'clock on a clock.
+
+- The clock wraps after 12.
+
+	15 % 12 = 3
+
+- Therefore
+	Time = 3 O'clock
+
+Example 2 : Week Days
+---------------------
+- Suppose today is Monday After 10 Days Instead of counting every day
+
+	10 % 7 = 3
+
+- Three days after Monday
+
+	Tuesday
+	Wednesday
+	Thursday
+
+- Answer
+	Thursday
+
+Example 3 : Circular Track
+---------------------------
+- Suppose a circular track has
+- 100 Positions
+- Current Position
+	95
+- Move
+	10 Steps
+	95 + 10 = 105
+	105 % 100 = 5
+
+- Final Position
+	5
+
+Use cases of Modulo:-
+-=-==-=-=-=-=-=-=-=
+1. Check Even or Odd
+2. Last Digit
+3. Remove Last Digit
+4. Reverse Number	
+5. Circular Array Index : - LeetCode-1752 (Sorted and Rotated Array)
+
+Solution:-
+---------
+class Solution {
+    public boolean check(int[] arr) {
+        int count = 0;
+        int n = arr.length;
+        for(int i=0; i<n; i++){
+            if(arr[i]>arr[(i+1)%n]){
+                count++;
+            }
+            if(count>1){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+Modular Arithmetic in Competitive Programming:-
+=-=-=--=-=-=-==-=-=-=-=-=--=-==-=--==-=-=-=-=
+Question 1:-
+- Given a positive integer N, find: N! % 1379.
+
+Question 2:- 
+- You are given an array of N integers.
+
+- Find
+	(A1 × A2 × A3 × ... × AN) % 10007
+
+Question 3:- Given two integers A and B, compute
+
+	A^B % 107.
+
+
+For solution of above questions we need to know following properties of Modulus:-
+
+| Operation                 | Formula                                          |
+| ------------------------- | ------------------------------------------------ |
+| Addition                  | `(a+b)%m=((a%m)+(b%m))%m`                        |
+| Subtraction               | `(a-b)%m=((a%m)-(b%m)+m)%m`                      |
+| Multiplication            | `(a×b)%m=((a%m)×(b%m))%m`                        |
+| Exponentiation            | `(a^b)%m=((a%m)^b)%m`                            |
+| Nested Modulo             | `((a%m)%m)=a%m`                                  |
+| Three-Term Addition       | `(a+b+c)%m=((a%m)+(b%m)+(c%m))%m`                |
+| Three-Term Multiplication | `(a×b×c)%m=((a%m)×(b%m)×(c%m))%m`                |
+| Mixed Expression          | `(a×b+c)%m=(((a%m)×(b%m))+(c%m))%m`              |
+| General Rule              | Apply `%m` to operands and after each operation. |
+| Binary Exponentiation     | `a^n=(a^(n/2))²` (even), `a×(a^(n/2))²` (odd)    |
+
+
+Question 1:-
+------------
+- Given a positive integer N, find: N! % 1379.
+Example:-
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Provide size:-");
+		long n = sc.nextLong();
+		System.out.println("Please provide MOD value:-");
+		long MOD = sc.nextLong();
+		long fact = 1;
+		for(int i=1; i<=n; i++) {
+			fact = (fact*(i%MOD))%MOD;
+		}
+		System.out.println(fact);
+	}
+}
+
+
+
+Output:-
+
+5
+Please provide MOD value:-
+21
+15
+
+Question 3:- 
+-----------
+- Given two integers A and B, compute
+
+	A^B % 107.
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Provide base number:-");
+		long base = sc.nextLong();
+		System.out.println("Provide exponent");
+		long expo = sc.nextLong();
+		System.out.println("Provide Modulos");
+		long MOD = sc.nextLong(); 
+		long ans = 1;
+		base  = base%MOD;
+		while(expo > 0) {
+			if(expo%2!=0) {
+				ans = (base*ans)%MOD;
+			}
+			base = (base*base)%MOD;
+			expo = expo/2;
+		}
+		System.out.println(ans);
+	}
+}
 
  
 
