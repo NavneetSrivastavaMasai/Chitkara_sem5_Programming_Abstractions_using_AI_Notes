@@ -1250,6 +1250,80 @@ Home Work for Leetcode and self understanding:-
 | Happy Number              	|    **202** 	| Happy Number              	| Easy       
 | Count Primes              	|    **204** 	| Count Primes              	| Medium  
 
+
+================================================================================
+
+Count Primes (Leetcode:- 204):-
+==============================
+Solution:-
+----------
+class Solution {
+    public int countPrimes(int n) {
+        int count =0;
+        if(n<=1){
+            return 0;
+        }
+        if(n==2){
+            return 0;
+        }
+        boolean [] marked = new boolean[n+1];
+        for(int i=2; i<n; i++){
+            if(!marked[i]){
+                count++;
+                for(int j=i; j<=n; j = j+i){
+                    marked[j] = true;
+                }
+            }
+            
+        }
+        return count;
+    }
+}
+
+Explanation:-
+------------
+- In the above code, we have created a boolean array named 'marked' to keep track of the numbers that have already been processed.
+
+- Initially, every value in the array is 'false', which means no number has been processed yet.
+
+- We iterate from 2 to n-1.
+
+- If marked[i] is false, it means the current number has not been processed by any smaller number. Therefore, it is a prime number, and we increment the count.
+
+- After finding a prime number, we mark all of its multiples (including the number itself) as true.
+
+- We start from j = i and increase j by i in every iteration:
+      j = i, 2i, 3i, 4i, ...
+
+- This ensures that whenever we reach a composite number in the outer loop, it has already been marked by one of its smaller prime factors, so we simply skip it.
+
+- At the end of the process, the variable 'count' contains the total number of prime numbers less than n.
+
+- If we run inner loop till "j*j<=n" at the place of "j<=n" then the complexity will be "O(n loglogn)" and this algorithem will be called as "Sieve of Eratosthenes".
+
+Example (n = 20)
+----------------
+- Initially:
+
+	2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+
+- 2 ke multiples remove:
+
+	2 3 X 5 X 7 X 9 X 11 X 13 X 15 X 17 X 19
+
+- 3 ke multiples remove:
+
+	2 3 X 5 X 7 X X X 11 X 13 X X X 17 X 19
+
+- 4 skip (already non-prime)
+
+- 5 ke multiples remove
+
+- Final primes:
+
+	2 3 5 7 11 13 17 19
+
+
 ================================================================================
 ================================================================================
 
@@ -1258,10 +1332,10 @@ Questions Practice in Class (06-07-2026):-
 
 | Topic                    	| LeetCode # 	| Problem Name              	| Difficulty 
 | -------------------------	| ---------: 	| ------------------------- 	| ---------- 
-| Power of Two              	|    **231** 	| Power of Two              		| Easy       
-| Power of Three            	|    **326** 	| Power of Three            		| Easy       
-| Power of Four             	|    **342** 	| Power of Four             		| Easy       
-| Ugly Number               	|    **263** 	| Ugly Number               		| Easy       
-| Ugly Number II            	|    **264** 	| Ugly Number II            		| Medium     
+| Power of Two              	|    **231** 	| Power of Two              	| Easy       
+| Power of Three            	|    **326** 	| Power of Three            	| Easy       
+| Power of Four             	|    **342** 	| Power of Four             	| Easy       
+| Ugly Number               	|    **263** 	| Ugly Number               	| Easy       
+| Ugly Number II            	|    **264** 	| Ugly Number II            	| Medium     
 
 
