@@ -1,3 +1,5 @@
+These pattern numbers are according to "Striver DSA Sheet".
+
 Pattern 1:-
 ==========
 public class PatternOne {
