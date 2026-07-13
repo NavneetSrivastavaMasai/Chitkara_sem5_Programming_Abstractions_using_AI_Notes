@@ -1,0 +1,401 @@
+ArrayList:-
+=========
+Internally :- Dynamic Array
+---------------------------
+| Operation        | Method                       | Time Complexity    | Explanation                 |
+| ---------------- | ---------------------------- | ------------------ | --------------------------- |
+| Add at End       | `add(E e)`                   | **O(1)** Amortized | Resize happens occasionally |
+| Add at Index     | `add(int index, E e)`        | **O(n)**           | Elements are shifted        |
+| Get Element      | `get(int index)`             | **O(1)**           | Direct indexing             |
+| Update Element   | `set(int index, E e)`        | **O(1)**           | Direct indexing             |
+| Remove by Index  | `remove(int index)`          | **O(n)**           | Elements shift left         |
+| Remove by Object | `remove(Object o)`           | **O(n)**           | Search + Shift              |
+| Contains         | `contains(Object o)`         | **O(n)**           | Linear Search               |
+| Find Index       | `indexOf(Object o)`          | **O(n)**           | Linear Search               |
+| Size             | `size()`                     | **O(1)**           | Stored internally           |
+| Empty Check      | `isEmpty()`                  | **O(1)**           | Size comparison             |
+| Clear            | `clear()`                    | **O(n)**           | Removes all references      |
+| Convert to Array | `toArray()`                  | **O(n)**           | Copies elements             |
+| Iterate          | Enhanced for-loop / Iterator | **O(n)**           | Visits each element         |
+
+Where to use:-
+=-=-=-=-=-=-=
+- Duplicates elements needed
+- Number of elements is not known beforehand
+- Need dynamic resizing
+- Need fast random access (get(index))
+- Need to return a list of answers
+- Need to store intermediate results
+- Need dynamic arrays in DP problems
+
+Common Problem Clues
+---------------------
+If the question says:
+- Return a list
+- Store all answers
+- Store missing elements
+- Store intervals
+- Dynamic output size
+- Result size is unknown
+
+Think
+	ArrayList
+
+Examples
+--------
+- Store all missing numbers
+- Store all leaders in an array
+- Return all subsets
+- Return all permutations
+- Store intervals
+
+
+
+LinkedList:-
+============
+Internally:- Doubly LinkedList
+------------------------------
+| Operation       | Method          | Time Complexity | Explanation          |
+| --------------- | --------------- | --------------- | -------------------- |
+| Add First       | `addFirst()`    | **O(1)**        | Head pointer update  |
+| Add Last        | `addLast()`     | **O(1)**        | Tail pointer update  |
+| Remove First    | `removeFirst()` | **O(1)**        | Head update          |
+| Remove Last     | `removeLast()`  | **O(1)**        | Tail update          |
+| Get First       | `getFirst()`    | **O(1)**        | Head access          |
+| Get Last        | `getLast()`     | **O(1)**        | Tail access          |
+| Add at Index    | `add(index, e)` | **O(n)**        | Traverse to index    |
+| Get by Index    | `get(index)`    | **O(n)**        | Sequential traversal |
+| Set by Index    | `set(index, e)` | **O(n)**        | Traverse first       |
+| Remove by Index | `remove(index)` | **O(n)**        | Traverse first       |
+| Contains        | `contains()`    | **O(n)**        | Linear search        |
+| Size            | `size()`        | **O(1)**        | Stored count         |
+| Clear           | `clear()`       | **O(n)**        | Removes references   |
+
+Where to use:-
+=-=-=-=-=-=-=
+- Frequent insertion/deletion at beginning
+- Need Doubly Linked List implementation
+
+HashSet
+========
+Internal:- HashMap
+-------------------
+| Operation   | Method                       | Time Complexity  | Explanation          |
+| ----------- | ---------------------------- | ---------------- | -------------------- |
+| Add         | `add(E e)`                   | **O(1)** Average | Hashing              |
+| Remove      | `remove(Object o)`           | **O(1)** Average | Hashing              |
+| Search      | `contains(Object o)`         | **O(1)** Average | Hash Lookup          |
+| Size        | `size()`                     | **O(1)**         | Stored internally    |
+| Empty Check | `isEmpty()`                  | **O(1)**         | Size check           |
+| Clear       | `clear()`                    | **O(n)**         | Removes all elements |
+| Iterate     | Enhanced for-loop / Iterator | **O(n)**         | Visit every element  |
+
+Where to use:-
+=-=-=-=-=-=-=
+- Need Unique Elements
+- Membership Checking
+- Cycle Detection
+- Fast Search/Lookup
+
+Common Problem Clues
+---------------------
+If question says
+- Duplicate
+- Distinct
+- Unique
+- Already Present?
+- Visited
+- Exists?
+Think
+	HashSet
+
+Examples
+--------
+- Contains Duplicate
+- Happy Number
+- Sudoku
+- Graph Visited
+- Remove Duplicate Elements
+
+
+LinkedHashSet
+=============
+Internal:- LinkedHashMap
+------------------------
+| Operation  | Time Complexity  |
+| ---------- | ---------------- |
+| add()      | **O(1)** Average |
+| remove()   | **O(1)** Average |
+| contains() | **O(1)** Average |
+| size()     | **O(1)**         |
+| clear()    | **O(n)**         |
+| Iteration  | **O(n)**         |
+
+Where to use:-
+=-=-=-=-=-=-=
+- Need Unique Elements
+- Preserve Insertion Order
+- Remove Duplicates but keep original order
+
+Common Problem Clues
+---------------------
+If question says
+- Preserve original order
+- Remove duplicates
+- First occurrence only
+
+Think
+	LinkedHashSet
+
+
+TreeSet
+========
+Internal:- Red-Black Tree
+--------------------------
+| Operation     | Method        | Time Complexity |
+| ------------- | ------------- | --------------- |
+| Add           | `add()`       | **O(log n)**    |
+| Remove        | `remove()`    | **O(log n)**    |
+| Search        | `contains()`  | **O(log n)**    |
+| First Element | `first()`     | **O(log n)**    |
+| Last Element  | `last()`      | **O(log n)**    |
+| Higher        | `higher()`    | **O(log n)**    |
+| Lower         | `lower()`     | **O(log n)**    |
+| Ceiling       | `ceiling()`   | **O(log n)**    |
+| Floor         | `floor()`     | **O(log n)**    |
+| Poll First    | `pollFirst()` | **O(log n)**    |
+| Poll Last     | `pollLast()`  | **O(log n)**    |
+| Size          | `size()`      | **O(1)**        |
+| Iterate       | Iterator      | **O(n)**        |
+
+Where to use:-
+=-=-=-=-=-=-=
+- Need Sorted Elements
+- Need Unique Elements
+- Need Smallest Element
+- Need Largest Element
+- Need Next Greater Element
+- Need Previous Smaller Element
+- Range Queries
+
+Common Problem Clues
+---------------------
+If question says
+- Sorted
+- Ascending
+- Descending
+- Closest
+- Ceiling
+- Floor
+- Higher
+- Lower
+Think
+	TreeSet
+
+ArrayDeque
+===========
+Internal:- Circular Dynamic Array
+---------------------------------
+| Operation      | Method           | Time Complexity | 
+| -------------- | ---------------- | --------------- |
+| Add First      | `addFirst()`     | **O(1)**        |   
+| Add Last       | `addLast()`      | **O(1)**        |   
+| Remove First   | `removeFirst()`  | **O(1)**        |             
+| Remove Last    | `removeLast()`   | **O(1)**        |             
+| Offer First    | `offerFirst()`   | **O(1)**        |             
+| Offer Last     | `offerLast()`    | **O(1)**        |             
+| Poll First     | `pollFirst()`    | **O(1)**        |             
+| Poll Last      | `pollLast()`     | **O(1)**        |             
+| Peek First     | `peekFirst()`    | **O(1)**        |             
+| Peek Last      | `peekLast()`     | **O(1)**        |             
+| Push           | `push()`         | **O(1)**        |             
+| Pop            | `pop()`          | **O(1)**        |             
+| Peek           | `peek()`         | **O(1)**        |             
+| Contains       | `contains()`     | **O(n)**        |             
+| Remove(Object) | `remove(Object)` | **O(n)**        |             
+| Size           | `size()`         | **O(1)**        |             
+| isEmpty        | `isEmpty()`      | **O(1)**        |             
+| Clear          | `clear()`        | **O(n)**        |             
+
+
+
+| Situation | Methods                                                                        |
+| --------- | ------------------------------------------------------------------------------ |
+| Stack     | `push()` `pop()` `peek()`                                                      |
+| Queue     | `offer()` `poll()` `peek()`                                                    |
+| Deque     | `addFirst()` `addLast()` `pollFirst()` `pollLast()` `peekFirst()` `peekLast()` |
+
+
+Where to use:-
+=-=-=-=-=-=-=
+As Queue
+- FIFO
+- BFS
+- Level Order Traversal
+- Simulation
+As Stack
+- LIFO
+- Parentheses
+- Undo
+ Expression Evaluation
+As Deque
+- Sliding Window
+- Monotonic Queue
+
+
+
+PriorityQueue
+=============
+Internal:- Binary Heap
+----------------------
+Java uses Min Heap by default.
+
+| Operation      | Method           | Time Complexity | Explanation      |
+| -------------- | ---------------- | --------------- | ---------------- |
+| Insert         | `offer()`        | **O(log n)**    | Heapify Up       |
+| Insert         | `add()`          | **O(log n)**    | Heapify Up       |
+| Remove Minimum | `poll()`         | **O(log n)**    | Heapify Down     |
+| Remove Minimum | `remove()`       | **O(log n)**    | Heapify Down     |
+| Peek Minimum   | `peek()`         | **O(1)**        | Root Element     |
+| Contains       | `contains()`     | **O(n)**        | Linear Search    |
+| Remove(Object) | `remove(Object)` | **O(n)**        | Search + Heapify |
+| Size           | `size()`         | **O(1)**        |                  |
+| isEmpty        | `isEmpty()`      | **O(1)**        |                  |
+| Clear          | `clear()`        | **O(n)**        |                  |
+
+
+Where to use:-
+=-=-=-=-=-=-=
+- Need Minimum
+- Need Maximum
+- Top K
+- Kth Largest
+- Kth Smallest
+- Scheduling
+- Greedy
+- Heap Problems
+
+Examples
+--------
+- Last Stone Weight
+- Kth Largest
+- Merge K Lists
+- Dijkstra
+- Prim
+
+
+HashMap
+========
+Internal:- Hash Table (Java 8+: Bucket → Linked List → Red-Black Tree when heavily collided)
+--------------------------------------------------------------------------------------------
+
+| Operation       | Method             | Time Complexity  | Explanation            |
+| --------------- | ------------------ | ---------------- | ---------------------- |
+| Insert          | `put(K,V)`         | **O(1)** Average | Hashing                |
+| Search          | `get(K)`           | **O(1)** Average | Hash Lookup            |
+| Search          | `containsKey(K)`   | **O(1)** Average | Hash Lookup            |
+| Search Value    | `containsValue(V)` | **O(n)**         | Linear Search          |
+| Remove          | `remove(K)`        | **O(1)** Average | Hash Lookup            |
+| Update          | `put(K,V)`         | **O(1)** Average | Replace Existing Value |
+| Size            | `size()`           | **O(1)**         | Stored Count           |
+| Empty Check     | `isEmpty()`        | **O(1)**         | Size Check             |
+| Clear           | `clear()`          | **O(n)**         | Removes All Entries    |
+| Iterate Keys    | `keySet()`         | **O(n)**         | Visit All Keys         |
+| Iterate Values  | `values()`         | **O(n)**         | Visit All Values       |
+| Iterate Entries | `entrySet()`       | **O(n)**         | Visit All Entries      |
+
+Where to use:-
+=-=-=-=-=-=-=-=
+- Frequency Counting
+- Key → Value Mapping
+- Index Mapping
+- Fast Search
+- Pair Finding
+- Grouping
+- Memoization
+- Graph Representation
+Common Problem Clues
+-------------------
+If question says
+- Frequency
+- Count
+- Occurrence
+- Mapping
+- Pair
+- Lookup
+- Index
+- Cache
+Think
+	HashMap
+
+Examples
+--------
+- Two Sum
+- Frequency Count
+- Group Anagrams
+- Word Pattern
+- Character Mapping
+
+
+LinkedHashMap
+==============
+Internal:- Hash Table + Doubly Linked List
+-------------------------------------------
+| Operation     | Time Complexity  |
+| ------------- | ---------------- |
+| put()         | **O(1)** Average |
+| get()         | **O(1)** Average |
+| containsKey() | **O(1)** Average |
+| remove()      | **O(1)** Average |
+| size()        | **O(1)**         |
+| clear()       | **O(n)**         |
+| keySet()      | **O(n)**         |
+| entrySet()    | **O(n)**         |
+
+Where to use:-
+=-=-=-=-=-=-=
+- Need Key → Value Mapping
+- Preserve Insertion Order
+- Ordered Dictionary
+
+
+TreeMap
+=======
+Internal:- Red-Black Tree
+-------------------------
+| Operation        | Method             | Time Complexity |
+| ---------------- | ------------------ | --------------- |
+| Insert           | `put()`            | **O(log n)**    |
+| Search           | `get()`            | **O(log n)**    |
+| Search           | `containsKey()`    | **O(log n)**    |
+| Remove           | `remove()`         | **O(log n)**    |
+| First Key        | `firstKey()`       | **O(log n)**    |
+| Last Key         | `lastKey()`        | **O(log n)**    |
+| Higher Key       | `higherKey()`      | **O(log n)**    |
+| Lower Key        | `lowerKey()`       | **O(log n)**    |
+| Ceiling Key      | `ceilingKey()`     | **O(log n)**    |
+| Floor Key        | `floorKey()`       | **O(log n)**    |
+| Poll First Entry | `pollFirstEntry()` | **O(log n)**    |
+| Poll Last Entry  | `pollLastEntry()`  | **O(log n)**    |
+| keySet()         | **O(n)**           |                 |
+| entrySet()       | **O(n)**           |                 |
+
+
+Where to use:-
+=-=-=-=-=-=-=
+- Need Sorted Keys
+- Range Queries
+- Floor Key
+- Ceiling Key
+- Higher Key
+- Lower Key
+- Ordered Dictionary
+- Time Based Search
+
+
+Questions for Leetcode using collections:-
+----------------------------------------
+1389 (In class)
+1431 (For home)
+989 (For home)
+599 (first try using brute force and then use HashMap) (In class)

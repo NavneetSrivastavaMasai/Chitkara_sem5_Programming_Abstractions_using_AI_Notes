@@ -1234,6 +1234,7 @@ Example
 - Θ(4n⁴+2n²+5) = Θ(n⁴)
 
 ================================================================================
+For Practice:-
 ================================================================================
 Number-based questions
 ======================
@@ -1336,6 +1337,6 @@ Questions Practice in Class (06-07-2026):-
 | Power of Three            	|    **326** 	| Power of Three            	| Easy       
 | Power of Four             	|    **342** 	| Power of Four             	| Easy       
 | Ugly Number               	|    **263** 	| Ugly Number               	| Easy       
-| Ugly Number II            	|    **264** 	| Ugly Number II            	| Medium     
+  
 
 

@@ -666,7 +666,7 @@ class Solution {
 }
 
 (Multiplication Property)
-//If power is really minimal (like 0-10) then this code will be 
+//If power is really minimal (like 0-10) then this code will work also.
 
 class Solution {
     private static final int MOd = 1337;
