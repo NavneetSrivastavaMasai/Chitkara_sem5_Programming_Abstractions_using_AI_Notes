@@ -1,0 +1,318 @@
+Character Array:-
+-=-=-=-=-=-=-=-=
+
+- A Character Array (char[]) is an array whose elements are characters.
+
+- Each index stores exactly one character.
+
+Example
+
+char[] arr = {'J','a','v','a'};
+
+Declaration & Initialization
+---------------------------
+	char[] a = {'H','e','l','l','o'};
+
+	char[] b = new char[5];
+
+	char[] c = "Hello".toCharArray();
+
+
+Memory Representation
+----------------------
+
+Index
+
+	   0      1      2      3
+	+------+------+------+------+
+	|  J   |  a   |  v   |  a   |
+	+------+------+------+------+
+
+Accessing Elements
+------------------
+	System.out.println(arr[0]);
+
+	Output
+
+	J
+
+Updating
+---------
+	arr[1]='A';
+
+	Now
+
+	J A v a
+
+Complexity
+-----------
+Operation	Complexity
+---------------------------
+Access		O(1)
+Update		O(1)
+Traversal	O(n)
+Search		O(n)
+
+Why use Character Arrays (char[])?
+-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+- Although Java provides the String class, there are situations where char[] is more suitable.
+
+Reason 1: Easy Character Modification
+--------------------------------------
+- Character arrays are mutable.
+
+Example
+
+	char[] arr = {'H','e','l','l','o'};
+
+	arr[0]='Y';
+
+	Result
+
+	Yello
+
+- No new array is created.
+
+Reason 2: Better Performance for Frequent Updates
+--------------------------------------------------
+- Suppose we want to modify characters thousands of times.
+
+- With char[] the same memory is updated.
+
+- No new object is created.
+
+Reason 3: Useful in DSA
+------------------------
+- Many interview questions become easier using char[].
+
+Examples
+- Reverse String
+- Palindrome
+- Replace Characters
+- Character Swapping
+
+- Character arrays make swapping easy.
+
+Reason 4: Lower Overhead
+-------------------------
+- A character array stores only characters.
+
+- A String object stores
+	- characters
+	- object metadata
+	- hash code (computed lazily)
+	- length
+	- other internal information
+
+- Therefore char[] has lower memory overhead than String.
+
+
+When to Use char[]:-
+------------------
+- Use char[] when
+	- Frequent modifications are required
+	- Swapping characters
+	- Reversing
+	- Palindrome checking
+	- Simulation problems
+	- Memory efficiency matters
+
+ASCII
+-----
+Full Form
+- American Standard Code for Information Interchange
+- ASCII is a character encoding standard that assigns numeric values to English characters.
+- Every character is represented by a unique number.
+
+| Character | ASCII Value |
+| --------- | ----------- |
+| A         | 65          |
+| Z         | 90          |
+| a         | 97          |
+| 0         | 48          |
+| 1         | 49          |
+| Space     | 32          |
+| !         | 33          |
+
+ASCII Range
+-----------
+
+| Category           | Range            |
+| ------------------ | ---------------- |
+| Control Characters | 0–31             |
+| Digits             | 48–57            |
+| Uppercase Letters  | 65–90            |
+| Lowercase Letters  | 97–122           |
+| Special Symbols    | Remaining values |
+| Total Characters   | 128              |
+
+Question from Leetcode:-
+-----------------------
+- 344 
+- 541 
+- 917 
+- 443 
+
+
+String in Java
+==============
+- A String is a sequence of characters used to represent text in Java.
+
+- Unlike a character array (char[]), a String is an object of the String class present in the java.lang package.
+
+	String name = "Navneet";
+
+Immutable
+---------
+- Once a String object is created, its value cannot be changed.
+
+String s = "Java";
+s.concat(" Programming");
+
+Output:
+
+Java
+
+- The original String remains unchanged.
+
+
+Constructors of String
+----------------------
+The String class provides multiple constructors. The most commonly used are:
+
+1. Empty String Constructor
+String s = new String();
+
+Output
+
+""
+
+Creates an empty String.
+
+2. From Another String
+String s1 = "Java";
+
+String s2 = new String(s1);
+
+Output
+
+Java
+
+Creates a new String object with the same content.
+
+3. From Character Array
+char[] arr = {'J','a','v','a'};
+
+String s = new String(arr);
+
+Output
+
+Java
+
+Converts a character array into a String.
+
+4. From Part of Character Array
+char[] arr = {'J','a','v','a','1','7'};
+
+String s = new String(arr, 0, 4);
+
+Output
+
+Java
+
+Parameters:
+
+Starting index
+Number of characters
+
+5. From Byte Array
+byte[] b = {65, 66, 67};
+
+String s = new String(b);
+
+Output
+
+ABC
+
+Uses the platform's default character encoding.
+
+6. From StringBuilder
+StringBuilder sb = new StringBuilder("Java");
+
+String s = new String(sb);
+
+Output
+
+Java
+
+
+Important Methods of String:-
+---------------------------
+
+Method				Description			Time Complexity
+------------------------------------------------------------------------
+length()			Returns length of string	O(1)
+charAt(int index)		Returns character at index	O(1)
+substring(int begin)		Returns substring		O(n)
+substring(int begin, int end)	Returns substring in range	O(n)
+indexOf(char ch)		First occurrence of character	O(n)
+lastIndexOf(char ch)		Last occurrence			O(n)
+equals(Object obj)		Compares content		O(n)
+equalsIgnoreCase(String s)	Ignore case comparison		O(n)
+compareTo(String s)		Lexicographical comparison	O(min(n, m))
+startsWith(String prefix)	Prefix check			O(m)
+endsWith(String suffix)		Suffix check			O(m)
+replace(char old, char new)	Replace character		O(n)
+toLowerCase()			Convert to lowercase		O(n)
+toUpperCase()			Convert to uppercase		O(n)
+trim()				Remove leading/trailing spaces	O(n)
+split(String regex)		Split string			O(n)
+toCharArray()			Convert to char[]		O(n)
+isEmpty()			Checks if length is 0		O(1)
+
+
+
+Use String when the text is not expected to change after it is created.
+-----------------------------------------------------------------------
+Examples
+- Store a student's name
+- Store an email address
+- Store a password
+- Compare two strings
+
+
+
+
+StringBuilder in Java
+=======================
+- StringBuilder is a class in the java.lang package that is used to create and modify strings efficiently.
+
+- Unlike String, a StringBuilder object is mutable, meaning its contents can be changed without creating a new object.
+
+	StringBuilder sb = new StringBuilder("Java");
+
+
+StringBuilder Class Important Methods:-
+--------------------------------------
+Method				Description			Time Complexity
+append()			Add data at end			O(1) amortized
+insert(int index, value)	Insert at index			O(n)
+delete(int start, int end)	Delete range			O(n)
+deleteCharAt(int index)		Delete one character		O(n)
+reverse()			Reverse string			O(n)
+charAt(int index)		Access character		O(1)
+setCharAt(int index, char ch)	Update character		O(1)
+length()			Returns length			O(1)
+toString()			Convert to String		O(n)
+
+
+Use StringBuilder when the text needs to be modified repeatedly (append, insert, delete, replace, reverse, etc.).
+-----------------------------------------------------------------------------------------------------------------
+Examples
+- Reverse a string
+- Build a large string inside a loop
+- Delete characters
+- Insert characters
+- Replace characters
+- String Compression problems
+

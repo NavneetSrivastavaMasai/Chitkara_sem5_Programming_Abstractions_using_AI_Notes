@@ -399,3 +399,91 @@ Questions for Leetcode using collections:-
 1431 (For home)
 989 (For home)
 599 (first try using brute force and then use HashMap) (In class)
+
+
+------------------------------------------------------------------------------
+
+Leetcode Questions:-
+--------------------
+1 (In class)
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int [] arr = new int[2];
+        for(int i=0; i<nums.length;i++){
+            int remain = target - nums[i];
+            if(map.containsKey(remain)){
+
+                arr[0] = map.get(remain);
+                arr[1] = i;
+                return arr;
+            }
+            map.put(nums[i],i);
+
+        }
+        return arr;       
+    }
+}
+
+20 (In class)
+class Solution {
+    public boolean isValid(String s) {
+        ArrayDeque<Character> stack = new ArrayDeque<>();
+        for(int i=0; i<s.length();i++){
+            char ch = s.charAt(i);
+            if(ch=='[' ||ch=='{' ||ch=='(' ){
+                stack.push(ch);
+            }else{
+                if(stack.isEmpty()){
+                    return false;
+                }else{
+                    char top = stack.pop();
+                    if(top == '[' && ch !=']' ||top == '{' && ch !='}' ||top == '(' && ch !=')' ){
+                        return false;
+                    }
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+1046 (In class)
+class Solution {
+    public int lastStoneWeight(int[] stones) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for(int i=0; i<stones.length;i++){
+            pq.add(stones[i]);
+        }
+        while(pq.size()>1){
+            int s1 = pq.poll();
+            int s2 = pq.poll();
+            if(s1!=s2){
+                pq.add(s1-s2);
+            }
+        }
+        if(pq.isEmpty()){
+            return 0;
+        }
+        return pq.peek();
+    }
+}
+
+217 (For Home)
+349 (For Home)
+804 (For Home)
+242 (For Home)
+387 (For Home)
+290 (For Home)
+414 (For Home)
+
+
+
+
+
+
+
+
+
+
+
