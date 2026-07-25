@@ -1,0 +1,164 @@
+Sliding Window Questions:-
+-------------------------
+LeetCode
+=========
+Fixed Window
+=-=-=-=-=-=-=
+643 Class
+Code:-
+------
+class Solution {
+    public double findMaxAverage(int[] nums, int k) {
+        int sum = 0;
+        for(int i=0; i<k;i++){
+            sum+=nums[i];
+        }
+        int maxSum = sum;
+        int j=0;
+        for(int i=k; i<nums.length; i++){
+            sum = sum + nums[i]-nums[j];
+            j++;
+            maxSum = Math.max(sum,maxSum);
+        }
+        return (double)maxSum/k;
+    }
+}
+
+
+	
+1343 Class
+Code:-
+-----
+class Solution {
+    public int numOfSubarrays(int[] arr, int k, int threshold) {
+        int sum = 0;
+        int count = 0;
+        for(int i=0;i<k;i++){
+            sum += arr[i];
+        }
+        if(sum/k >= threshold){
+            count++;
+        }
+        int j = 0;
+        for(int i=k;i<arr.length;i++){
+            sum += arr[i] - arr[j];
+            j++;
+            if(sum/k >= threshold){
+                count++;
+            }
+        }
+        return count;
+    }
+}
+
+
+2461 Class
+Code-
+-----
+class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+        long sum = 0;
+        long maxSum = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int left = 0;
+        for(int right=0; right<nums.length; right++){
+            sum+=nums[right];
+            map.put(nums[right],map.getOrDefault(nums[right],0)+1);
+            if(right-left+1==k){
+                if(map.size()==k){
+                    maxSum = Math.max(sum,maxSum);
+                }
+                sum-=nums[left];
+                map.put(nums[left],map.get(nums[left])-1);
+                if(map.get(nums[left])==0){
+                    map.remove(nums[left]);
+                }
+                left++;
+            }
+        }
+        return maxSum;
+    }
+}
+
+
+Variable Window
+=-=-=-=-=-=-=-=
+209 Class
+Code:-
+-----
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+         int left =0;
+         int sum =0;
+         int minLen = Integer.MAX_VALUE;
+
+         for(int right=0;right<nums.length;right++){
+                sum += nums[right];
+                while(sum>=target){
+                    minLen = Math.min(minLen,right-left+1);
+                    sum -= nums[left];
+                    left++;
+                }
+         }
+         if(minLen == Integer.MAX_VALUE )return 0;
+         else return minLen;
+    }
+}
+
+		
+1004 Class
+Code:-
+----
+class Solution {
+    public int longestOnes(int[] nums, int k) {
+        int left = 0;
+        int max = 0;
+        int n = nums.length;
+        int count = 0;
+
+        for(int right = 0; right < n; right++){
+            if(nums[right] == 0){
+                count++;
+            }
+            while(count > k){
+                if(nums[left] == 0){
+                    count--;
+                }
+                left++;
+            }
+            max = Math.max(max, right - left + 1);
+        }
+        return max;
+    }
+}
+
+
+
+
+
+1695 Class
+Code:-
+-----
+class Solution {
+    public int maximumUniqueSubarray(int[] nums) {
+        int left =0;
+        int maxSum = 0;
+        HashSet<Integer> set = new HashSet<>();
+        int sum = 0;
+        for(int right=0; right<nums.length;right++){
+            while(set.contains(nums[right])){
+                sum-=nums[left];
+                set.remove(nums[left]);
+                left++;
+            }
+            sum+=nums[right];
+            set.add(nums[right]);
+            maxSum = Math.max(sum,maxSum);
+        }
+        return maxSum;
+    }
+}
+
+	
+904  (Home)
+1493 (Home)

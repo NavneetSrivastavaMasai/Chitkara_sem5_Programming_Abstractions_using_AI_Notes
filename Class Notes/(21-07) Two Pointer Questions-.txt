@@ -1,0 +1,162 @@
+Two Pointer Questions:-
+----------------------
+167. Two Sum II – Input Array Is Sorted -- Class
+Code:-
+-----
+class Solution {
+    public int[] twoSum(int[] num, int target) {
+        int i=0;
+        int j= num.length-1;
+        while(i<j){
+            int sum = num[i]+num[j];
+            if(sum==target){
+                return new int[]{i+1,j+1};
+            }else if(sum>target){
+                j--;
+            }else{
+                i++;
+            }
+        }
+        return new int[]{-1,-1};
+    }
+}
+
+
+283. Move Zeroes -- Class
+Code:-
+-----
+class Solution {
+    public void moveZeroes(int[] nums) {
+       int n = nums.length;
+       int left = 0;
+       for(int i = 0;i<n;i++){
+            if(nums[i]!=0){
+            int temp = nums[i];
+            nums[i] = nums[left];
+            nums[left] = temp;
+            left++;
+            } 
+        }
+    }
+}
+
+88. Merge Sorted Array -- Class
+Code:-
+-----
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i = m-1;
+        int j = n-1;
+        int k = m+n-1;
+        while(j>=0){
+            if(i>=0 && nums1[i]>nums2[j]){
+                nums1[k] = nums1[i];
+                i--;
+            }else{
+                nums1[k] = nums2[j];
+                j--;
+            }
+            k--;
+        }
+    }
+}
+
+
+
+11. Container With Most Water -- Class
+Code:-
+-----
+class Solution {
+    public int maxArea(int[] height) {
+        int l=0;
+        int r = height.length-1;
+        int maxWater =0;
+        while(l<r){
+            int w = r-l;
+            int h = Math.min(height[l],height[r]);
+            int area = h*w;
+            maxWater = Math.max(area,maxWater);
+            if(height[l]<height[r]){
+                l++;
+            }
+            else{
+                r--;
+            }
+        }
+        return maxWater;
+    }
+}
+
+15. 3Sum -- Class
+Code:-
+----
+1.(Less Optimized)
+------------------
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Set<List<Integer>> set  = new HashSet<>();
+        Arrays.sort(nums);
+        for(int i=0; i<nums.length-2; i++){
+            int j= i+1;
+            int k = nums.length-1;
+            while(j<k){
+                int sum = nums[i]+nums[j]+nums[k];
+                if(sum==0){
+                    set.add(Arrays.asList(nums[i],nums[j],nums[k]));
+                    j++;k--;
+                }else if(sum>0){
+                    k--;
+                }else{
+                    j++;
+                }
+            }
+        }
+        ArrayList<List<Integer>> list = new ArrayList<>();
+        for(List<Integer> li : set){
+            list.add(li);
+        }
+
+        return list;
+    }
+    
+}
+1.(More Optimized with same Time Complexity) 
+-------------------------------------------
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> list  = new ArrayList<>();
+        Arrays.sort(nums);
+        for(int i=0; i<nums.length-2; i++){
+            if(i>0 && nums[i]==nums[i-1]){
+                continue;
+            }
+            int j= i+1;
+            int k = nums.length-1;
+            while(j<k){
+                int sum = nums[i]+nums[j]+nums[k];
+                if(sum==0){
+                    list.add(Arrays.asList(nums[i],nums[j],nums[k]));
+                    j++;k--;
+                    while(j<k && nums[j]==nums[j-1]){
+                        j++;
+                    }
+                    while(j<k && nums[k]==nums[k+1]){
+                        k--;
+                    }
+                }else if(sum>0){
+                    k--;
+                }else{
+                    j++;
+                }
+            }
+        }
+        return list;
+    }
+    
+}
+
+905. Sort Array By Parity-- Home
+977. Squares of a Sorted Array -- Home
+26. Remove Duplicates from Sorted Array -- Home
+75. Sort Colors -- Home
+42. Trapping Rain Water -- Home
