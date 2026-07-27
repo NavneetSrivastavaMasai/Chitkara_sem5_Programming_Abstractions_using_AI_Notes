@@ -377,9 +377,7 @@ Examples
 
 
 
-Top 15 Must-Do Interview Questions
-
-If you have limited time, these are the ones I'd prioritize:
+Must-Do Questions
 
 LeetcodeNo.	LeetCode						Pattern
 ========================================================================================
@@ -388,19 +386,21 @@ LeetcodeNo.	LeetCode						Pattern
 387		First Unique Character					HashMap (Home)
 1456		Maximum Number of Vowels				Fixed Sliding Window (Home)
 3		Longest Substring Without Repeating Characters		Sliding Window + HashSet (Class)
-424		Longest Repeating Character Replacement			Sliding Window + HashMap
-567		Permutation in String					Fixed Sliding Window + Frequency
-205		Isomorphic Strings					HashMap
-290		Word Pattern						HashMap
-49		Group Anagrams						HashMap
-151		Reverse Words in a String				Two Pointer
-415		Add Strings						StringBuilder
-394		Decode String						Stack + StringBuilder
+424		Longest Repeating Character Replacement			Sliding Window + HashMap (Class)
+567		Permutation in String					Fixed Sliding Window + Frequency (Home)
+205		Isomorphic Strings					HashMap (Home) 
+290		Word Pattern						HashMap (Home) 
+49		Group Anagrams						HashMap (Class)
+151		Reverse Words in a String				Two Pointer (Home)
+415		Add Strings						StringBuilder (Home)
 76		Minimum Window Substring				Advanced Sliding Window
 
 
 
 
-
-
+Class:-
+=-=-=-=
+3 	Longest Substring Without Repeating Characters	
+424 	Longest Repeating Character Replacement	
+49	Group Anagrams
 
