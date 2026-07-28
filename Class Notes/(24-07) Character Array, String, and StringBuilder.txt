@@ -393,14 +393,82 @@ LeetcodeNo.	LeetCode						Pattern
 49		Group Anagrams						HashMap (Class)
 151		Reverse Words in a String				Two Pointer (Home)
 415		Add Strings						StringBuilder (Home)
-76		Minimum Window Substring				Advanced Sliding Window
+76		Minimum Window Substring				Advanced Sliding Window (Home)
 
 
 
 
 Class:-
 =-=-=-=
-3 	Longest Substring Without Repeating Characters	
+3 	Longest Substring Without Repeating Characters
+Code:-
+-=-=-=
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        HashSet<Character> st = new HashSet<>();
+        int left=0;
+        int maxi =0;
+        int n = s.length();
+        for(int i=0;i<n;i++){
+            while(st.contains(s.charAt(i))){
+                st.remove(s.charAt(left));
+                left++;
+            }
+
+            st.add(s.charAt(i));
+            maxi = Math.max(maxi,i-left+1);
+        }
+        return maxi;
+    }
+}
+
+	
 424 	Longest Repeating Character Replacement	
+Code:-
+=-=-=
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int left =0;
+        int maxFreq =0;
+        int maxLen =0;
+        // HashMap<Character, Integer> map = new HashMap<>();
+        int [] freq = new int[26];
+        for(int right =0; right<s.length();right++){
+            char ch = s.charAt(right);
+            // map.put(ch,map.getOrDefault(ch,0)+1);
+            freq[ch-'A']++;
+            // maxFreq = Math.max(maxFreq,map.get(ch));
+            maxFreq = Math.max(maxFreq,freq[ch-'A']);
+            while((right-left+1)-maxFreq >k){
+                ch = s.charAt(left);
+                freq[ch-'A']--;
+                // map.put(ch,map.get(ch)-1);
+                left++;
+            }
+            maxLen = Math.max(maxLen, right-left+1); 
+        }
+        return maxLen;
+    }
+}
+
+
 49	Group Anagrams
+Code:-
+=-=-=
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,List<String>> map = new HashMap<>();
+        for(String str : strs){
+            char[] arr = str.toCharArray();
+            Arrays.sort(arr);
+            String key = new String(arr);
+            if(!map.containsKey(key)){
+                map.put(key,new ArrayList<String>());
+            }
+            map.get(key).add(str);
+        }
+        return new ArrayList<>(map.values());
+
+    }
+}
 
