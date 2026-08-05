@@ -1,0 +1,306 @@
+Recursion:-
+==========
+- Recursion is a programming technique where a function solves a problem by calling itself on a smaller version of the same problem.
+
+Every recursive function has two things:-
+=-=-=-==-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=
+1. Base case:- Where we need to stop the code.
+2. Recursive case:- Decrease the problem and function call again.
+
+Recursion = Base case + Recursive case
+
+Basic Programs:-
+--------------
+- Print 1 to n
+- Print n to 1
+- Sum of n numbers
+
+- What is Stack frame?
+- What is Auxiliary Space?
+
+
+1. How to Think Recursively	
+============================
+- Recursive thinking means solving a big problem by assuming that the same problem can be solved for a smaller input.
+- Instead of thinking about the entire problem, focus only on:
+	- What is my work?
+	- Can the recursive call solve the remaining smaller problem?
+- Whenever you see a recursion problem, ask yourself these questions:
+Step 1: Identify the Base Case
+-------------------------------
+- When should the recursion stop?
+- Every recursive function must have a stopping condition.
+
+Example:
+	if (n == 0)
+    		return;
+
+Step 2: Find Your Small Work
+-----------------------------
+- What is the small work I should do in the current function?
+- Do not think about solving the entire problem.
+- Only solve the current part.
+
+Step 3: Reduce the Problem
+---------------------------
+- Can I make the problem smaller?
+
+Example:
+
+	Problem : Print 1 to 5
+
+	Current Work : Print 1
+
+	Remaining Problem : Print 2 to 5
+
+	- The remaining work is a smaller version of the original problem.
+
+Step 4: Let Recursion Solve the Rest
+-------------------------------------
+- Instead of worrying about the remaining work, simply make a recursive call.
+
+
+2. Faith Principle
+=-=-=-=-=-=-=-=-=-=
+- The Faith Principle is the most powerful idea in recursion.
+
+- The Faith Principle means trusting that the recursive call will correctly solve the smaller problem.
+
+- Do not try to understand what happens inside every recursive call while writing the algorithm.
+
+- Just believe that it will return the correct answer.
+
+Why is it called "Faith"?
+-------------------------
+- Because you have faith that the recursive call works correctly.
+
+Example 1: Factorial
+int fact(int n) {
+
+    if (n == 1)
+        return 1;
+
+    return n * fact(n - 1);
+}
+
+- Suppose fact(5)
+- Do not think like this:
+
+	fact(5)
+
+	↓
+
+	fact(4)
+
+	↓
+
+	fact(3)
+
+	↓
+
+	fact(2)
+
+	↓
+
+	fact(1)
+
+- This is execution thinking.
+
+- Instead think:
+
+	fact(5)
+
+	↓
+
+	I believe fact(4) will correctly return 24.
+
+	Now your work becomes
+
+	5 × 24
+
+	↓
+
+	120
+
+Difference Between Recursive Thinking and Faith Principle
+**********************************************************
+
+| Recursive Thinking                                 | Faith Principle                                                      
+| -------------------------------------------------- | -------------------------------------------------------------------- 
+| Focuses on "how to divide" the problem.            | Focuses on "trusting" the recursive call.                          
+| Find the current work and reduce the problem size. | Assume the recursive call correctly solves the smaller problem.    
+| Helps in designing recursive solutions.            | Helps avoid tracing every recursive call while writing the solution.
+
+
+Class Problems:-
+================
+- Factorial 
+Code:-
+-----
+public class Factorial {
+	public static void main(String[] args) {
+		int n = 10;
+		System.out.println(findFac(n));
+	}
+
+	public static int findFac(int n) {
+		if (n == 1) {
+			return 1;
+		}
+
+		return n * findFac(n - 1);
+	}
+}
+
+- 509 - Fibonacci Number 
+Code:-
+class Solution {
+    public int fib(int n) {
+        if(n<=1) return n;
+
+        return fib(n-1)+fib(n-2);
+    }
+}
+            
+- 70 - Climbing Stairs              
+- 1137 - N-th Tribonacci Number       
+- 50 - Pow(x, n)   
+Iterative way:-
+--------------
+class Solution {
+    public double myPow(double x, int n) {
+        long pow  = n;
+        if(pow<0){
+            x= 1/x;
+            pow = -pow;
+        }
+        double ans =1;
+        while(pow>0){
+            if(pow%2!=0){
+                ans = ans*x;
+            }
+            x = x*x;
+            pow = pow/2;
+        }
+        return ans;
+    }
+}
+
+Recursive way:-
+--------------
+class Solution {
+    public double myPow(double x, int n) {
+        long pow = n;
+        if(n==0)return 1;
+        if(pow<0){
+            x =1/x;
+            pow = -pow;
+        }
+        return power(x,pow);
+    }
+    public double power(double x, long pow){
+        if(pow==0) return 1;
+
+        double half = power(x, pow/2);
+
+        if(pow%2!=0){
+            return (x*half*half);
+        }
+
+        return (half*half);
+
+    }
+}
+                 
+- 344 - Reverse String  
+Code:-
+------
+class Solution {
+    public void reverseString(char[] s) {
+        reverse(s,0,s.length-1);
+    }
+    public void reverse(char[] s, int left, int right){
+        if(left > right) return;
+        char temp = s[left];
+        s[left] = s[right];
+        s[right] = temp;
+        reverse(s, left+1, right-1);
+
+    }
+}
+             
+- 1979 - Find Greatest Common Divisor of Array  
+Code:-
+------
+class Solution {
+    public int findGCD(int[] nums) {
+        int min=nums[0];
+        int max=nums[0];
+        for(int i=1;i<nums.length;i++){
+            if(nums[i]<min){
+                min=nums[i];
+            }
+            if(nums[i]>max){
+                max=nums[i];
+            }
+        }
+
+        return GCD(max,min);
+    }
+
+    public int GCD(int max,int min){
+        if(min == 0) return max;
+
+        return GCD(min,max%min);
+
+    }
+
+}
+
+- 704 - Binary Search (Recursive)  
+Code:-
+------
+class Solution {
+    public int search(int[] nums, int target) {
+        return binary(nums,0,nums.length-1,target);
+    }
+    public int binary(int[] num,int left,int right,int tar){
+        if(left>right)return -1;
+        int mid=left+(right-left)/2;
+        if(num[mid]==tar)return mid;
+        else if(num[mid]>tar)right=mid-1;
+        else left=mid+1;
+        return binary(num,left,right,tar);
+        
+    }
+
+}
+
+
+- Tower of Hanoi  
+public class Main {
+	static int moveCount = 0;
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Provide total number of Stack of rod: -");
+		int n = sc.nextInt();
+		solve(n,"A","C","B");
+		System.out.println("=======================");
+		System.out.println("Total move count :- "+moveCount);
+		
+	}
+	public static void solve(int n, String source, String destination, String auxiliary) {
+		if (n == 0) {
+			return;
+		}
+		solve(n - 1, source, auxiliary, destination);
+
+		moveCount++;
+		System.out.println("Moving " + n + " from " + source + " to " + destination);
+
+		solve(n - 1, auxiliary, destination, source);
+	}
+}	
+
+
+
