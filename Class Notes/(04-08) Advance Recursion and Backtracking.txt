@@ -1,0 +1,261 @@
+Some Java Basic Code:-
+=====================
+public class Demo {
+	public static void main(String[] args) {
+		String str = "a";
+		StringBuilder sb = new StringBuilder("a");
+		add1(str,sb);
+		System.out.println("Printing inside main method..");
+		System.out.println(str);//a
+		System.out.println(sb.toString());//a
+	}
+	public static void add1(String str, StringBuilder sb) {
+		str = str + "b";
+		sb.append('b');
+		System.out.println("Printing inside add1 method..");
+		System.out.println(str);//ab
+		System.out.println(sb.toString());//ab
+		add2(str, sb);
+	}
+	public static void add2(String str, StringBuilder sb) {
+		str = str + "c";
+		sb.append('c');
+		System.out.println("Printing inside add2 method..");
+		System.out.println(str);//abc
+		System.out.println(sb.toString());//abc
+		add3(str, sb);
+	}
+	public static void add3(String str, StringBuilder sb) {
+		str = str + "d";
+		sb.append('d');
+		System.out.println("Printing inside add3 method..");
+		System.out.println(str);//abcd
+		System.out.println(sb.toString());//abcd
+	}
+}
+Output:-
+=======
+Printing inside add1 method..
+ab
+ab
+Printing inside add2 method..
+abc
+abc
+Printing inside add3 method..
+abcd
+abcd
+Printing inside main method..
+a
+abcd
+
+
+Generate all the Subsequence:-
+=============================
+public class SubsequenceGeneration {
+	public static void main(String[] args) {
+		generateSubsequence("abc", "", 0);
+		System.out.println("+++++++++++++++++");
+		generateSubsequenceUsingForLoop("abc", "", 0, 2);
+	}
+
+	public static void generateSubsequence(String str, String ans, int i) {
+		if (i == str.length()) {
+			System.out.println(ans + "=");
+			return;
+		}
+		generateSubsequence(str, ans + str.charAt(i), i + 1);
+		generateSubsequence(str, ans, i + 1);
+	}
+	
+	public static void generateSubsequenceUsingForLoop(String str, String ans,int l, int h) {
+		System.out.println(ans+"=");
+		for(int i=l;i<=h;i++) {
+			generateSubsequenceUsingForLoop(str, ans+str.charAt(i), i+1, h);
+		}
+	}
+}
+
+Output:-
+-------
+abc=
+ab=
+ac=
+a=
+bc=
+b=
+c=
+=
++++++++++++++++++
+=
+a=
+ab=
+abc=
+ac=
+b=
+bc=
+c=
+
+
+
+
+
+Leetcode 78
+------------
+
+Code:-
+------
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        subseq(nums,0, new ArrayList<Integer>(), ans );
+        return ans;
+    }
+
+    public void subseq(int[] nums, int index, List<Integer> curr, List<List<Integer>> ans){
+        if(index==nums.length){
+            ans.add(new ArrayList<>(curr));
+            return; 
+        }
+        curr.add(nums[index]);
+        subseq(nums, index+1, curr, ans);
+        curr.removeLast();
+        subseq(nums, index+1, curr, ans);
+    }
+}
+
+
+
+Backtracking:-
+=============
+
+- Backtracking is an algorithmic technique in which we make a choice, explore that choice recursively, and if it does not lead to a valid solution, we undo that choice and try another possibility.
+
+In one line:-
+	Backtracking = Recursion + Choice + Undo
+
+
+Real Life Example
+----------------------
+Suppose you are in a maze:-
+
+	S . .
+	# # .
+	. . E
+
+You have 4 choices:-
+
+	Up
+	Down
+	Left
+	Right
+
+	You choose left.
+
+	↓
+
+	Dead End.
+
+What you will do now?
+
+You came back
+
+	↓
+
+try another path
+
+- That process is called as Backtracking.
+
+- Why is it called Backtracking?
+
+- Backtracking uses two words :-
+
+	Back
+
+	+
+
+	Tracking
+
+Means:-
+
+Go Forward
+
+↓
+
+Wrong Path
+
+↓
+
+Come Back
+
+↓
+
+Try Another Path
+
+General Steps of Backtracking
+-------------------------------
+Every Backtracking problem follows following pattern to solve questions:-
+
+1. Choose
+
+↓
+
+2. Check
+
+↓
+
+3. Explore
+
+↓
+
+4. Undo
+
+↓
+
+5. Try Next Choice
+
+Simple Backtracking example:-
+-----------------------------
+Code:-
+-----
+public class SimpleBacktrackingExample {
+	
+	public static void main(String[] args) {
+		path(0,9);
+	}
+	
+	public static boolean path(int currentPosition, int targetPosition) {
+		if(currentPosition==targetPosition) {
+			System.out.println("We have reached at destination "+targetPosition);
+			return true;
+		}
+		
+		if(currentPosition>targetPosition) {
+			System.out.println("We reached at Dead End at position "+currentPosition);
+			return false;
+		}
+		
+		System.out.println("We are taking 2 step at "+currentPosition);
+		if(path(currentPosition+2,targetPosition)) {
+			return true;
+		}
+		
+		System.out.println("We have not found our destination so we need to backtrack from here position is "+ currentPosition+" and we will take 1 step");
+		if(path(currentPosition+1, targetPosition)) {
+			return true;
+		}
+		return false; 
+	}
+
+}
+
+Output:-
+-------
+We are taking 2 step at 0
+We are taking 2 step at 2
+We are taking 2 step at 4
+We are taking 2 step at 6
+We are taking 2 step at 8
+We reached at Dead End at position 10
+We have not found our destination so we need to backtrack from here position is 8 and we will take 1 step
+We have reached at destination 9
+
