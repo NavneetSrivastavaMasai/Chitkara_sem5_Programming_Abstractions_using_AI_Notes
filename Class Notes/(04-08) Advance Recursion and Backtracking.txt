@@ -123,6 +123,32 @@ class Solution {
     }
 }
 
+Leetcode 90
+------------
+Code:-
+------
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> set  = new ArrayList<>();
+        Arrays.sort(nums);
+        gs(nums, set, new ArrayList<Integer>(), 0);
+        return set;
+    }
+    public void gs(int[] nums, List<List<Integer>> set, List<Integer> list, int i){
+        if(i==nums.length){
+            set.add(new ArrayList<>(list));
+            return;
+        }
+        list.add(nums[i]);
+        gs(nums,set, list, i+1);
+        list.removeLast();
+        while(i+1<nums.length && nums[i]==nums[i+1]){
+            i++;
+        }
+        gs(nums,set, list,i+1);
+    }
+
+}
 
 
 Backtracking:-
@@ -258,4 +284,39 @@ We are taking 2 step at 8
 We reached at Dead End at position 10
 We have not found our destination so we need to backtrack from here position is 8 and we will take 1 step
 We have reached at destination 9
+
+
+- Permutations:-
+- Leetcode 46
+Code:-
+-----
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {    
+        List<List<Integer>> ans = new ArrayList<>();
+        generatePermutations(nums,ans,0, nums.length-1);
+        return ans;    
+    }
+
+
+    public void generatePermutations(int[] nums, List<List<Integer>> ans, int low, int high){
+        if(low==high){
+            ArrayList<Integer> li = new ArrayList<>();
+            for(int x : nums){
+                li.add(x);
+            }
+            ans.add(li);
+        }else{
+            for(int i=low; i<=high; i++){
+                swap(nums,low,i);
+                generatePermutations(nums, ans, low+1, high);
+                swap(nums,i, low);
+            }
+        }
+    }
+    public void swap(int []nums, int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
 
