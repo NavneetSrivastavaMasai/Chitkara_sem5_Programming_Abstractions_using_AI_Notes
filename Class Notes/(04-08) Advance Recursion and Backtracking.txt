@@ -320,3 +320,38 @@ class Solution {
     }
 }
 
+
+
+
+- Rat in Maze - Geek for Geeks
+------------------------------
+Solution Code:-
+--------------
+class Solution {
+    public ArrayList<String> ratInMaze(int[][] maze) {
+        // code here
+        ArrayList<String> ans = new ArrayList<>();
+        RIM(maze, 0, 0, ans, "");
+        return ans;
+    }
+    public void RIM(int[][]maze, int row, int col, ArrayList<String> ans, String curr){
+        //All the places where we can not go
+        if(row<0 || col<0 || row>=maze.length || col>=maze.length || maze[row][col]==0 || maze[row][col]==-1){            
+		return;
+        }
+        //Reached at destination
+        if(row==maze.length-1 && col == maze.length-1){
+            ans.add(curr);
+            return;
+        }
+        maze[row][col] = -1;//Mark visited that place at that time
+        
+        RIM(maze, row+1, col, ans, curr+"D");//Down
+        RIM(maze, row, col-1, ans, curr+"L");//Left
+        RIM(maze, row, col+1, ans, curr+"R");//Right
+        RIM(maze, row-1, col, ans, curr+"U");//Up
+ 
+        maze[row][col] = 1;//When I explore that place I need to backtrack for other options or Mark not visited
+    }
+
+}
