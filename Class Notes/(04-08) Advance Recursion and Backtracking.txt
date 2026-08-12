@@ -355,3 +355,229 @@ class Solution {
     }
 
 }
+
+- N-Queens Problem:-
+--------------------
+Leetcode 51:-
+------------
+class Solution {
+    public List<List<String>> solveNQueens(int n) {
+        char[][]chess = new char[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                chess[i][j]='.';
+            }
+        }
+        List<List<String>> ans = new ArrayList<>();
+        placeQueens(chess, 0, ans);
+        return ans;
+    }
+
+    public void placeQueens(char[][]chess,int row, List<List<String>> ans){
+        if(row==chess.length){
+            List<String> list = new ArrayList<>();
+            for(int i=0; i<chess.length; i++){
+                list.add(new String(chess[i]));
+            } 
+            ans.add(list);
+            return;
+        }
+        for(int col =0; col<chess.length; col++){
+            if(isQueenSafe(chess, row, col)){
+                chess[row][col] = 'Q';
+                placeQueens(chess, row+1, ans);
+                chess[row][col] = '.';
+            }
+        }
+    }
+    public boolean isQueenSafe(char[][]chess, int row, int col){
+        // Vertical Check
+        for(int i=row-1; i>=0; i--){
+            if(chess[i][col]=='Q') return false;
+        }
+
+        // Left Diagonal
+        int i = row-1;
+        int j = col-1;
+        while(i>=0 && j>=0){
+            if(chess[i][j]=='Q') return false;
+            i--;
+            j--;
+        }
+        // Right Diagonal
+        i = row-1;
+        j = col+1;
+        while(i>=0 && j<chess.length){
+            if(chess[i][j]=='Q') return false;
+            i--;
+            j++;
+        }
+        return true;
+    }
+}
+
+
+
+Sudoku Solver:-
+---------------
+Leetcode 37:-
+------------
+class Solution {
+    public void solveSudoku(char[][] board) {
+        solving(board, 0, 0);
+    }
+    public boolean solving(char[][] board, int row, int col){
+        if(row==9){
+            // System.out.println(Arrays.deepToString(board));
+            return true;
+        }
+        int nRow =0;
+        int nCol = 0;
+        if(col == 8){
+            nRow = row+1;
+            nCol = 0;
+        }else{
+            nCol = col+1;
+            nRow = row;
+        }
+        if(board[row][col] !='.'){
+            return solving(board, nRow, nCol);
+        }else{
+            for(int i=1; i<=9; i++){
+                if(isValid(board, row, col, i)){
+                    char ch = (char)(i + '0');
+                    board[row][col] = ch;
+                    if(solving(board, nRow, nCol)){
+                        return true;
+                    }
+                    board[row][col] = '.';
+                }
+            }
+        }
+        return false;
+
+    }
+    public boolean isValid(char[][]board, int row, int col, int target){
+        // target int converting into char
+        char ch = (char) (target + '0');
+        // Checking Row
+        for(int i=0; i<9; i++){
+            if(board[i][col] == ch){
+                return false;
+            }
+        }
+        // Checking column
+        for(int i=0; i<9; i++){
+            if(board[row][i]==ch){
+                return false;
+            }
+        }
+        // checking that particular 3x3 Matrix/grid
+        int gridRow  = (row/3)*3;
+        int gridCol = (col/3)*3;
+        for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                if(board[i+gridRow][j+gridCol]==ch){
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+}
+
+
+Combinations:-
+-------------
+Leetcode 77:-
+------------
+Solution:-
+---------
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> ans=new ArrayList<>();
+        backtrack(1,n,k,new ArrayList<>(),ans);
+        return ans;
+        
+    }
+    public void backtrack(int start,int n,int k,List<Integer>curr,List<List<Integer>> ans){
+        if(curr.size()==k){
+            // System.out.println(curr);
+            ans.add(new ArrayList<>(curr));
+            return;
+        }
+        for(int i=start;i<=n;i++){
+            curr.add(i);
+            backtrack(i+1,n,k,curr,ans);
+            curr.remove(curr.size()-1);
+        }
+        
+    }
+}
+
+Leetcode 40:-
+-----------
+Solution:-
+---------
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> ans = new ArrayList<>();
+
+        generateComb(candidates, 0, ans, new ArrayList<>(),target);
+        return new ArrayList<>(ans);
+    }
+
+    public void generateComb(int[] candidates, int index, List<List<Integer>> ans, List<Integer> curr, int target){
+
+        if(target==0){
+            ans.add(new ArrayList<>(curr));
+            return;
+        }
+        if(target<0 || index == candidates.length){
+            return;
+        }
+        curr.add(candidates[index]);
+        generateComb(candidates, index+1, ans, curr, target-candidates[index]);
+        curr.removeLast();
+        while(index+1<candidates.length && candidates[index]==candidates[index+1]){
+            index++;
+        }
+        generateComb(candidates, index+1, ans, curr, target);
+
+    }
+}
+
+
+
+Leetcode 39:-
+-----------
+
+Generate Parantheses:-
+-----------------------
+Leetcode 22:-
+-----------
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> ans = new ArrayList<>();
+        generateP(n, 0, 0, new StringBuilder(), ans);
+        return ans;
+    }
+    public void generateP(int n, int open, int close, StringBuilder curr, List<String> ans){
+        if(n==open && n == close){
+            ans.add(curr.toString());
+            return;
+        }
+        if(open<n){
+            curr.append("(");
+            generateP(n, open+1, close, curr, ans);
+            curr.deleteCharAt(curr.length()-1);
+        }
+        if(close<open){
+            curr.append(")");
+            generateP(n, open, close+1, curr, ans);
+            curr.deleteCharAt(curr.length()-1);
+        }
+    }
+}
