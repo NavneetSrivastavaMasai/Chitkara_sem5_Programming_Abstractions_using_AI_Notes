@@ -155,4 +155,72 @@ Quick Sort:-
 	}
 	
 	
+
+Recursion Sort Related Question:-
+--------------------------------
+Leetcode 493:-
+------------
+class Solution {
+    public int reversePairs(int[] nums) {
+        int count = mergeSort(nums, 0 , nums.length-1);
+        // System.out.println(Arrays.toString(nums));
+        return count;
+    }
+    public int mergeSort(int[] nums, int low, int high){
+        int count = 0;
+        if(low>=high){
+            return 0;
+        }
+        int mid = low + (high-low)/2;
+        count +=mergeSort(nums, low, mid);
+        count +=mergeSort(nums, mid+1, high);
+        count +=merge(nums, low, mid, high);
+        return count;
+    }
+    public int merge(int[] nums, int left, int mid, int right){
+        int count = 0;
+        int j = mid+1;
+        for(int i = left; i<=mid; i++){
+            while(j<=right && (long) nums[i] > 2L *nums[j]){
+                j++;
+            }
+            count += j-mid-1;
+        }
+
+        int n1 = mid-left+1;
+        int n2 = right-mid;
+        int[] leftA = new int[n1];
+        int[] rightA = new int[n2];
+
+        for(int i=0; i<n1; i++){
+            leftA[i] = nums[left+i];
+        }
+        for(int i=0; i<n2; i++){
+            rightA[i] = nums[mid+i+1];
+        }
+
+        int i=0;
+        j= 0;
+        int k = left;
+        while(i<n1 && j<n2){
+            if(leftA[i]<=rightA[j]){
+                nums[k] = leftA[i];
+                i++;
+            }else{
+                nums[k] = rightA[j];
+                j++;
+            }
+            k++;
+        }
+        while(i<n1){
+            nums[k] = leftA[i];
+            i++;k++;  
+        }
+        while(j<n2){
+            nums[k] = rightA[j];
+            j++;k++;
+        }
+        return count;
+    }
+}
 	
