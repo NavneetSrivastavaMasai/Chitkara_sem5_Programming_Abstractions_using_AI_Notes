@@ -581,3 +581,43 @@ class Solution {
         }
     }
 }
+
+Test Pad Question:-
+--------------------
+Count word in the board:-
+-------------------------
+// Do not change the class name
+class Result {
+  static int countWord(char board[][], String word, int m, int n) {
+    int count =0;
+      for(int i=0; i<m; i++){
+          for(int j=0; j<n; j++){
+              count += counting(board, i, j, word, 0);
+          }
+      }
+      return count;
+  }
+  static int counting(char board[][], int row, int col, String word, int index){
+      int count =0;
+      if(row<0 || col<0 || row==board.length || col==board[0].length || board[row][col] != word.charAt(index) || 
+         board[row][col]=='#'){
+          return 0;
+      }
+      if(index == word.length()-1){
+          return 1;
+      }
+      char temp = board[row][col];
+      board[row][col] = '#';
+      //Up 
+      count += counting(board, row-1, col, word, index+1);
+      //Down
+       count += counting(board, row+1, col, word, index+1);
+      //Left
+       count += counting(board, row, col-1, word, index+1);
+      //Right
+       count += counting(board, row, col+1, word, index+1);
+      board[row][col] = temp; 
+      return count;
+      
+  }
+}
