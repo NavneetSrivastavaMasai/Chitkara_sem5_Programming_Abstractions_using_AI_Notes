@@ -1,0 +1,412 @@
+SINGLY LINKED LIST :-
+===================
+
+ WHAT IS A LINKED LIST?
+-----------------------
+- A Linked List is a LINEAR DATA STRUCTURE where elements (called NODES) are not stored in contiguous memory locations.
+
+- Each node stores two things:	
+    1) DATA        -> the actual value
+    2) REFERENCE   -> address/link to the NEXT node
+
+- The nodes are "connected/linked" together using these references — hence the name "Linked List".
+
+- Unlike arrays, a linked list does NOT require a fixed block of memory. Nodes can be scattered anywhere in memory and are connected via pointers.
+
+  Visual:
+  	[10 | next] --> [20 | next] --> [30 | next] --> [40 | NULL]
+  	head                                              tail
+
+- "head" = reference to the first node (entry point of the list)
+
+- "tail" = last node, whose next points to NULL (marks end of list)
+
+- If head is NULL, the list is EMPTY.
+
+- Suppose we have an array:-
+
+	int[] arr = {10, 20, 30, 40, 50};
+
+
+	Conceptually:
+
+	Memory
+
+1000    1004    1008    1012    1016
++----+  +----+  +----+  +----+  +----+
+| 10 |  | 20 |  | 30 |  | 40 |  | 50 |
++----+  +----+  +----+  +----+  +----+
+
+The elements are stored **contiguously**.
+
+- But in the Linked List:-
+- we create independent objects called **Nodes**.
+
+- Each node stores:
+
+	1. Data
+	2. Reference to the next node
+
+- Conceptually:
+
++------+------+
+| data | next |
++------+------+
+
+- For example:
+
++----+------+     +----+------+     	+----+------+
+| 10 |   ●-------->| 20 |   ●-------->	| 30 | null|
++----+------+     +----+------+     	+----+------+
+
+- The nodes don't need to be adjacent in memory.
+
+- The `next` reference tells us where the next node is.
+
+
+
+2. WHY DO WE NEED LINKED LIST?
+------------------------------
+:- To understand why LL exists, compare it with ARRAYS:
+
+ARRAY LIMITATIONS:
+  - Fixed size (static arrays) — must declare size in advance.
+  - Stored in CONTIGUOUS memory — needs one big free block.
+  - Insertion/Deletion in middle or beginning is EXPENSIVE
+    (requires shifting elements → O(n) shifting cost).
+  - Memory is wasted if declared size > actual usage.
+  - Resizing (like in dynamic arrays/ArrayList) requires copying entire array to a new bigger block → costly operation.
+
+LINKED LIST ADVANTAGES:
+  - Dynamic size — grows/shrinks at runtime, no pre-declaration needed.
+  - No need for contiguous memory — nodes can live anywhere in heap.
+  - Insertion/Deletion at beginning or middle is efficient
+    (just change references, no shifting) — O(1) if position/node known.
+  - Memory is allocated only when needed (on demand).
+
+LINKED LIST DISADVANTAGES:
+  - No random access — to reach nth element, must traverse from head (O(n) access time), unlike arrays which give O(1) access via index.
+  - Extra memory used for storing the "next" reference in every node.
+  - Traversal is one-directional in Singly Linked List (can't go backward).
+  - Not cache-friendly — since nodes aren't contiguous, CPU cache misses are more frequent compared to arrays.
+
+
+3. MEMORY MANAGEMENT — HOW & WHERE NODES ARE STORED
+-----------------------------------------------------
+- In Java, objects (including linked list nodes) are created using the "new" keyword, and they are stored in the HEAP memory area (not stack).
+- The STACK only stores the reference variable (a pointer-like value) that points to the actual object's location in the HEAP.
+
+  Example concept:
+      Node head = new Node(10);
+
+  	head  (reference) --------> [ Node object: data=10, next=null ]
+   	(stored in stack)            (stored in heap)
+
+- Since heap memory is NOT contiguous by nature, nodes of a linked list can be placed ANYWHERE the JVM finds free space — this is exactly why Linked List doesn't need one large continuous memory block like arrays.
+
+- Each node internally holds the MEMORY ADDRESS (reference) of the next node, not the actual next node "inside" it. This reference is what creates the "link" or "chain".
+
+- GARBAGE COLLECTION (Java-specific):
+  - When a node is removed from the list (no longer referenced by head or any other node's "next"), it becomes "unreachable".
+  - Java's Garbage Collector automatically frees this unreachable memory — programmer does NOT manually deallocate memory (unlike C/C++ where free()/delete is required).
+  - This is why, during deletion, it's important to correctly re-link the previous node's "next" — otherwise you may accidentally create memory  leaks (orphaned chains still referenced somewhere) or lose access to part of the list.
+
+
+4. STRUCTURE OF A NODE (BUILDING BLOCK)
+------------------------------------------
+- A Node is a self-referential structure/class — meaning it contains an reference to another object of its OWN type.
+
+- Java representation:
+
+  class Node {
+      int data;      // stores the value
+      Node next;     // reference to the next Node in the list
+
+      Node(int data) {
+          this.data = data;
+          this.next = null;   // by default points to nothing
+      }
+  }
+
+- "self-referential" is the key theoretical concept — a class containing a variable of its own type is what enables chaining of nodes.
+- "next = null" is critical — it always marks the END of the list.
+
+
+5. THE LINKED LIST "WRAPPER" / HEAD POINTER
+-----------------------------------------------
+- Usually we maintain a separate reference called "head" (sometimes wrapped inside a LinkedList class) that always points to the first node.
+- head is the ONLY entry point into the entire list.
+- If you lose the head reference, the entire list becomes unreachable (and eventually garbage collected) — this is why head must be handled carefully, especially during insertion/deletion at start.
+- Some implementations also maintain a "tail" reference (pointer to last node) to make insertion at the end O(1) instead of O(n).
+- Some implementations maintain a "size" counter to track number of nodes without traversing every time.
+
+
+6. KEY TERMINOLOGY
+---------------------
+- NODE        : basic unit containing data + next reference
+- HEAD        : reference to first node
+- TAIL        : reference to last node (next = null)
+- NULL        : special value indicating "no reference" / end of chain
+- TRAVERSAL   : process of visiting each node one by one from head to tail
+- LINK/POINTER: the "next" reference connecting one node to another
+- DANGLING REFERENCE: when a reference points to a node that has been disconnected/removed — must be avoided by proper re-linking
+
+
+7. HOW TRAVERSAL CONCEPTUALLY WORKS
+---------------------------------------
+- Start from "head".
+- Use a temporary reference (commonly named "current" or "temp") — never move the head pointer itself while traversing, otherwise you lose the start of the list.
+- Move current = current.next repeatedly until current becomes null.
+- This is why access is O(n) — there's no shortcut to jump directly to the kth element; you must pass through every node before it.
+
+
+8. TYPES OF OPERATIONS 
+------------------------
+
+- INSERTION
+    a) At beginning — new node becomes new head; O(1)
+    b) At end — traverse till last node (or use tail pointer); O(n) or O(1)
+    c) At a given position/sorted position — traverse till correct spot, then re-link; O(n)
+
+- DELETION
+    a) From beginning — move head to head.next; O(1)
+    b) From end — traverse to second-last node, set its next to null; O(n)
+    c) From a given position/value — traverse, find node, re-link previous node's next to skip the deleted node; O(n)
+
+- SEARCH — traverse and compare data at each node until match found; O(n)
+
+- Note: Insertion/Deletion at a KNOWN node (if you already hold a reference to it) can be O(1) since it's just reference reassignment — the O(n) cost comes from the traversal needed to LOCATE that position, not from the insertion/deletion action itself.
+
+
+9. SINGLY vs OTHER LINKED LIST VARIANTS (CONCEPTUAL COMPARISON)
+---------------------------------------------------------------------
+- SINGLY LINKED LIST:
+    - Each node has ONE link -> points only to the NEXT node.
+    - Traversal possible only in FORWARD direction.
+    - Less memory per node (only one reference field).
+
+- DOUBLY LINKED LIST :
+    - Each node has TWO links -> "next" and "prev".
+    - Traversal possible in both directions.
+    - More memory per node, but easier backward operations/deletion.
+
+- CIRCULAR LINKED LIST :
+    - Last node's "next" points back to the HEAD instead of null.
+    - No true "end" — useful for round-robin type applications.
+    - Can be singly circular or doubly circular.
+
+(Singly Linked List is the simplest and most memory-efficient variant, which is why it's taught first — it builds the foundation for all other variants.)
+
+
+10. TIME & SPACE COMPLEXITY SUMMARY (SINGLY LINKED LIST)
+--------------------------------------------------------------
+  Operation                  Time Complexity      Notes
+  --------------------------------------------------------------
+  Access (by index)          O(n)                 no random access
+  Search                     O(n)                 linear traversal
+  Insert at head             O(1)
+  Insert at tail             O(n) / O(1)*          *O(1) if tail pointer maintained
+  Insert at middle           O(n)                 traversal to find spot
+  Delete at head             O(1)
+  Delete at tail             O(n)                 need previous node reference
+  Delete at middle           O(n)                 traversal to find spot
+
+  Space Complexity: O(n) — one node per element, plus one extra reference field per node (overhead compared to array).
+
+
+11. WHY LINKED LIST IS IMPORTANT (REAL-WORLD RELEVANCE)
+---------------------------------------------------------------
+- Forms the FOUNDATION for many other data structures:
+    - Stack and Queue can be implemented using Linked List
+    - Used in Hash Maps for collision handling (chaining)
+    - Basis for understanding Doubly Linked List, Circular Linked List, and advanced structures
+- Real systems usage:
+    - Browser history (conceptually similar to doubly linked structures)
+    - Undo/redo functionality
+    - Memory allocation systems (free list management in OS)
+    - Music/playlist "next song" style navigation
+
+
+12. COMMON MISCONCEPTIONS / IMPORTANT POINTS TO REMEMBER
+-----------------------------------------------------------------
+- A linked list variable (head) is NOT the list itself — it is only a reference/pointer to the first node.
+- next = null does NOT mean the node is deleted — it simply means there is no further connection from that node onward.
+- Losing the head reference without saving it elsewhere = losing access to the entire list (even though nodes technically still exist in memory until garbage collected).
+- Linked List size is NOT fixed at creation — this is the core difference from arrays; memory is allocated node-by-node as needed.
+- Traversal must always use a temporary/current pointer — moving "head" directly during traversal is a common beginner mistake that breaks the list.
+
+
+
+
+Creation of a Linked List From Scratch:-
+-----------------------------------------
+//Add First
+//Add Last
+//Insert At specific index
+//Remove at particular index
+//Get Size
+//isEmpty
+//Display List
+//Reverse List
+
+package com.chitkara;
+
+public class Main {
+	public static void main(String[] args) {
+		LinkedListNodes ll = new LinkedListNodes();
+		ll.addLast(10);
+		ll.addLast(20);
+		ll.addLast(30);
+		ll.addLast(40);
+		ll.addLast(50);
+		
+		ll.addFirst(5);
+		ll.addFirst(4);
+
+		ll.addFirst(2);
+		ll.addFirst(1);
+		
+		ll.insertAtIndex(2, 3);
+		ll.displayList();
+		
+		System.out.println("==============");
+		ll.reverseList();
+		ll.displayList();
+		System.out.println("==============");
+		System.out.println(ll.getSize());
+		System.out.println("================");
+		System.out.println(ll.isEmpty());
+		System.out.println("=====================");
+		ll.removeAtIndex(4);
+		ll.displayList();
+		
+	}
+}
+//Add First
+//Add Last
+//Insert At specific index
+//Get Size
+//isEmpty
+//Display List
+//Reverse List
+//Remove at particular index
+class Node{
+	int data;
+	Node next;
+	Node(int data){
+		this.data = data;
+		this.next = null;
+	}
+}
+class LinkedListNodes{
+	private Node head;
+	private int size;
+	private Node tail;
+	
+	public void addFirst(int data) {
+		Node newNode = new Node(data);
+		if(head == null) {
+			head = newNode;
+			tail = newNode;
+		}else {
+			newNode.next = head;
+			head = newNode;
+		}
+		size++;
+	}
+	public void addLast(int data) {
+		Node newNode = new Node(data);
+		if(tail==null) {
+			tail = newNode;
+			head = newNode;
+		}else {
+			tail.next = newNode;
+			tail = newNode;
+		}
+		size++;
+	}
+	public void insertAtIndex(int index, int data) {
+		if(index <0 || index > size) {
+			System.out.println("Please provide valid index");
+			return;
+		}
+		if(index == 0) {
+			addFirst(data);
+			return;
+		}
+		if(index==size) {
+			addLast(data);
+			return;
+		}
+		Node newNode = new Node(data);
+		Node curr = head;
+		for(int i=0; i<index-1; i++) {
+			curr = curr.next;
+		}
+		newNode.next = curr.next;
+		curr.next = newNode;
+		size++;
+		
+	}
+	public void removeAtIndex(int index) {
+		if(index<0 || index>=size) {
+			System.out.println("Invalid");
+			return;
+		}
+		
+		Node curr = head;
+		for(int i=0; i<index-1; i++) {
+			curr = curr.next;
+		}
+		curr.next = curr.next.next;
+		
+		size--;
+		
+	}
+	public int getSize() {
+		return size;
+	}
+	public boolean isEmpty() {
+		return size==0;
+	}
+	public void displayList() {
+		if(head == null) {
+			System.out.println("Empty List");
+			return;
+		}
+		Node curr = head;
+		while(curr!=null) {
+			System.out.print(curr.data);
+			System.out.print("=>");
+			curr = curr.next;
+		}
+		System.out.print("null");
+		System.out.println();
+	}
+	public void reverseList() {
+		Node pre = null;
+		Node curr = head;
+		tail = head;
+		while(curr !=null) {
+			Node nextP = curr.next;
+			curr.next = pre;
+			pre = curr;
+			curr = nextP;
+		}
+		head = pre;
+	}
+}
+
+
+Output:-
+------
+1=>2=>3=>4=>5=>10=>20=>30=>40=>50=>null
+==============
+50=>40=>30=>20=>10=>5=>4=>3=>2=>1=>null
+==============
+10
+================
+false
+=====================
+50=>40=>30=>20=>5=>4=>3=>2=>1=>null
+
