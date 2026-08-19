@@ -410,3 +410,137 @@ false
 =====================
 50=>40=>30=>20=>5=>4=>3=>2=>1=>null
 
+
+
+Leetcode Questions:-
+-------------------
+876. Middle of the Linked List
+Code:-
+-----
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast!=null && fast.next !=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+}
+
+
+206. Reverse Linked List
+Code:-
+-----
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode  prev = null;
+        ListNode curr= head;
+
+        while(curr!=null){
+            ListNode temp =curr.next;
+            curr.next= prev;
+            prev = curr;
+            curr= temp;
+        }
+        return prev;
+    }
+}
+
+141. Linked List Cycle (Home)
+
+142. Linked List Cycle II
+Code:-
+------
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        // HashSet<ListNode> set = new HashSet<>();
+        // ListNode curr = head;
+        // while(curr!=null){
+        //     if(set.contains(curr)){
+        //         return curr;
+        //     }
+        //     set.add(curr);
+        //     curr = curr.next;
+        // }
+        // return null;
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                slow = head;
+                while(slow!=fast){
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return slow;
+            }
+        }
+        return null;
+    }
+}
+
+237. Delete Node in a Linked List
+Code:-
+-----
+class Solution {
+    public void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+}
+
+234. Palindrome Linked List (Home)
+
+328. Odd Even Linked List 
+Code:-
+-----
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if(head == null || head.next == null){
+            return head;
+        }
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode evenHead = even;
+        while(even!= null && even.next!=null){
+            odd.next = odd.next.next;
+            odd = odd.next;
+
+            even.next = even.next.next;
+            even = even.next;
+        }
+        odd.next = evenHead;
+        return head;
+    }
+}
+
+19. Remove Nth Node From End of List (Home)
+
+2095. Delete the Middle Node of a Linked List
+Code:-
+-----
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
+        if(head == null || head.next == null){
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next.next;
+        while(fast!=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        slow.next = slow.next.next;
+        return head;
+    }
+}
+
+148. Sort List
+160. Intersection of Two Linked Lists
+2. Add Two Numbers
+
+
