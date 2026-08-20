@@ -411,7 +411,6 @@ false
 50=>40=>30=>20=>5=>4=>3=>2=>1=>null
 
 
-
 Leetcode Questions:-
 -------------------
 876. Middle of the Linked List
@@ -540,7 +539,156 @@ class Solution {
 }
 
 148. Sort List
-160. Intersection of Two Linked Lists
+
+Using ArrayList:-
+---------------
+        ArrayList<Integer> list = new ArrayList<>();
+        ListNode curr = head;
+        while(curr!=null){
+            list.add(curr.val);
+            curr = curr.next;
+        }
+        Collections.sort(list);
+        ListNode dummy = new ListNode(0);
+        ListNode newHead = dummy;
+        for(int x : list){
+            dummy.next = new ListNode(x);
+            dummy = dummy.next;
+        }
+        return newHead.next;
+
+Using Merge Sort:-
+-----------------
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode sortList(ListNode head) {
+
+        if(head == null || head.next == null){
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while(fast!=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode rightHead = slow.next;
+        slow.next = null;
+        ListNode left = sortList(head);
+        ListNode right  = sortList(rightHead);
+        return merger(left,right);
+    }
+    public ListNode merger(ListNode left, ListNode right){
+        ListNode dummy = new ListNode(0);
+        ListNode newHead = dummy;
+        while(left!=null && right !=null){
+            if(left.val<=right.val){
+                dummy.next = left;
+                left = left.next;
+            }else{
+                dummy.next = right;
+                right = right.next;
+            }
+            dummy = dummy.next;
+        }
+        if(left!=null){
+            dummy.next = left;
+        }
+        if(right!=null){
+            dummy.next = right;
+        }
+        return newHead.next;
+    }
+}
+
+
+
+160. Intersection of Two Linked Lists (Home)
+
 2. Add Two Numbers
+Code:-
+-----
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int carry = 0;
+        ListNode dummy = new ListNode(0);
+        ListNode newHead = dummy;
+        while(l1 != null || l2 != null || carry != 0){
+            int sum = carry;
+            if(l1 != null){
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if(l2!=null){
+                sum+=l2.val;
+                l2 = l2.next;
+            }
+            dummy.next = new ListNode(sum%10);
+            carry = sum/10;
+            dummy = dummy.next;
+        }
+        return newHead.next;
+    }
+}
+
+61. Rotate List
+Code:-
+-----
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head == null || head.next == null || k==0){
+            return head;
+        }
+        int size = 0;
+        ListNode curr = head;
+        ListNode tail = null;
+        while(curr != null){
+            size++;
+            tail = curr;
+            curr = curr.next;
+        }
+        
+        k = k%size;
+        if(k==0){
+            return head;
+        }
+        curr = head;
+        for(int i=1; i<size-k; i++){
+            curr= curr.next;
+        }
+        ListNode newHead = curr.next;
+        curr.next =null;
+        tail.next = head;
+        return newHead;
+    }
+}
+
+25. Reverse Node in k-Group
+138. Copy List with Random pointer 
+
+
+
+
+
+
 
 
