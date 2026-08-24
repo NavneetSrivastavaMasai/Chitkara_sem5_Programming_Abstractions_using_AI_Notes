@@ -682,8 +682,89 @@ class Solution {
     }
 }
 
+
 25. Reverse Node in k-Group
+Code:-
+-----
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode temp=head;
+        for(int i=0;i<k;i++){
+            if(temp==null){
+                return head;
+            }
+            temp=temp.next;
+        }
+        ListNode prev=null;
+        ListNode curr=head;
+        ListNode next=null;
+        for(int i=0;i<k;i++){
+            next=curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=next;
+        }
+        
+        head.next = reverseKGroup(curr, k);
+        return prev;
+    }
+    
+}
+
 138. Copy List with Random pointer 
+Code:-
+-----
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        HashMap<Node,Node> map = new HashMap<>();
+        Node temp = head;
+
+
+        while(temp != null){
+            map.put(temp, new Node(temp.val));
+            temp = temp.next;
+        }
+
+        temp =head;
+        while(temp!= null){
+            Node n = map.get(temp);
+            n.next = map.get(temp.next);
+            n.random = map.get(temp.random);
+            temp = temp.next;
+        }
+        return map.get(head);
+
+    }
+}
+
+
+
+
 
 
 
