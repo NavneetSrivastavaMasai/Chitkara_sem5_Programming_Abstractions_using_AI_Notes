@@ -1,0 +1,320 @@
+DOUBLY LINKED LIST 
+==================
+1. WHAT IS A DOUBLY LINKED LIST?
+-----------------------------------
+- A Doubly Linked List (DLL) is a LINEAR DATA STRUCTURE where each node stores THREE things instead of two:
+    1) DATA        -> the actual value
+    2) NEXT        -> reference to the next node
+    3) PREV        -> reference to the previous node
+- This extra "prev" reference is the ONLY structural difference from a Singly Linked List — but it changes a lot about how the list behaves.
+- Because each node knows both its neighbors, the list can be traversed in BOTH directions — forward (head to tail) and backward (tail to head).
+
+  Visual:
+  NULL <-- [prev|10|next] <--> [prev|20|next] <--> [prev|30|next] --> NULL
+             head                                      tail
+
+- head.prev is always NULL (nothing before the first node)
+- tail.next is always NULL (nothing after the last node)
+
+
+2. WHY DO WE NEED DOUBLY LINKED LIST? 
+--------------------------------------
+- Recall the biggest pain point of Singly Linked List: you can only move FORWARD. If you're standing at some node and need to go back one step, there's no way to do it — you'd have to restart traversal from head.
+
+SINGLY LINKED LIST LIMITATIONS THAT DLL SOLVES:-
+-----------------------------------------------
+  - Can't traverse backward at all in SLL.
+  - Deleting a node in SLL requires a reference to the PREVIOUS node (to re-link its "next"), which means you must first traverse from head just to find that previous node — even if you already have a reference to the node you want to delete.
+  - In SLL, going "back one step" is impossible without a second pass.
+
+DOUBLY LINKED LIST ADVANTAGES:-
+--------------------------------
+  - Bidirectional traversal — can move forward and backward freely.
+  - Easier to implement structures where backward movement matters:-
+    	- browser history (back/forward), undo/redo, music playlist(previous/next track), LRU Cache, text editors (cursor movement).
+  - Insertion before a given node is straightforward (in SLL, inserting "before" a node is awkward since you don't have direct backward access).
+
+DOUBLY LINKED LIST DISADVANTAGES:-
+----------------------------------
+  - Extra memory per node — every node stores ONE ADDITIONAL reference (prev), so memory overhead is higher than SLL.
+  - Slightly more complex to implement — every insertion/deletion requires updating TWO sets of links (next AND prev) instead of one, so there's more room for mistakes (dangling/incorrect links).
+  - Still no random access (O(n) access by index) — that limitation is inherited from linked lists in general, DLL doesn't fix it.
+
+
+3. STRUCTURE OF A NODE (BUILDING BLOCK)
+-------------------------------------------
+- Like SLL, a DLL node is self-referential — but now it references its OWN type TWICE (once forward, once backward).
+
+  Java representation:
+
+  class Node {
+      int data;      // stores the value
+      Node next;     // reference to the next node
+      Node prev;     // reference to the previous node
+
+      Node(int data) {
+          this.data = data;
+          this.next = null;
+          this.prev = null;
+      }
+  }
+
+- Every node is aware of BOTH its neighbors — this is the conceptual core of DLL. A singly linked node only "knows" what comes after it, a doubly linked node "knows" what comes before AND after it.
+
+
+4. MEMORY MANAGEMENT — SAME PRINCIPLES AS SLL, WITH ONE ADDITION
+---------------------------------------------------------------------
+- Just like SLL, DLL nodes are created via "new" and live in HEAP memory, reference variables (head, tail, temp pointers) live on the STACK.
+- Nodes are NOT contiguous in memory — same as SLL, they can be scattered  anywhere the JVM allocates free space.
+- The extra "prev" reference means each node consumes slightly more heap memory than an SLL node (one more reference field per node).
+- GARBAGE COLLECTION consideration (important nuance for DLL):-
+    - A node becomes eligible for GC only when NOTHING references it — neither as someone's "next" NOR as someone's "prev".
+    - This means during deletion, you must clear/re-link BOTH directions correctly. If you only fix the "next" links and forget "prev" links, the list can become internally INCONSISTENT — e.g., you can still forward-traverse correctly, but backward-traversal from a node further down would still point back to the "deleted" node.
+    - Best practice: when deleting a node, some implementations explicitly set the removed node's own next and prev to null too —
+      this helps the JVM garbage-collect it cleanly and avoids any accidental lingering reference back to the rest of the list.
+
+
+5. HEAD & TAIL — BOTH MATTER MORE IN DLL
+---------------------------------------------
+- In SLL, maintaining a "tail" reference was optional/for optimization.
+- In DLL, maintaining BOTH head and tail is much more natural and common, because:-
+	- tail lets you traverse backward starting from the end — without it, you'd have to forward-traverse the entire list first just to find the last node before going backward, defeating the purpose.
+	- head.prev = null and tail.next = null are the two "boundary markers" that tell you when to stop in each direction.
+- Losing the head reference = losing forward entry point.
+- Losing the tail reference = losing backward entry point (though tail can technically still be re-found by forward traversal from head if needed — it's a convenience/performance reference, not the only path to the list, unlike head).
+
+
+6. KEY TERMINOLOGY (DLL-SPECIFIC ADDITIONS)
+-------------------------------------------------
+- NEXT          : forward reference (same as SLL)
+- PREV          : backward reference (new in DLL)
+- BIDIRECTIONAL : ability to traverse in either direction
+- BOUNDARY NODE : head (prev = null) or tail (next = null)
+- DOUBLE LINKING: the act of updating BOTH next and prev references correctly during insertion/deletion — the defining extra step compared to SLL
+
+
+7. HOW TRAVERSAL CONCEPTUALLY WORKS
+----------------------------------------
+FORWARD TRAVERSAL (same idea as SLL):
+  - Start at head, move current = current.next repeatedly until null.
+
+BACKWARD TRAVERSAL (new capability in DLL):
+  - Start at tail, move current = current.prev repeatedly until null.
+
+- Because of this, DLL naturally supports algorithms/use-cases that require moving in either direction without restarting from head every time — this is the single biggest conceptual win of DLL over SLL.
+
+
+8. TYPES OF OPERATIONS (CONCEPTUAL OVERVIEW ONLY)
+--------------------------------------------------------
+(theory of WHAT they mean — every operation now touches TWO links)
+
+- INSERTION
+    a) At beginning — new node becomes new head; must set:
+         new.next = old head, old head.prev = new, update head
+    b) At end — must set:
+         old tail.next = new, new.prev = old tail, update tail
+    c) In the middle / before or after a given node — must correctlyre link FOUR references total (the new node's next & prev, AND the two neighboring nodes' prev/next pointing to the new node)
+
+- DELETION
+    a) From beginning — move head to head.next, then set new head.prev = null
+    b) From end — move tail to tail.prev, then set new tail.next = null
+    c) From middle / given node — since the node itself has both prev and next, you can directly do:-
+         node.prev.next = node.next
+         node.next.prev = node.prev
+       - WITHOUT needing to traverse to find the previous node — this is the key efficiency advantage of DLL over SLL for deletion.
+
+- SEARCH — same as SLL conceptually: traverse (from either end) and compare data at each node until match found; O(n)
+
+- Note: In DLL, if you already hold a reference to the node to delete, deletion is truly O(1) — no traversal needed at all, because the node already "knows" both its neighbors. In SLL, even holding a reference to the node isn't enough to delete it in O(1), since you still need the previous node's reference to re-link "next".
+
+
+9. DOUBLY vs SINGLY LINKED LIST (SIDE-BY-SIDE CONCEPTUAL COMPARISON)
+--------------------------------------------------------------------------
+  Aspect                    	Singly Linked List      	Doubly Linked List
+  --------------------------------------------------------------------
+  References per node       	1 (next)                	2 (next, prev)
+  Traversal direction       	Forward only            	Forward & backward
+  Memory per node            	Lower                    	Higher (extra field)
+  Delete known node          	O(n)* needs prev         	O(1) — prev known
+                              	(*to find previous node)
+  Implementation complexity  	Simpler                  	More links to manage
+  Typical use case           	Simple lists, stacks     	Browser history,
+                                                       		undo/redo, LRU cache
+
+
+10. DOUBLY CIRCULAR LINKED LIST 
+-------------------------------
+- A natural extension: instead of head.prev = null and tail.next = null, you connect them together —
+      tail.next = head  AND  head.prev = tail
+- This creates a circular structure that can be traversed endlessly in either direction, useful for round-robin scheduling, circular buffers, and similar cyclic use-cases.
+- (Just a conceptual mention here — not the focus of this note.)
+
+
+11. TIME & SPACE COMPLEXITY SUMMARY (DOUBLY LINKED LIST)
+-----------------------------------------------------------------
+  Operation                  	Time Complexity      	Notes
+  --------------------------------------------------------------
+  Access (by index)          	O(n)                 	no random access
+  Search                     	O(n)                 	linear traversal
+  Insert at head              	O(1)
+  Insert at tail               	O(1)                 	tail pointer maintained
+  Insert at middle (known pos) 	O(n) to find + O(1) to link
+  Delete at head                O(1)
+  Delete at tail                O(1)                 	tail pointer maintained
+  Delete a known node           O(1)                 	no traversal needed
+                                                       	(unlike SLL)
+
+  Space Complexity: O(n) — one node per element, plus TWO extra reference fields per node (next + prev) — more overhead than SLL.
+
+
+12. WHY DOUBLY LINKED LIST IS IMPORTANT 
+----------------------------------------
+- Used to implement DEQUE (double-ended queue) — insertion/deletion needed at both ends efficiently.
+- Core structure behind LRU Cache implementations (combined with a hashmap) — because O(1) deletion of a known node is essential there.
+- Browser back/forward navigation, undo/redo systems in editors.
+- Music/video playlist navigation (previous & next track).
+- Used internally in some language library implementations, e.g. Java's own LinkedList class is implemented as a doubly linked list.
+
+
+13. COMMON MISCONCEPTIONS / IMPORTANT POINTS TO REMEMBER
+------------------------------------------------------------------------
+- Adding "prev" doesn't just add convenience — it fundamentally changes the cost of certain operations (especially deletion of a known node, from O(n)-to-find in SLL to O(1) in DLL).
+- Every insertion/deletion in DLL involves updating TWO relationships, not one — forgetting to update "prev" (while correctly updating "next") is the most common bug, and it leaves the list looking correct in forward traversal while being broken in backward traversal.
+- head.prev and tail.next must ALWAYS be null in a properly formed DLL — if either accidentally points somewhere, backward or forward
+  traversal can go out of bounds or loop incorrectly.
+- DLL still does NOT give random access — people sometimes assume "bidirectional" means "direct access", but you still must traverse
+  node by node from one of the two ends.
+
+
+
+
+
+Leetcode Questions:-
+--------------------
+707 - Design Doubly Linked List
+Code:-
+-----
+class Node{
+    int data;
+    Node next;
+    Node prev;
+    Node(int data){
+        this.data = data;
+    }
+}
+
+class MyLinkedList {
+    Node head;
+    Node tail;
+    int size;
+    
+    public int get(int index) {
+        if(index < 0 || index >= size){
+            return -1;
+        }
+        if(index == 0){
+            return head.data;
+        }
+        if(index == size-1){
+            return tail.data;
+        }
+        Node curr = head;
+        for(int i=0; i<index;i++){
+            curr = curr.next;
+        }
+        return curr.data;
+        
+    }
+    
+    public void addAtHead(int val) {
+        Node newNode = new Node(val);
+        if(head==null){
+            head = newNode;
+            tail = newNode;
+        }
+        else{
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        }
+        size++;
+    }
+    
+    public void addAtTail(int val) {
+        Node newNode = new Node(val);
+        if(tail == null){
+            head = newNode;
+            tail = newNode;
+        }
+        else{
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        size++;
+    }
+    
+    public void addAtIndex(int index, int val) {
+        if(index<0 || index > size){
+            return;
+        }
+        if(index == 0){
+            addAtHead(val);
+            return;
+        }
+        if(index == size){
+            addAtTail(val);
+            return;
+        }
+        Node curr = head;
+        for(int i=0; i<index-1; i++){
+            curr = curr.next;
+        }
+        Node newNode = new Node(val); 
+        newNode.next = curr.next;
+        newNode.prev = curr;
+
+        curr.next.prev = newNode;
+        curr.next = newNode;
+        size++;
+    }
+    
+    public void deleteAtIndex(int index) {
+
+        if(index < 0 || index >= size){
+            return;
+        }
+
+        if(index == 0){
+            head = head.next;
+
+            if(head == null){
+                tail = null;
+                size--;
+                return;
+            }
+
+            head.prev = null;
+            size--;
+            return;
+        }
+
+        if(index == size - 1){
+            tail = tail.prev;
+            tail.next = null;
+            size--;
+            return;
+        }
+
+        Node curr = head;
+
+        for(int i = 0; i < index - 1; i++){
+            curr = curr.next;
+        }
+
+        curr.next = curr.next.next;
+        curr.next.prev = curr;
+
+        size--;
+    }
+}
