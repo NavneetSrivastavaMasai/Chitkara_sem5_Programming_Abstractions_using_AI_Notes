@@ -318,3 +318,169 @@ class MyLinkedList {
         size--;
     }
 }
+
+1472 - Browser History 
+Code:-
+-----
+class WebPage{
+    WebPage next;
+    WebPage prev;
+    String url;
+    WebPage(String url){
+        this.url = url;
+    }
+}
+
+
+class BrowserHistory {
+    WebPage currentPage;
+
+    public BrowserHistory(String homepage) {
+        currentPage = new WebPage(homepage);
+    }
+    
+    public void visit(String url) {
+        WebPage newPage = new WebPage(url);
+        newPage.prev = currentPage;
+        currentPage.next = newPage;
+        currentPage = newPage;
+    }
+    
+    public String back(int steps) {
+        while(steps>0 && currentPage.prev != null){
+            steps--;
+            currentPage = currentPage.prev;
+        }
+        return currentPage.url;
+    }
+    
+    public String forward(int steps) {
+        while(steps>0 && currentPage.next != null){
+            steps--;
+            currentPage = currentPage.next;
+        }
+        return currentPage.url;
+    }
+}
+
+/**
+ * Your BrowserHistory object will be instantiated and called as such:
+ * BrowserHistory obj = new BrowserHistory(homepage);
+ * obj.visit(url);
+ * String param_2 = obj.back(steps);
+ * String param_3 = obj.forward(steps);
+ */
+
+
+
+
+430 - Multilevel DLL
+Code:-
+------
+
+class Solution {
+    public Node flatten(Node head) {
+        if(head==null){
+            return null;
+        }
+        flattenList(head);
+        return head;
+    }
+    public Node flattenList(Node node){
+        Node curr = node;
+        Node last = curr;
+        while(curr!=null){
+            Node nextP = curr.next;
+            if(curr.child!=null){
+                Node childHead = curr.child;
+                Node childTail = flattenList(childHead);
+                curr.next = childHead;
+                childHead.prev = curr;
+                curr.child=null;
+                if(nextP != null){
+                    nextP.prev = childTail;
+                    childTail.next = nextP;
+                }
+                last = childTail;
+
+            }else{
+                last = curr;
+            }
+            curr = nextP;
+        }
+        return last;
+
+    }
+
+}
+
+146 - LRU Cache 
+Code:-
+-----
+
+class Node{
+    Node next;
+    Node prev;
+    int key;
+    int value;
+    Node(int key, int val){
+        this.key=key;
+        this.value = val;
+    }
+}
+
+class LRUCache {
+    Node head;
+    Node tail;
+    Map<Integer, Node> map;
+    int capacity;
+    public LRUCache(int capacity) {
+        head = new Node(0,0);
+        tail = new Node(0,0);
+        this.capacity = capacity;
+        map = new HashMap<>();
+        head.next = tail;
+        tail.prev = head;
+    }
+    public void insertNode(Node node){
+        node.next=head.next;
+        node.prev=head;
+        head.next.prev = node;
+        head.next =node; 
+    }
+    public void removeNode(Node node){
+        node.prev.next=node.next;
+        node.next.prev=node.prev;
+    }
+    public int get(int key) {
+        if(!map.containsKey(key)){
+            return -1;
+        }
+        Node node = map.get(key);
+        removeNode(node);
+        insertNode(node);
+        return node.value;
+    }
+    
+    public void put(int key, int value) {
+        if(map.containsKey(key)){
+            Node node = map.get(key);
+            node.value = value;
+            removeNode(node);
+            insertNode(node);
+            return;
+        }
+        Node node = new Node(key, value);
+        map.put(key,node);
+        insertNode(node);
+        if(map.size()>capacity){
+            map.remove(tail.prev.key);
+            removeNode(tail.prev);
+            
+        }
+    }
+}
+
+
+460 - LFU Cache   
+
