@@ -1,0 +1,186 @@
+CIRCULAR LINKED LIST — COMPLETE THEORY NOTES
+================================================
+
+1. WHAT IS A CIRCULAR LINKED LIST?
+--------------------------------------
+- A Circular Linked List (CLL) is a variation of a linked list where the LAST node does NOT point to null — instead, it points BACK to the FIRST node (head), forming a continuous circle.
+- There is no true "end" in a circular linked list — every node always leads to another node, forever, if you keep traversing.
+- CLL can be built on top of EITHER a Singly Linked List or a Doubly Linked List structure — the "circular" property is independent of whether nodes have one or two references.
+
+  	Visual (Singly Circular):
+       +-----------------------------------------+
+       |                                           |
+       v                                           |
+     [10|next] --> [20|next] --> [30|next] --------+
+      head                        tail (points back to head, not null)
+
+  	Visual (Doubly Circular):
+       +----------------------------------------------------+
+       |                                                       |
+       v                                                       |
+  <--> [prev|10|next] <--> [prev|20|next] <--> [prev|30|next] <--+
+        head                                    tail
+  (tail.next = head, AND head.prev = tail — linked in both directions)
+
+
+- The only structural change from a normal (linear) linked list is: last node's "next" = head   (instead of null) and, for doubly circular:
+      head's "prev" = tail        (instead of null)
+
+
+2. WHY DO WE NEED CIRCULAR LINKED LIST? 
+----------------------------------------
+Linear linked lists (singly or doubly) have a hard STOP at the end (next = null). But many real-world scenarios are naturally CYCLIC, not linear — they don't have a "last item" conceptually, they just keep looping back to the start.
+
+LIMITATIONS OF LINEAR LISTS THAT CLL SOLVES:
+  - In a linear list, once you reach the last node, you're stuck — the only way back to the beginning is to hold a separate head reference and jump back manually; there's no continuous flow.
+  - Repetitive style processes (where after the last item you naturally want to go back to the first) aren't naturally modeled by a linear list — you'd need extra logic to detect "end reached, now reset to head" every time.
+
+CIRCULAR LINKED LIST ADVANTAGES:
+  - Naturally models cyclical processes — no special "wrap-around" logic needed; the structure itself loops.
+  - From ANY node, you can reach ALL other nodes — you don't strictly need to start from "head" the way you do in a linear list, since continuing forward eventually cycles through everything.
+  - Efficient for continuous/repeating operations — e.g., cycling through players in a game, or processes in a scheduler, without manually resetting a pointer back to the start.
+  - In the circular singly-linked version, if you maintain only a "tail" reference (instead of head), you can still access the head instantly via tail.next — giving O(1) access to BOTH ends with just one reference variable.
+
+CIRCULAR LINKED LIST DISADVANTAGES:
+  - No natural "null" to detect the end — traversal logic must be written carefully, or you'll loop INFINITELY by accident. You must track the start point and stop when you return to it (not stop when you see null, because you'll never see null).
+  - Slightly more complex to implement correctly — insertion/deletion must maintain the "wrap-around" link, which is easy to forget.
+  - Debugging is trickier — printing/traversing a circular list with ordinary linear-list logic can cause infinite loops if you're not careful.
+
+
+3. STRUCTURE OF A NODE (BUILDING BLOCK)
+-------------------------------------------
+The NODE STRUCTURE ITSELF is identical to Singly or Doubly Linked List
+— circularity is NOT a property of the node, it's a property of HOW the nodes are CONNECTED (specifically, what the last node's "next" points to).
+
+  Java representation (Singly Circular version):
+
+  class Node {
+      int data;
+      Node next;
+
+      Node(int data) {
+          this.data = data;
+          this.next = null;   // temporarily null until linked into the circle
+      }
+  }
+
+- Key theoretical point: there is no special "circular node" class. A circular list is simply a linear list's nodes connected in a loop. This is why CLL is taught AFTER singly/doubly lists — it reuses the exact same node structure, just changes the linking pattern.
+
+
+4. MEMORY MANAGEMENT — SAME PRINCIPLES, WITH ONE KEY DIFFERENCE
+-----------------------------------------------------------------------
+- Nodes are still created via "new" and stored in HEAP memory; reference variables (head/tail/temp) still live on the STACK — no change from SLL/DLL in this regard.
+- Nodes are still scattered (non-contiguous) in heap memory, connected purely through reference values.
+- THE KEY DIFFERENCE — GARBAGE COLLECTION CONCERN:
+    - In a linear list, once you remove all external references to a node (and nothing else points to it), it becomes unreachable and gets garbage collected.
+    - In a CIRCULAR list, nodes reference EACH OTHER in a loop. If you lose the "head"/"tail" entry-point reference from OUTSIDE the list, the nodes technically still ALL reference each other (A points to B, B points to C, C points back to A) — but since NOTHING from outside the loop points into it anymore, the entire loop becomes unreachable together and gets garbage collected as a group.
+    - This is a subtle but important theoretical point: in a linear list, "no one points to me" is per-node; in a circular list, "no one points to me" must be evaluated for the WHOLE cycle from the outside, since internally every node is always pointed to by its neighbor.
+
+
+5. HEAD & TAIL — REDEFINED SLIGHTLY FOR CIRCULAR LISTS
+--------------------------------------------------------------
+- "head" is still conceptually the "starting point" you choose to treat as the beginning — but structurally, in a circular list, EVERY node looks the same (every node has a valid next, none point to null). head is a matter of where YOU decide traversal begins, not a special structural marker like it is in a linear list.
+- Many CLL implementations deliberately store only a "tail" reference (instead of head) because:
+      tail.next  = head   -> gives O(1) access to the first node
+      tail itself           -> gives O(1) access to the last node
+  So a single "tail" reference is enough to reach BOTH ends instantly
+  — this is a well-known trick specific to circular singly linked lists.
+
+- The "empty list" condition changes too:
+      Linear list  -> empty when head == null
+      Circular list -> empty when tail == null (or head == null, depending which reference you maintain) —
+                        there's no node pointing to itself to check.
+- The "single node" special case is important in CLL: when there is exactly ONE node, that node's next (and prev, if doubly) must point
+  to ITSELF — not to null, and not left unset.
+
+
+6. KEY TERMINOLOGY
+----------------------
+- CIRCULAR / LOOP     : last node connects back to the first node
+- WRAP-AROUND         : the link from tail back to head
+- SELF-LOOP           : special case where a single node points to itself
+- TRAVERSAL TERMINATION CONDITION: since there's no null, you must stop
+  when you return to your STARTING node (e.g., current == head), not
+  when current == null
+
+
+7. HOW TRAVERSAL CONCEPTUALLY WORKS (MOST IMPORTANT CONCEPT IN CLL)
+------------------------------------------------------------------------
+- In SLL/DLL, you traverse "while current != null".
+- In CLL, that condition would cause an INFINITE LOOP, because current will never become null — it will just keep cycling forever.
+- Correct approach: use a DO-WHILE style pattern —
+      1) Start at head, process it
+      2) Move current = current.next
+      3) Repeat WHILE current != head (i.e., stop once you're back where you started)
+- This "stop when you're back at the start" condition is THE defining theoretical adjustment every learner must internalize when moving from linear to circular lists.
+- For circular DOUBLY linked lists, the same idea applies for backward traversal too — you stop when you return to your starting node while moving via "prev".
+
+
+8. TYPES OF OPERATIONS (CONCEPTUAL OVERVIEW ONLY)
+--------------------------------------------------------
+(theory of WHAT they mean — every operation must preserve the loop)
+
+- INSERTION
+    a) At beginning — new node becomes new head; must:
+         - point new node's next to the old head
+         - update the LAST node's next to point to the new head (this step is unique to CLL — a linear list never needs to touch the last node just to insert at the front)
+    b) At end — must:
+         - attach new node after current last node
+         - point new node's next back to head (maintain the loop)
+    c) At a given position — same traversal-and-relink idea as linear lists, just with extra care that the final wrap-around link is never accidentally broken
+
+- DELETION
+    a) Deleting the head — must find the LAST node (since it's the one pointing to head) and update its next to point to the new head (in singly circular; in doubly circular, this is simpler since tail is already directly accessible via head.prev)
+    b) Deleting the tail — must update the new last node's next to point back to head, preserving circularity
+    c) Deleting a middle/given node — same idea as linear lists (re-link previous node's next to skip the deleted node), but there is no "null" edge case to worry about at the boundaries — every position conceptually "wraps"
+
+- SPECIAL CASE — Deleting the ONLY node in the list: after deletion, head/tail references must be set to null explicitly (the list becomes empty) — there's no natural way to detect this without explicitly checking if the node you're deleting points to itself.
+
+- SEARCH / TRAVERSAL-BASED OPERATIONS — must always use the "stop when back at start" rule described in section 7, never "stop at null".
+
+
+9. CIRCULAR vs LINEAR LINKED LIST (SIDE-BY-SIDE CONCEPTUAL COMPARISON)
+---------------------------------------------------------------------------
+  Aspect                     Linear (Singly/Doubly)     Circular
+  ---------------------------------------------------------------------
+  Last node's next            null                       points to head
+  End detection                current == null            current == start node
+  Access from tail to head     Not possible directly       O(1) via tail.next
+                                (need full retraversal)     (singly circular)
+  Risk of infinite loop        No (null stops it)           Yes, if traversal
+                                                             logic is written
+                                                             incorrectly
+  Natural fit for              One-time linear data         Repeating/cyclic
+                                                             processes
+
+
+10. TIME & SPACE COMPLEXITY SUMMARY (CIRCULAR LINKED LIST)
+--------------------------------------------------------------------
+  Operation                    Time Complexity      Notes
+  --------------------------------------------------------------
+  Access (by index)            O(n)                 no random access
+  Search                       O(n)                 bounded by "back to
+                                                     start" condition
+  Insert at head (tail known)  O(1)                 via tail.next trick
+  Insert at tail (tail known)  O(1)
+  Insert at head (tail NOT     O(n)                 must traverse to find
+    known, only head kept)                          last node to relink it
+  Delete head (tail known)     O(1)
+  Delete head (tail NOT known) O(n)                 must find last node
+  Delete a known node          O(1) for doubly circular; O(n)-to-find
+                                for singly circular (same reasoning as
+                                linear SLL vs DLL)
+
+  Space Complexity: O(n) — same as linear counterpart (singly or doubly), no extra field is required purely for circularity — it's just a different VALUE stored in the existing "next" (and "prev") fields.
+
+
+11. COMMON MISCONCEPTIONS / IMPORTANT POINTS TO REMEMBER
+------------------------------------------------------------------------
+- "Circular" is a LINKING pattern, not a different node structure —the Node class is identical to SLL/DLL; only what gets stored in the last node's "next" (and DLL's head "prev") changes.
+- Traversal using "while current != null" will NEVER terminate on a circular list — always use "while current != head" (or an equivalent do-while-style start/stop check).
+- An empty circular list still means head/tail = null, same as a linear list — the "loop" only exists once nodes are actually present.
+- A single-node circular list is a special case: that one node's next (and prev, in doubly circular) must point to ITSELF, not to null.
+- Maintaining a "tail" reference (rather than head) is a well-known useful trick specifically in circular singly linked lists, since tail.next gives you instant access to head as well — effectively tracking both ends with a single reference variable.
+
+Practice Questions from Test pad.
+=================================
