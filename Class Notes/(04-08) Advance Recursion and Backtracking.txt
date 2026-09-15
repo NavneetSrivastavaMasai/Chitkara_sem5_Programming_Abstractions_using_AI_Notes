@@ -504,7 +504,6 @@ class Solution {
     public void backtrack(int start,int n,int k,List<Integer>curr,List<List<Integer>> ans){
         if(curr.size()==k){
             // System.out.println(curr);
-            ans.add(new ArrayList<>(curr));
             return;
         }
         for(int i=start;i<=n;i++){

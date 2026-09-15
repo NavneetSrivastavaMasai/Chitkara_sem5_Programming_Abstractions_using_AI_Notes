@@ -1,0 +1,888 @@
+Stack:
+======
+
+- A Stack is a linear data structure in which insertion and deletion are performed from the same end, called the TOP.
+
+- A Stack follows:
+
+- LIFO — Last In, First Out
+
+	- The element inserted last is the first element removed.
+
+Example
+
+Push: 10
+Push: 20
+Push: 30
+
+Stack becomes:
+
+       ┌────┐
+ TOP → │ 30  │  ← Last inserted
+       ├────┤
+       │ 20  │
+       ├────┤
+       │ 10  │
+       └────┘
+
+Now:
+
+pop()
+
+removes 30.
+
+Then:
+
+pop()
+
+removes 20.
+
+Stack ADT (Abstract Data Type)
+==============================
+- The ADT specifies **what operations are available**, not how they are implemented.
+- Typical Stack operations:
+
+| Operation          | Meaning                                                                  |
+| ------------------ | ------------------------------------------------------------------------ |
+| `push(x)`          | Insert `x`                                                               |
+| `pop()`            | Remove and return top element                                            |
+| `peek()` / `top()` | Return top element without removing                                      |
+| `isEmpty()`        | Check whether stack is empty                                             |
+| `size()`           | Number of elements                                                       |
+| `isFull()`         | Check whether stack is full — mainly for fixed-size array implementation |
+
+Why do we need Stack?
+=-=-=-=-=-=-=-=-=-=-=
+- Stacks are useful whenever the **most recently added item needs to be processed first**.
+
+- Common applications:
+
+* Function calls / Call Stack
+* Recursion
+* Undo/Redo
+* Browser history
+* Expression evaluation
+* Infix → Postfix conversion
+* Infix → Prefix conversion
+* Parentheses matching
+* Depth First Search
+* Backtracking
+* Monotonic Stack problems
+
+ARRAY REPRESENTATION OF STACK
+==============================
+Stack Using Array
+Implementation:-
+package com.chitkara;
+
+public class Main {
+	public static void main(String[] args) {
+		MyStack st = new MyStack(10);
+		try {
+			st.push(10);
+			st.push(20);
+			st.push(30);
+			
+			System.out.println(st.pop());
+			
+			System.out.println(st.peek());
+			
+			System.out.println(st.isEmpty());
+			System.out.println(st.isFull());
+			System.out.println(st.pop());
+			st.displayStack();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+}
+
+class MyStack {
+	int capacity;
+	int[] arr;
+	int top;
+
+	MyStack(int capacity) {
+		this.capacity = capacity;
+		this.arr = new int[capacity];
+		this.top = -1;
+	}
+
+	void push(int data) throws Exception {
+		if (top == capacity - 1) {
+			throw new Exception("Stack Overflow");
+		}
+		top++;
+		arr[top] = data;
+	}
+
+	int pop() throws Exception {
+		if (top == -1) {
+			throw new Exception("Stack Underflow");
+		}
+		int data = arr[top];
+		top--;
+		return data;
+	}
+
+	int peek() throws Exception {
+		if (top == -1) {
+			throw new Exception("Stack Underflow");
+		}
+		return arr[top];
+	}
+
+	boolean isEmpty() {
+		return top == -1;
+	}
+
+	boolean isFull() {
+		return top == capacity - 1;
+	}
+
+	void displayStack() {
+		if(top == -1) {
+			throw new RuntimeException("Stack is Empty");
+		}
+		for(int i= top; i>=0; i--) {
+			System.out.println(arr[i]);
+		}
+	}
+}
+
+Output:-
+------
+30
+20
+false
+false
+20
+10
+
+
+
+
+
+Stack Overflow
+=-=-=-=-=-=-=-=
+- When we try to push into a full fixed-size array stack, we have **Stack Overflow**.
+
+
+Stack Underflow
+=-=-=-=-=-=-=-=
+- If we try to perform `pop()` on an empty Stack, we get **Stack Underflow**.
+
+
+Complexity of Array Stack
+
+| Operation   | Time |
+| ----------- | ---: |
+| `push()`    | O(1) |
+| `pop()`     | O(1) |
+| `peek()`    | O(1) |
+| `isEmpty()` | O(1) |
+| `size()`    | O(1) |
+| `display()` | O(n) |
+
+Space
+------
+O(n)
+
+- for capacity `n`.
+
+Important Problem with Array Implementation
+============================================
+- The biggest limitation of a basic array Stack is its fixed capacity.
+
+
+STACK USING LINKED LIST
+=========================
+Why use Linked List
+--------------------
+- A Linked List can make the Stack **dynamic in size**.
+
+- We don't need to specify a fixed capacity.
+
+- Instead, nodes are created when required.
+
+Implementation:-
+---------------
+package com.chitkara;
+
+public class Main {
+	public static void main(String[] args) {
+		MyStack st = new MyStack();
+		try {
+			st.push(10);
+			st.push(20);
+			st.push(30);
+			
+			System.out.println(st.pop());
+			
+			System.out.println(st.peek());
+			
+			System.out.println(st.isEmpty());
+			System.out.println(st.pop());
+			st.displayStack();
+			System.out.println(st.getSize());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+}
+
+class Node {
+	Node next;
+	int data;
+
+	Node(int data) {
+		this.data = data;
+	}
+}
+
+class MyStack {
+	Node top;
+	int size;
+
+	void push(int data) {
+		Node newNode = new Node(data);
+		newNode.next = top;
+		top = newNode;
+		size++;
+	}
+
+	int pop() {
+		if (top == null) {
+			throw new RuntimeException("Stack underflow");
+		}
+		int data = top.data;
+		top = top.next;
+		return data;
+	}
+
+	int peek() {
+		if (top == null) {
+			throw new RuntimeException("Stack underflow");
+		}
+
+		return top.data;
+	}
+
+	boolean isEmpty() {
+		return top == null;
+	}
+
+	int getSize() {
+		return size;
+	}
+
+	void displayStack() {
+		if (top == null) {
+			throw new RuntimeException("Stack is EMpty..");
+		}
+		Node temp = top;
+		while (temp != null) {
+			System.out.println(temp.data);
+			temp = temp.next;
+		}
+	}
+}
+
+Output:-
+-------
+30
+20
+false
+20
+10
+3
+
+
+
+
+Array vs Linked List Stack
+---------------------------
+- This comparison is very important.
+
+| Feature        | Array Stack        | Linked List Stack                 |
+| -------------- | ------------------ | --------------------------------- |
+| Memory         | Contiguous         | Non-contiguous                    |
+| Capacity       | Usually fixed      | Dynamic                           |
+| `push()`       | O(1)               | O(1)                              |
+| `pop()`        | O(1)               | O(1)                              |
+| `peek()`       | O(1)               | O(1)                              |
+| Overflow       | When array is full | Only when memory allocation fails |
+| Extra memory   | Low                | Extra pointer per node            |
+| Cache locality | Better             | Generally worse                   |
+| Resizing       | May be required    | Not required                      |
+| Implementation | Simpler            | Slightly more complex             |
+
+---
+
+Which implementation is better?
+-------------------------------
+
+- It depends on the requirements.
+
+Array is preferable when:-
+-------------------------
+* Maximum capacity is known
+* Memory locality matters
+* We want simple implementation
+
+Linked List is preferable when:
+--------------------------------
+* Size is highly dynamic
+* We don't know maximum size beforehand
+* We don't want resizing
+
+Final Complexity Table:-
+--------------------------
+
+| Operation                    | Array Stack | Linked List Stack |
+| ---------------------------- | ----------: | ----------------: |
+| Push                         |        O(1) |              O(1) |
+| Pop                          |        O(1) |              O(1) |
+| Peek                         |        O(1) |              O(1) |
+| isEmpty                      |        O(1) |              O(1) |
+| Size                         |       O(1)* |             O(1)* |
+| Search                       |        O(n) |              O(n) |
+| Access by index              |        O(1) |              O(n) |
+| Space                        |        O(n) |              O(n) |
+| Fixed Capacity               |         Yes |                No |
+
+
+Leetcode Questions:-
+===================
+20. Valid Parentheses
+Solution:-
+---------
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character>stack = new Stack<>();
+
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+
+            if(ch=='('|| ch=='{'||ch=='['){
+                stack.push(ch);
+            }else{
+                if(stack.isEmpty()){
+                    return false;
+                }
+
+                char top = stack.peek();
+                if((ch==')'&& top=='(')||(ch=='}'&& top=='{')||(ch==']'&& top=='[')){
+                    stack.pop();
+                }else{
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+
+
+
+1047. Remove All Adjacent Duplicates In String
+Solution:-
+--------
+class Solution {
+    public String removeDuplicates(String s) {
+        char[] stack = new char[s.length()];
+        int top = -1;
+        char[] arr = s.toCharArray();
+        for(int i=0; i<arr.length; i++){
+            char ch = arr[i];
+            if(top != -1 && stack[top] == ch){
+                top--;
+            }else{
+                stack[++top] = ch;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<=top;i++){
+            sb.append(stack[i]);
+        }
+        return sb.toString();
+    }
+}
+
+
+INFIX, PREFIX AND POSTFIX NOTATIONS
+===================================
+1. ARITHMETIC EXPRESSION
+------------------------
+An arithmetic expression is a combination of:
+
+- Operands
+- Operators
+- Parentheses (if required)
+
+Example:
+
+    A + B
+
+Here:
+    A, B  -> Operands
+    +     -> Operator
+
+
+2. TYPES OF EXPRESSION NOTATIONS
+--------------------------------
+
+An arithmetic expression can be represented in three common ways:
+
+1. Infix Notation
+2. Prefix Notation
+3. Postfix Notation
+
+
+3. INFIX NOTATION
+-----------------
+
+In Infix notation, the operator is written BETWEEN its operands.
+
+General form:
+
+    Operand1 Operator Operand2
+
+Example:
+
+    A + B
+
+    A - B
+    A * B
+    A / B
+
+Infix notation is the most commonly used notation by humans.
+
+Example:
+
+    A + B * C
+
+In this expression, * has higher precedence than +.
+
+Therefore, it is interpreted as:
+
+    A + (B * C)
+
+
+Advantages of Infix Notation:
+
+- Easy for humans to read and understand.
+- Commonly used in mathematical expressions.
+- Supports familiar operators and parentheses.
+
+
+Disadvantage:
+
+- Operator precedence and associativity are required to determine the order of evaluation.
+
+Example:
+
+    A + B * C
+
+We need to know that * has higher precedence than +.
+
+
+4. PREFIX NOTATION
+------------------
+
+In Prefix notation, the operator is written BEFORE its operands.
+
+It is also called Polish Notation.
+
+General form:
+
+    Operator Operand1 Operand2
+
+Example:
+
+    A + B
+
+Prefix:
+
+    + A B
+
+More examples:
+
+    A - B        ->  - A B
+    A * B        ->  * A B
+    A / B        ->  / A B
+
+
+Example:
+
+    A + B * C
+
+Since * has higher precedence:
+
+    A + (B * C)
+
+Prefix representation:
+
+    + A * B C
+
+
+Important Point:
+
+In Prefix notation, every operator appears BEFORE
+the operands on which it operates.
+
+
+5. POSTFIX NOTATION
+-------------------
+
+In Postfix notation, the operator is written AFTER its operands.
+
+It is also called Reverse Polish Notation (RPN).
+
+General form:
+
+    Operand1 Operand2 Operator
+
+Example:
+
+    A + B
+
+Postfix:
+
+    A B +
+
+More examples:
+
+    A - B        ->  A B -
+    A * B        ->  A B *
+    A / B        ->  A B /
+
+
+Example:
+
+    A + B * C
+
+Since * has higher precedence:
+
+    A + (B * C)
+
+Postfix representation:
+
+    A B C * +
+
+
+Important Point:
+
+In Postfix notation, every operator appears AFTER the operands on which it operates.
+
+
+6. COMPARISON
+-------------
+
+Expression:
+
+    A + B
+
+Infix:
+
+    A + B
+
+Prefix:
+
+    + A B
+
+Postfix:
+
+    A B +
+
+
+Therefore:
+
+    Infix   -> Operator is BETWEEN operands
+    Prefix  -> Operator is BEFORE operands
+    Postfix -> Operator is AFTER operands
+
+
+7. EXAMPLE WITH PARENTHESES
+---------------------------
+
+Infix expression:
+
+    (A + B) * C
+
+First evaluate:
+
+    A + B
+
+Then multiply the result by C.
+
+Prefix:
+
+    * + A B C
+
+Postfix:
+
+    A B + C *
+
+
+Another example:
+
+    (A + B) * (C - D)
+
+Prefix:
+
+    * + A B - C D
+
+Postfix:
+
+    A B + C D - *
+
+
+8. OPERATOR PRECEDENCE
+----------------------
+
+When converting an Infix expression, operator precedence determines which operation should be performed first.
+
+Common precedence order:
+
+    ^       -> Highest
+    * / %   -> Next
+    + -     -> Lowest
+
+
+Example:
+
+    A + B * C
+
+Because * has higher precedence than +:
+
+    A + (B * C)
+
+
+Postfix:
+
+    A B C * +
+
+Prefix:
+
+    + A * B C
+
+
+9. ASSOCIATIVITY
+----------------
+
+When two operators have the same precedence, associativity determines the order in which they are processed.
+
+Most arithmetic operators are LEFT ASSOCIATIVE.
+
+Example:
+
+    A - B + C
+
+Both - and + have the same precedence.
+
+Since they are left associative:
+
+    (A - B) + C
+
+Postfix:
+
+    A B - C +
+
+Prefix:
+
+    + - A B C
+
+
+Another example:
+
+    A / B * C
+
+Since / and * have the same precedence and are left associative:
+
+    (A / B) * C
+
+Postfix:
+
+    A B / C *
+
+
+10. RIGHT ASSOCIATIVITY
+-----------------------
+
+Exponentiation (^) is generally treated as RIGHT ASSOCIATIVE.
+
+Example:
+
+    A ^ B ^ C
+
+It is interpreted as:
+
+    A ^ (B ^ C)
+
+Postfix:
+
+    A B C ^ ^
+
+Prefix:
+
+    ^ A ^ B C
+
+
+11. WHY PREFIX AND POSTFIX?
+---------------------------
+
+Prefix and Postfix notations are useful because they remove the need for parentheses and reduce ambiguity about the order of operations.
+
+Consider:
+
+    A + B * C
+
+Infix requires precedence rules to understand the expression.
+
+Postfix:
+
+    A B C * +
+
+The order of operations is directly represented.
+
+Prefix:
+
+    + A * B C
+
+The order of operations is also directly represented.
+
+
+12. ADVANTAGE OF POSTFIX
+------------------------
+
+Postfix expressions are particularly useful for Stack-based
+evaluation.
+
+Example:
+
+    2 3 + 4 *
+
+Step 1:
+
+    2 3 +
+
+    -> 5
+
+Step 2:
+
+    5 4 *
+
+    -> 20
+
+Result:
+
+    20
+
+
+13. ADVANTAGE OF PREFIX
+-----------------------
+
+Prefix expressions can also be evaluated using a Stack.
+
+Example:
+
+    * + 2 3 4
+
+Start from RIGHT to LEFT.
+
+    2 + 3 = 5
+
+    5 * 4 = 20
+
+Result:
+
+    20
+
+
+14. EXPRESSION TREE AND NOTATIONS
+---------------------------------
+
+Expression tree can be used to understand the relationship
+between Infix, Prefix and Postfix notation.
+
+Example:
+
+    (A + B) * (C - D)
+
+
+Expression Tree:
+
+             *
+           /   \
+          +     -
+         / \   / \
+        A   B C   D
+
+
+Tree Traversals:
+
+    Prefix  -> Root -> Left -> Right
+
+    Infix   -> Left -> Root -> Right
+
+    Postfix -> Left -> Right -> Root
+
+
+Therefore:
+
+    Prefix:
+
+        * + A B - C D
+
+
+    Infix:
+
+        (A + B) * (C - D)
+
+
+    Postfix:
+
+        A B + C D - *
+
+
+
+
+15. STACK APPLICATION
+---------------------
+
+Stacks are commonly used for:
+
+- Infix to Postfix  conversion
+- Infix to Prefix conversion
+- Postfix expression evaluation
+- Prefix expression evaluation
+- Parentheses matching
+- Expression parsing
+
+In particular, Infix to Postfix conversion is an important application of Stack because operators can be temporarily stored in a Stack according to their precedence and associativity.
+
+
+Practice Questions:-
+-------------------
+- Convert following infix expressions into Postfix/Prefix expression.
+Q1 -> A + B * C
+Q2 -> A * B + C
+Q3 -> A + B - C
+Q4 -> A * B / C
+Q5 -> (A + B) * (C - D)
+Q6 -> A + B * C - D
+Q7 -> A * B + C / D
+Q8 -> A + (B * C - D) / E
+Q9 -> A + B * (C ^ D - E)
+Q10 -> (A + B) * (C - D) / E
+Q11-> A * (B + C * D) - E
+Q12 -> (A - B / C) * (D + E)
+Q13 -> A + B * (C ^ D - E) ^ (F + G * H) - I
+Q14 -> (A + B * C) / (D - E * F) + G
+Q15 -> A * (B + C) / (D - E) + F * G
+Q16 -> (A + B) * (C + D) - E / F
+Q17 -> A - B * (C + D / E) ^ F

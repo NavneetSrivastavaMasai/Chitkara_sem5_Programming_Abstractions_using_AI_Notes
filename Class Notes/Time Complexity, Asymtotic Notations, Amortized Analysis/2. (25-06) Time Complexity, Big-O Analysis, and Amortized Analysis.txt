@@ -600,7 +600,7 @@ Asymptotic Notations
 
 - Is it necessary to carry this entire expression forever?
 
-What is Asymptotic Analysis?
+What is Asymptotic Analysis?  
 =-=-=-=-=-=-=-=-=-=-=-=-=
 - Asymptotic Analysis is the study of an algorithm's growth as the input size becomes very large (n → ∞).
 
@@ -1070,13 +1070,13 @@ One line Statement:-
                    Algorithm
                     	│
       ┌─────────────┼─────────────┐
-      │             	 		  │             	 		│		   
-      ▼                	     ▼                 	      ▼
+      │             	 		  │          │		   
+      ▼                	     ▼              ▼
  Best Case    	 Average Case   	Worst Case
-      │             				│             			│
-      ▼               	      ▼             	 	▼
+      │             │                     │
+      ▼               ▼                    ▼ 
  Time Function 	 Time Function  	   Time Function
-      │                 			    │             	                    │
+      │                 │                  │
       └─────────────┼─────────────┘
                    	▼
      		 Apply Asymptotic Notations
