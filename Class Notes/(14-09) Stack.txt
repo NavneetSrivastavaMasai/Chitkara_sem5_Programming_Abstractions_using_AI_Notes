@@ -886,3 +886,117 @@ Q14 -> (A + B * C) / (D - E * F) + G
 Q15 -> A * (B + C) / (D - E) + F * G
 Q16 -> (A + B) * (C + D) - E / F
 Q17 -> A - B * (C + D / E) ^ F
+
+
+
+Geek for Geeks:-
+--------------
+- Infix to Postfix
+Code:-
+-----
+class Solution {
+    public static int priority(char ch){
+        if(ch == '^') return 3;
+        if(ch == '*' || ch == '/') return 2;
+        if(ch == '+' || ch == '-') return 1;
+        return -1;
+    }
+    public static boolean rightAsso(char ch){
+        return  ch =='^';
+    }
+    public static boolean shouldPop(char stackTop, char ch){
+        if(priority(stackTop) > priority(ch)){
+            return true;
+        }
+        if(priority(stackTop) == priority(ch) && !rightAsso(ch)){
+            return true;
+        }
+        return false;
+    }
+    public static String infixToPostfix(String s) {
+        Stack<Character> stack = new Stack<>();
+        StringBuilder ans = new StringBuilder();
+        
+        for(int i=0; i<s.length();i++){
+            char ch = s.charAt(i);
+            if(Character.isLetterOrDigit(ch)){
+                ans.append(ch);
+            }else if(ch == '('){
+                stack.push(ch);
+            }else if(ch == ')'){
+                while(!stack.isEmpty() && stack.peek() != '('){
+                    ans.append(stack.pop());
+                }
+                stack.pop();
+            }else{
+                while(!stack.isEmpty() &&  shouldPop(stack.peek(),ch)) {
+                    ans.append(stack.pop());
+                }
+                stack.push(ch);
+            }
+        }
+        while(!stack.isEmpty()){
+            ans.append(stack.pop());
+        }
+        return ans.toString();
+    }
+}
+
+
+
+
+
+
+- Infix to Prefix
+Code:-
+------
+class Solution {
+    public static int priority(char ch){
+        if(ch == '^') return 3;
+        if(ch == '*' || ch == '/') return 2;
+        if(ch == '+' || ch == '-') return 1;
+        return -1;
+    }
+    public static boolean rightAsso(char ch){
+        return  ch =='^';
+    }
+    public static boolean shouldPop(char stackTop, char ch){
+        if(priority(stackTop) > priority(ch)){
+            return true;
+        }
+        if(priority(stackTop) == priority(ch) && rightAsso(ch)){
+            return true;
+        }
+        return false;
+    }
+    
+    static String infixToPrefix(String s) {
+       Stack<Character> stack = new Stack<>();
+       StringBuilder ans = new StringBuilder();
+        for(int i=s.length()-1; i>=0;i--){
+            char ch = s.charAt(i);
+            if(Character.isLetterOrDigit(ch)){
+                ans.append(ch);
+            }else if(ch == ')'){
+                stack.push(ch);
+            }else if(ch == '('){
+                while(!stack.isEmpty() && stack.peek() != ')'){
+                    ans.append(stack.pop());
+                }
+                stack.pop();
+            }else{
+                while(!stack.isEmpty() &&  shouldPop(stack.peek(),ch)) {
+                    ans.append(stack.pop());
+                }
+                stack.push(ch);
+            }
+        }
+        while(!stack.isEmpty()){
+           ans.append(stack.pop());
+        }
+        return ans.reverse().toString();
+        
+    }
+}
+
+
