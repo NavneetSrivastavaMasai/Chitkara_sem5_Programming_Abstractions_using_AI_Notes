@@ -999,4 +999,122 @@ class Solution {
     }
 }
 
+- Practice Postfix to Infix
+Code:-
+----
+package com.chitkara;
+
+import java.util.Stack;
+
+public class Demo2 {
+	public static void main(String[] args) {
+		String postFix = "ab+c*d-";
+		System.out.println(postfixToInfix(postFix));
+	}
+
+	public static boolean isOperator(char ch) {
+		if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+			return true;
+		}
+		return false;
+	}
+	public static String postfixToInfix(String str) {
+		Stack<String> stack = new Stack<>();
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+			if (!isOperator(ch)) {
+				stack.push(String.valueOf(ch));
+			} else {
+				String right = stack.pop();
+				String left = stack.pop();
+				String expre = "(" + left + ch + right + ")";
+				stack.push(expre);
+			}
+		}
+		return stack.pop();
+
+	}
+}
+
+
+
+- Practice Prefix to Infix
+Code:-
+----
+package com.chitkara;
+import java.util.Stack;
+public class Demo3 {
+	public static void main(String[] args) {
+		String preFix = "-+abc";
+		System.out.println(prefixToInfix(preFix));
+	}
+	public static boolean isOperator(char ch) {
+		if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+			return true;
+		}
+		return false;
+	}
+	public static String prefixToInfix(String str) {
+		Stack<String> stack = new Stack<>();
+		for (int i = str.length()-1; i>=0; i--) {
+			char ch = str.charAt(i);
+			if (!isOperator(ch)) {
+				stack.push(String.valueOf(ch));
+			} else {
+				String left = stack.pop();
+				String right = stack.pop();
+				String expre = "(" + left + ch + right + ")";
+				stack.push(expre);
+			}
+		}
+		return stack.pop();
+	}
+}
+
+
+
+Leetcode:-
+---------
+150 - Evaluate Reverse Polish Notation
+Code:-
+-----
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Stack<Integer>st = new Stack<>();
+
+        for(String token : tokens){
+            
+            switch(token){
+                
+                case("+") :
+                    int b = st.pop();
+                    int a = st.pop(); 
+                    st.push(a+b);
+                    break;
+                case("-") :
+                    b = st.pop();
+                    a = st.pop(); 
+                    st.push(a-b);
+                    break;
+                case("*") :
+                    b = st.pop();
+                    a = st.pop();
+                    st.push(a*b);
+                    break;
+                case("/") :
+                    b = st.pop();
+                    a = st.pop(); 
+                    st.push(a/b);
+                    break;
+
+                default : st.push(Integer.parseInt(token));
+            }
+        }
+        return st.pop();
+    }
+}
+
+
+
+227 - Basic Calculator II
 
