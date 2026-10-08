@@ -1,0 +1,427 @@
+Queue
+======
+- A Queue is a linear data structure in which:
+  - Insertion is performed from one end called REAR.
+  - Deletion is performed from the other end called FRONT.
+- A Queue follows:
+- FIFO — First In, First Out
+  - The element inserted first is the first element removed.
+
+Example
+--------
+Suppose we insert:
+	Enqueue: 10
+	Enqueue: 20
+	Enqueue: 30
+
+Queue becomes:- 
+FRONT             REAR
+  ↓                ↓
+┌────┬────┬────┐
+│ 10  │ 20 	 │ 30 	│
+└────┴────┴────┘
+
+Now:
+	dequeue() removes 10.
+
+Then:
+	dequeue() removes 20.
+So:
+First In  →  First Out
+   10     →     10
+   20     →     20
+   30     →     30
+
+Queue ADT (Abstract Data Type)
+================================
+- The ADT specifies what operations are available, not how they are implemented.
+- Typical Queue operations:
+
+Operation		Meaning
+
+enqueue(x)		Insert x at the rear
+dequeue()		Remove and return the front element
+peek() / front()	Return front element without removing
+isEmpty()		Check whether queue is empty
+size()			Number of elements
+isFull()		Check whether queue is full — mainly for fixed-size array implementation
+
+
+Why do we need Queue?
+=======================
+- Queues are useful whenever the first item that arrives should be processed first.
+- Common applications:
+- CPU Scheduling
+- Printer Queue
+- Network Data Packets
+- Request Processing
+- BFS — Breadth First Search
+- Level Order Traversal of Binary Tree
+- Message Queues
+- Producer-Consumer Problems
+- Task Scheduling
+- Customer Service Systems
+- Call Center Systems
+
+Implementing Queue Using Array:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Code:-
+-----
+class QueueUsingArray{
+	int front;
+	int rear;
+	int capacity;
+	int[] arr;
+	public QueueUsingArray(int capacity) {
+		this.capacity = capacity;
+		this.arr = new int[capacity];
+		this.front = -1;
+		this.rear = -1;
+	}
+	public void enqueue(int data) {
+		if(rear == capacity -1) {
+			System.out.println("Queue Overflow");
+			return;
+		}
+		rear++;
+		arr[rear] = data;
+		if(front  == -1) {
+			front++;
+		}
+	}
+	public int dequeue() {
+		if(front == -1 || front > rear) {
+			System.out.println("Queue Underflow");
+			return -1;
+		}
+		int data = arr[front];
+		front++;
+		return data;
+	}
+	public int peek() {
+		if(front == -1 || front > rear) {
+			System.out.println("Queue Underflow");
+			return -1;
+		}
+		return arr[front];
+	}
+	public boolean isEmpty() {
+		return rear == -1 || front > rear;
+	}
+}
+
+
+
+
+
+Problem with Simple Array Queue
+=================================
+False Overflow
+- False overflow occurs when there is free space at the beginning of the array, but rear has reached the last index.
+
+
+
+Implementing Queue Using LinkedList:-
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class QueueUsingLL {
+	class Node{
+		int data;
+		Node next;
+		
+		Node(int data){
+			this.data = data;
+		}
+	}
+	
+	Node front = null;
+	Node rear = null;
+	
+	void enqueue(int data) {
+		Node newNode = new Node(data);
+		if(front==null) {
+			front = rear = newNode;
+			return;
+		}
+		rear.next = newNode;
+		rear = newNode;
+	}
+	int dequeue() {
+		if(front == null) {
+			System.out.println("Queue Underflow");
+			return -1;
+		}
+		int data = front.data;
+		front = front.next;
+		if(front == null) {
+			rear = null;
+		}
+		return data;
+	}
+	int peek() {
+		if(front == null) {
+			System.out.println("Queue is Empty");
+			return -1;
+		}
+		return front.data;
+	}
+}
+
+
+
+
+
+
+Implement Queue using Two Stacks:-
+-==-=-=-=-=-=-=-=--==-=-=--=-=-=
+Leetcode 232:-
+------------
+Code:-
+
+class MyQueue {
+    Stack<Integer> st1;
+    Stack<Integer> st2;
+    
+    public MyQueue() {
+        st1= new Stack<>();
+        st2= new Stack<>();    
+    }
+    
+    public void push(int x) {
+        while(!st2.isEmpty()){
+            st1.push(st2.pop());
+        }
+        st1.push(x);
+        while(!st1.isEmpty()){
+            st2.push(st1.pop());
+        }
+    }
+    
+    public int pop() {
+       if(st2.isEmpty()){
+        return -1;
+       }
+       return st2.pop();
+    }
+    
+    public int peek() {
+        if(st2.isEmpty()){
+            return -1;
+        }
+        return st2.peek();
+    }
+    
+    public boolean empty() {
+        return st2.isEmpty();
+    }
+}
+
+
+Implement Stack using Two Queue:-
+=-==-==-=-=-=-=-=-=-=-=-=-=-=-=
+Leetcode 225
+Code:-
+-----
+import java.util.*;
+
+class MyStack {
+
+    Queue<Integer> q1;
+    Queue<Integer> q2;
+
+    public MyStack() {
+        q1 = new LinkedList<>();
+        q2 = new LinkedList<>();
+    }
+
+    public void push(int x) {
+        while (!q2.isEmpty()) {
+            q1.offer(q2.poll());
+        }
+
+        q2.offer(x);
+
+        while (!q1.isEmpty()) {
+            q2.offer(q1.poll());
+        }
+    }
+
+    public int pop() {
+        if (q2.isEmpty()) {
+            return -1;
+        }
+        return q2.poll();
+    }
+
+    public int top() {
+        if (q2.isEmpty()) {
+            return -1;
+        }
+        return q2.peek();
+    }
+
+    public boolean empty() {
+        return q2.isEmpty();
+    }
+}
+
+Circular Queue:-
+==============
+- A Circular Queue is a queue in which the last position of the array is connected back to the first position.
+- It follows the same FIFO (First In, First Out) principle as a normal queue, but unlike a linear queue, it can reuse the empty spaces created after deletion.
+Leetcode 622:-
+-------------
+class MyCircularQueue {
+    int queue[];
+    int front;
+    int rear;
+    int size;
+    int capacity;
+    public MyCircularQueue(int k) {
+        capacity = k;
+        queue = new int[k];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+    public boolean enQueue(int value) {
+        if(isFull()){
+            return false;
+        }
+        rear = (rear + 1) % capacity;
+        queue[rear] = value;
+        size++;
+        return true;
+    }
+    public boolean deQueue() {
+        if(isEmpty()){
+            return false;
+        }
+        front = (front+1) % capacity;
+        size--;
+        return true;
+    }
+    public int Front() {
+        if(isEmpty()){
+            return -1;
+        }
+        return queue[front];
+    }
+    
+    public int Rear() {
+        if(isEmpty()){
+            return -1;
+        }
+
+        return queue[rear];
+    }
+    
+    public boolean isEmpty() {
+        return size == 0;
+    }
+    
+    public boolean isFull() {
+        return size == capacity;
+    }
+}
+
+Circular Deque:-
+===============
+Deque stands for: Double Ended Queue
+- Unlike a normal queue, insertion and deletion can happen from both ends.
+- A Circular Deque is a deque implemented using a circular array.
+
+Leetcode 641:-
+-------------
+class MyCircularDeque {
+    int front;
+    int rear;
+    int size;
+    int capacity;
+    int[] arr;
+    public MyCircularDeque(int k) {
+        front=0;
+        rear=-1;
+        capacity=k;
+        arr=new int[k];
+        size=0;
+    }
+    public boolean insertFront(int value) {
+        if(isFull()){
+            return false;
+        }
+        if(isEmpty()){
+            front=0;
+            rear=0;
+        }
+        else{
+            front=(front-1+capacity)%capacity;
+        }
+        arr[front]=value;
+        size++;
+        return true;
+    }
+    
+    public boolean insertLast(int value) {
+        if(isFull()){
+            return false;
+        }
+        if(isEmpty()){
+            front=0;
+            rear=0;
+        }
+        else{
+            rear=(rear+1)%capacity;
+        }
+        arr[rear]=value;
+        size++;
+        return true;
+    }
+    
+    public boolean deleteFront() {
+        if(isEmpty()){
+            return false;
+        }
+        if(size==1){
+            front=0;
+            rear=-1;
+        }
+        front=(front+1)%capacity;
+        size--;
+        return true;
+    }
+    
+    public boolean deleteLast() {
+        if(isEmpty()){
+            return false;
+        }
+        if(size==1){
+            front=0;
+            rear=-1;
+        }
+        rear=(rear-1+capacity)%capacity;
+        size--;
+        return true;
+    }
+    
+    public int getFront() {
+        if(isEmpty()){
+            return -1;
+        }
+        return arr[front];
+    }
+    
+    public int getRear() {
+        if(isEmpty()){
+            return -1;
+        }
+        return arr[rear];
+    }
+    
+    public boolean isEmpty() {
+        return size==0;
+    }
+    
+    public boolean isFull() {
+        return size==capacity;
+    }
+}
