@@ -1,0 +1,1420 @@
+Tree:
+=====
+- A Tree is a non-linear data structure that represents data in a hierarchical relationship using nodes and edges.
+- Unlike linear data structures such as Array, Linked List, Stack and Queue, elements in a Tree are arranged in a hierarchical structure.
+
+Example
+-------
+                         10
+                      /      \
+                    20        30
+                  /    \        \
+                40      50       60
+
+Here:
+- 10, 20, 30, 40, 50, 60 are Nodes
+- Lines connecting the nodes are Edges
+- 10 is the Root
+- 20 and 30 are children of 10
+
+Linear vs Non-Linear
+=-=--=-==-=-=-=-=-=-=
+Linear Data Structure
+---------------------
+- Data is arranged sequentially.
+10 → 20 → 30 → 40 → 50
+
+Examples:
+- Array
+- Linked List
+- Stack
+- Queue
+
+Non-Linear Data Structure
+--------------------------
+- Data does not follow a single sequential path.
+             10
+           /    \
+         20      30
+        /  \       \
+      40   50       60
+
+Examples:
+- Tree
+- Graph
+
+Why Do We Need Tree?
+=-=-=-=-=-=-=-=-=-=
+- The main reason for using Trees is to represent hierarchical data efficiently.
+- Many real-world relationships are naturally hierarchical.
+
+Example 1: Company Hierarchy
+----------------------------
+                     CEO
+                   /     \
+              Manager1   Manager2
+              /    \         \
+           Emp1    Emp2      Emp3
+
+Here:
+- CEO manages Managers
+- Managers manage Employees
+This relationship is naturally represented using a Tree.
+
+Example 2: File System
+----------------------
+Computer
+│
+├── Documents
+│   ├── Resume.pdf
+│   └── Notes.txt
+│
+├── Pictures
+│   ├── Photo1.jpg
+│   └── Photo2.jpg
+│
+└── Videos
+    └── Movie.mp4
+
+- A file system is hierarchical:
+Computer
+   ↓
+Folder
+   ↓
+Subfolder
+   ↓
+File
+
+Therefore, Tree is a natural data structure for representing it.
+
+
+Why not just use Linked List?
+-----------------------------
+- A Linked List represents a single chain:
+10 → 20 → 30 → 40
+
+- But a hierarchy may branch:
+              10
+            /    \
+          20      30
+         /  \       \
+       40   50       60
+
+A Tree allows branching, while a Linked List does not naturally represent this hierarchy.
+Basic Terminology:-
+=================
+- Consider the following Tree throughout these notes:
+                         10
+                      /      \
+                    20        30
+                  /    \     /  \
+                40      50  60   70
+                             |
+                             80
+
+We will use this Tree to understand all terminology.
+1. Node
+=-=-=-=
+- A Node is the basic building block of a Tree that stores data and references to its children.
+
+Example:
+                         10
+
+10 is a Node.
+Similarly:
+20
+30
+40
+50
+60
+70
+80
+are also Nodes.
+
+So this Tree contains:
+- 8 Nodes
+
+Node in Java
+- A simple Tree node can conceptually be represented as:
+class Node {
+    int data;
+}
+
+- For a General Tree, where a node can have multiple children:
+class Node {
+    int data;
+    ArrayList<Node> children;
+}
+
+- We only need to understand:
+
+	Node = Data + connection/reference to other nodes
+
+2. Edge
+=-=---=
+- An Edge is the connection between two nodes in a Tree.
+
+Example:
+10
+|
+20
+
+The connection between 10 and 20 is an Edge.
+In our Tree:
+                         10
+                      /      \
+                    20        30
+                  /    \     /  \
+                40      50  60   70
+                             |
+                            80
+
+Edges are:
+10 — 20
+10 — 30
+20 — 40
+20 — 50
+30 — 60
+30 — 70
+60 — 80
+
+Therefore:-
+Number of Nodes = 8
+Number of Edges = 7
+
+- For a Tree containing N nodes:
+	Number of Edges = N - 1
+
+3. Root
+=-=-=-=	
+- The Root is the topmost node of a Tree.
+
+Example:
+                         10  ← Root
+                      /      \
+                    20        30
+
+Therefore:
+Root = 10
+
+Properties of Root
+1. Root is the topmost node.
+2. A Tree has exactly one root.
+3. Root does not have a parent.
+4. Root can have zero or more children.
+
+Example:
+        10
+       /  \
+     20    30
+
+Here:
+Root = 10
+Parent of 10 = None
+
+4. Parent
+=-=-=-=-=
+- A node that is directly connected above another node is called its Parent.
+
+Example:
+             10
+            /  \
+          20    30
+
+Here:
+Parent of 20 = 10
+Parent of 30 = 10
+
+Another example:
+             20
+            /  \
+          40    50
+
+Therefore:
+Parent of 40 = 20
+Parent of 50 = 20
+
+- Every node except the root has exactly one parent.
+
+5. Child
+=-=-=-=-=
+- A node directly below another node is called its Child.
+
+Example:
+             10
+            /  \
+          20    30
+
+Here:
+Children of 10 = 20, 30
+
+Similarly:
+             20
+            /  \
+          40    50
+
+Therefore:
+Children of 20 = 40, 50
+
+Parent–Child Relationship
+              Parent
+                 |
+              Children
+
+Example:
+                 10
+               /    \
+             20      30
+
+So:
+10 → Parent of 20 and 30
+
+20 → Child of 10
+30 → Child of 10
+
+The relationship is two-way conceptually:
+10 is Parent of 20
+20 is Child of 10
+
+6. Sibling
+=-=-=-=--=
+- Nodes having the same parent are called siblings.
+
+Example:
+              10
+            /    \
+          20      30
+
+Both 20 and 30 have the same parent:
+Parent = 10
+
+Therefore:
+20 and 30 are siblings.
+
+Another example:
+                20
+              /    \
+            40      50
+
+40 and 50 → Siblings
+
+- Siblings must have the same immediate parent.
+
+
+7. Leaf Node
+=-=-=-=-=-=-=
+- A Leaf Node is a node that has no children.
+
+Consider:
+                         10
+                      /      \
+                    20        30
+                  /    \     /  \
+                40      50  60   70
+                             |
+                             80
+
+Check:
+40 → 0 children
+50 → 0 children
+70 → 0 children
+80 → 0 children
+
+Therefore:
+Leaf Nodes = 40, 50, 70, 80
+
+8. Degree
+=-=-==-=-=
+- There are two related concepts:
+1. Degree of a Node
+2. Degree of a Tree
+1. Degree of a Node
+----------------
+- The degree of a node is the number of children that node has.
+
+Example:
+             10
+           /    \
+         20      30
+        /  \    /  \
+      40   50  60   70
+
+For node 10:
+Children = 20, 30
+
+Degree(10) = 2
+
+For node 20:
+Children = 40, 50
+
+Degree(20) = 2
+
+For node 30:
+Children = 60, 70
+
+Degree(30) = 2
+
+For leaf 40:
+Children = 0
+
+Degree(40) = 0
+
+Degree of Tree
+---------------
+- The degree of a Tree is the maximum degree of any node in that Tree.
+
+Example:
+                    10
+                 /  |  \
+               20   30   40
+              / \
+            50   60
+
+Degrees:
+Degree(10) = 3
+Degree(20) = 2
+Degree(30) = 0
+Degree(40) = 0
+Degree(50) = 0
+Degree(60) = 0
+
+Maximum degree:
+3
+
+Therefore:
+Degree of Tree = 3
+
+9 Level
+=-=-=--=
+- The level of a node represents its position/layer in the Tree.
+
+A common convention is:
+Root → Level 0
+
+Example:
+                         10        ← Level 0
+                      /      \
+                    20        30    ← Level 1
+                  /    \     /  \
+                40      50  60   70 ← Level 2
+                             |
+                             80      ← Level 3
+
+Therefore:
+Level(10) = 0
+
+Level(20) = 1
+Level(30) = 1
+
+Level(40) = 2
+Level(50) = 2
+Level(60) = 2
+Level(70) = 2
+
+Level(80) = 3
+
+
+- Some textbooks define the root as Level 1 instead of Level 0.
+
+10. Depth
+=--==-=-=
+- The depth of a node is the number of edges from the root to that node.
+
+Example:
+                         10
+                      /      \
+                    20        30
+                  /    \     /  \
+                40      50  60   70
+                             |
+                             80
+
+For 10:
+Root → 10
+
+Depth(10) = 0
+
+For 20:
+10 → 20
+
+1 edge
+
+Depth(20) = 1
+
+For 50:
+10 → 20 → 50
+
+2 edges
+
+Depth(50) = 2
+
+For 80:
+10 → 30 → 60 → 80
+
+3 edges
+
+Depth(80) = 3
+
+Level vs Depth
+=-=--=-===-=-=
+- With the convention we're using:
+	Root = Level 0
+
+and:
+Depth = Number of edges from Root
+
+So they have the same numerical value in this convention.
+Example:
+10
+ |
+20
+ |
+50
+
+Level(50) = 2
+Depth(50) = 2
+
+But conceptually:-
+------------------
+- Level → which layer the node belongs to
+- Depth → how far the node is from the root
+
+11. Height:-
+=-=-=-=-=-=
+- The height of a node is the number of edges on the longest path from that node to a leaf.
+
+Let's consider:
+                         10
+                      /      \
+                    20        30
+                  /    \     /  \
+                40      50  60   70
+                             |
+                             80
+
+Height of Leaf
+A leaf has no child.
+Therefore:
+Height(40) = 0
+Height(50) = 0
+Height(70) = 0
+Height(80) = 0
+
+Height of Node 60
+60
+ |
+80
+
+Longest path:
+60 → 80
+
+Number of edges:
+1
+
+Therefore:
+Height(60) = 1
+
+Height of Node 30
+Node 30 has:
+30 → 60 → 80
+
+and:
+30 → 70
+
+Longest path:
+30 → 60 → 80
+
+Number of edges:
+2
+
+Therefore:
+Height(30) = 2
+
+Height of Root
+Height of the Tree is the height of the root.
+Longest path from 10 to a leaf:
+10 → 30 → 60 → 80
+
+Number of edges:
+3
+
+Therefore:
+Height of Tree = 3
+
+Depth vs Height:-
+=-=-=-=-=-=-=-=-=
+Depth
+Think:
+Root → Node
+
+ROOT
+ ↓
+ ↓
+NODE
+
+Depth tells us how far a node is from the root.
+
+Height
+Think:
+Node → Deepest Leaf
+
+NODE
+ ↓
+ ↓
+DEEPEST LEAF
+
+Height tells us how far a node is from its deepest leaf.
+Example
+                10
+               /
+             20
+             |
+             40
+             |
+             50
+
+For node 20:
+Depth
+Path from root:
+10 → 20
+
+Therefore:
+Depth(20) = 1
+
+Height
+Path from node to deepest leaf:
+20 → 40 → 50
+
+Therefore:
+Height(20) = 2
+
+Easy memory trick
+Depth → Down from Root
+Height → Up from Leaf
+
+Tree Properties:-
+=================
+- Property 1 — Number of Edges
+If Tree has N nodes:
+Edges = N - 1
+
+Example:
+N = 10
+
+Edges = 10 - 1
+      = 9
+
+- Property 2 — One Root
+A Tree has exactly one root.
+        Root
+       /    \
+     ...    ...
+
+- Property 3 — Parent
+Every node except root has exactly one parent.
+       10
+      /
+    20
+
+20 has parent 10.
+
+- Property 4 — Leaf
+A leaf has:
+0 children
+
+Therefore:
+Degree of Leaf = 0
+
+- Property 5 — Unique Path
+There is exactly one path from root to any node.
+Example:
+                10
+               /
+             20
+             |
+             40
+
+Path from 10 to 40:
+10 → 20 → 40
+
+There is no second path.
+
+
+
+
+Facts to remember:-
+==================
+1. N nodes → N - 1 edges
+
+2. Root → No parent
+
+3. Non-root node → Exactly one parent
+
+4. Leaf → 0 children → Degree 0
+
+5. Tree Height → Height of Root
+
+
+General Tree 
+=-=-=-=-=-=-=
+
+- In a General Tree, a node can have any number of children.
+                  10
+              /  |   |  \
+            20   30  40  50
+
+Here 10 has 4 children.
+It could even have:
+- 0 children
+- 1 child
+- 2 children
+- 3 children
+- 10 children
+- 100 children
+
+There is no fixed maximum.
+
+Creation of a General Tree:-
+=-=-=-=-=--==-=-=-=-=-=-=-=
+code:-
+-----
+import java.util.ArrayList;
+
+public class Main {
+	public static void main(String[] args) {
+		GTree tree = new GTree(10);
+		tree.addChild(tree.root, 20);
+		tree.addChild(tree.root, 30);
+		tree.addChild(tree.root, 40);
+		
+		Node node20 = tree.root.children.get(0);
+		tree.addChild(node20, 50);
+		tree.addChild(node20, 60);
+		
+		Node node30 = tree.root.children.get(1);
+		tree.addChild(node30, 70);
+		tree.addChild(node30, 80);
+		
+		Node node40 = tree.root.children.get(2);
+		tree.addChild(node40, 90);
+		tree.addChild(node40, 100);
+		
+	}
+}
+class Node{
+	int data;
+	ArrayList<Node> children;
+	Node(int data){
+		this.data = data;
+		this.children = new ArrayList<>();
+	}
+}
+class GTree{
+	Node root;
+	GTree(int data){
+		root = new Node(data);
+	}
+	void addChild(Node parentNode, int childData) {
+		Node childNode = new Node(childData);
+		parentNode.children.add(childNode);
+	}
+}-
+
+
+
+
+
+Tree Traversal
+==============
+- Tree Traversal is the process of visiting every node of a Tree exactly once in a specific order.
+
+Consider this General Tree:
+                         10
+                    /     |     \
+                  20      30      40
+                / | \              / \
+              50  60  70          80  90
+                       |
+                      100
+
+Different traversal techniques visit these nodes in different orders.
+
+Types of General Tree Traversal
+-------------------------------
+- Tree traversal can broadly be divided into two approaches:
+                       TREE TRAVERSAL
+                              │
+             ┌────────────┴────────────┐
+             │                   	      │
+            DFS                              BFS
+     Depth First Search            Breadth First Search
+             │                            │
+       ┌─────┴─────┐                   │
+       │              │                   │
+   Preorder       Postorder             Level Order
+
+
+DFS — Depth First Search
+==-=-=--=-=-=-=-=-==-=-=
+Depth First Search (DFS) explores a node by going as deep as possible along a branch before backtracking.
+
+For example:
+                         10
+                    /     |     \
+                  20      30      40
+                / | \              / \
+              50  60  70          80  90
+                       |
+                      100
+
+DFS starts from 10.
+Then it goes to 20 and explores the children of 20 before going to 30.
+Conceptually:
+10
+ ↓
+20
+ ↓
+50
+ ↓
+60
+ ↓
+70
+ ↓
+100
+ ↓
+30
+ ↓
+40
+ ↓
+80
+ ↓
+90
+
+How is DFS implemented?
+-----------------------
+- DFS is naturally implemented using:
+Recursion
+or explicitly using:
+Stack
+
+Why?
+Because when we go deeper, we need to remember where we came from so that we can backtrack later.
+Connection:
+DFS
+ │
+ ├── Recursion
+ │
+ └── Stack
+
+DFS Traversals in General Tree
+------------------------------
+- For a General Tree, two important DFS traversals are:
+DFS
+│
+├── Preorder
+└── Postorder
+
+Preorder Traversal
+-----------------
+In Preorder Traversal, we visit the current node before visiting its children.
+
+The rule is:
+Current Node
+     ↓
+Children
+
+Or:
+                 PREORDER
+                     │
+             ┌───────┴───────┐
+             │               		 │
+         Visit Node      Visit Children
+
+Example
+                         10
+                    /     |     \
+                  20      30      40
+                / | \              / \
+              50  60  70          80  90
+                       |
+                      100
+
+Start at 10:
+Visit 10
+
+Then first child 20:
+Visit 20
+
+Then its children:
+50 → 60 → 70
+
+When we reach 70, its child is:
+100
+
+Then we come back and process:
+30
+
+Then:
+40 → 80 → 90
+
+Preorder Result
+10 20 50 60 70 100 30 40 80 90
+
+PREORDER algo:-
+-=-===-=-=-=-=
+
+1. If node is NULL
+       return
+
+2. Visit node
+
+3. For every child of node
+       PREORDER(child)
+
+Preorder Implementation:-
+------------------------
+//	DFS - Preorder
+	void preorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		System.out.print(root.data +" ");
+		for(Node child : root.children) {
+			preorder(child);
+		}
+	}
+
+
+Postorder Traversal:-
+=-=-=-=-=-=-=-=--=-==
+- Now change the order.
+- In Postorder Traversal, we visit all children first and the current node after its children have been processed.
+
+Rule:
+Children
+   ↓
+Current Node
+
+Example
+Same tree:
+                         10
+                    /     |     \
+                  20      30      40
+                / | \              / \
+              50  60  70          80  90
+                       |
+                      100
+
+For node 20:
+       20
+     / | \
+   50  60  70
+             |
+            100
+
+Postorder:
+50 → 60 → 100 → 70 → 20
+
+Then:
+30
+
+For 40:
+80 → 90 → 40
+
+Finally:
+10
+
+Postorder Result
+50 60 100 70 20 30 80 90 40 10
+
+Postorder Algorithm:-
+--------------------
+
+1. If node is NULL
+       return
+
+2. For every child of node
+       POSTORDER(child)
+
+3. Visit node
+
+Postorder Implementation:-
+-------------------------
+//	DFS - Postorder
+	void postorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		for(Node child : root.children) {
+			postorder(child);
+		}
+		System.out.print(root.data +" ");
+	}
+
+
+BFS — Breadth First Search
+===========================
+- Breadth First Search (BFS) visits nodes level by level rather than going deeply into one branch.
+
+Consider:
+                         10          ← Level 0
+                    /     |     \
+                  20      30      40   ← Level 1
+                / | \              / \
+              50  60  70          80  90  ← Level 2
+                       |
+                      100              ← Level 3
+
+BFS will visit:
+Level 0:
+10
+
+Level 1:
+20 30 40
+
+Level 2:
+50 60 70 80 90
+
+Level 3:
+100
+
+Therefore:
+10 20 30 40 50 60 70 80 90 100
+
+Why does BFS use Queue?
+------------------------
+First discovered → First processed
+
+This is exactly the behaviour of a Queue.
+Queue
+  ↓
+FIFO
+  ↓
+First In → First Out
+
+Therefore:
+BFS → Queue
+
+BFS Algorithm
+--------------
+LEVEL ORDER(node)
+
+1. If node is NULL
+       return
+
+2. Create an empty Queue
+
+3. Add root to Queue
+
+4. While Queue is not empty:
+
+       a. Remove a node
+
+       b. Visit the node
+
+       c. Add all its children to Queue
+
+BFS Implementation:-
+-------------------
+//	BFS - levelOrder
+	void levelorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		Queue<Node> queue = new LinkedList<>();
+		queue.offer(root);
+		while(!queue.isEmpty()) {
+			Node curr = queue.poll();
+			System.out.print(curr.data+" ");
+			for(Node child : curr.children) {
+				queue.offer(child);
+			}
+		}
+	}
+
+BFS Dry Run
+------------
+Tree:
+                         10
+                    /     |     \
+                  20      30      40
+                / | \              / \
+              50  60  70          80  90
+                       |
+                      100
+
+Step 1
+Queue = [10]
+
+Remove 10:
+Output = 10
+
+Add children:
+Queue = [20, 30, 40]
+
+Step 2
+Remove 20:
+Output = 10 20
+
+Add children:
+Queue = [30, 40, 50, 60, 70]
+
+Step 3
+Remove 30:
+Output = 10 20 30
+
+No children.
+Queue = [40, 50, 60, 70]
+
+Step 4
+Remove 40:
+Output = 10 20 30 40
+
+Add 80, 90:
+Queue = [50, 60, 70, 80, 90]
+
+And so on.
+Eventually:
+Output:
+10 20 30 40 50 60 70 80 90 100
+
+
+Complete Code:-
+===============
+package com.chitkara;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Main {
+	public static void main(String[] args) {
+		GTree tree = new GTree(10);
+		tree.addChild(tree.root, 20);
+		tree.addChild(tree.root, 30);
+		tree.addChild(tree.root, 40);
+
+		Node node20 = tree.root.children.get(0);
+		tree.addChild(node20, 50);
+		tree.addChild(node20, 60);
+
+		Node node30 = tree.root.children.get(1);
+		tree.addChild(node30, 70);
+		tree.addChild(node30, 80);
+
+		Node node40 = tree.root.children.get(2);
+		tree.addChild(node40, 90);
+		tree.addChild(node40, 100);
+
+		System.out.println("Preorder:-");
+		tree.preorder(tree.root);
+		System.out.println();
+		System.out.println("=============");
+		System.out.println("Postorder:-");
+		tree.postorder(tree.root);
+		System.out.println();
+		System.out.println("=============");
+		System.out.println("Levelorder:-");
+		tree.levelorder(tree.root);
+		System.out.println();
+		System.out.println("=============");
+	}
+}
+
+class Node {
+	int data;
+	ArrayList<Node> children;
+
+	Node(int data) {
+		this.data = data;
+		this.children = new ArrayList<Node>();
+	}
+}
+
+class GTree {
+	Node root;
+
+	GTree(int data) {
+		root = new Node(data);
+	}
+
+	void addChild(Node parentNode, int childData) {
+		Node childNode = new Node(childData);
+		parentNode.children.add(childNode);
+	}
+
+//	DFS - Preorder
+	void preorder(Node root) {
+		if (root == null) {
+			return;
+		}
+		System.out.print(root.data + " ");
+		for (Node child : root.children) {
+			preorder(child);
+		}
+	}
+
+//	DFS - Postorder
+	void postorder(Node root) {
+		if (root == null) {
+			return;
+		}
+		for (Node child : root.children) {
+			postorder(child);
+		}
+		System.out.print(root.data + " ");
+	}
+
+//	BFS - levelOrder
+	void levelorder(Node root) {
+		if (root == null) {
+			return;
+		}
+		Queue<Node> queue = new LinkedList<>();
+		queue.offer(root);
+		while (!queue.isEmpty()) {
+			Node curr = queue.poll();
+			System.out.print(curr.data + " ");
+			for (Node child : curr.children) {
+				queue.offer(child);
+			}
+		}
+	}
+
+}
+
+Output:-
+=-=-=--=
+Preorder:-
+10 20 50 60 30 70 80 40 90 100 
+=============
+Postorder:-
+50 60 20 70 80 30 90 100 40 10 
+=============
+Levelorder:-
+10 20 30 40 50 60 70 80 90 100 
+=============
+
+
+
+Binary Tree:
+===========
+- A Binary Tree is a non-linear, hierarchical data structure in which each node can have at most two children.
+- These children are called:
+  1. Left Child
+  2. Right Child
+- A node may have zero, one, or two children.
+- A Binary Tree is a type of Tree data structure.
+Example:
+             10
+            /  \
+           20   30
+          / \     \
+         40  50    60
+
+
+Here:
+- 10 is the Root Node.
+- 20 is the Left Child of 10.
+- 30 is the Right Child of 10.
+- 40, 50, and 60 are Leaf Nodes.
+
+Important: Binary Tree mein har node ke exactly two children hona compulsory nahi hai. Maximum two children allowed hain.
+
+Why do we need Binary Trees?
+=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Binary Trees are useful for representing hierarchical data and designing efficient algorithms.
+- Hierarchical representation: Represent data in parent-child relationships.
+- Searching: BST (Binary Search Tree) supports efficient searching when balanced.
+- Priority-based processing: Binary Heaps help implement Priority Queues.
+- Decision-making: Decision trees represent choices and outcomes.
+
+Note: Searching is not automatically efficient in every Binary Tree. It depends on the structure and properties of the tree.
+
+
+
+Basic Terminology
+=-=-=-=-=-=-=-=-=
+- Consider this Binary Tree:
+                 10
+                /  \
+               20   30
+              / \   /
+             40  50 60
+
+
+- Root: The topmost node. Here, 10.
+- Parent: A node that has one or more children. For example, 20 is the parent of 40 and 50.
+- Child: A node directly connected below a parent.
+- Left Child: The child connected on the left side.
+- Right Child: The child connected on the right side.
+- Sibling: Nodes sharing the same parent. Here, 20 and 30 are siblings.
+- Leaf Node: A node with no children. Here, 40, 50, and 60.
+- Internal Node: A node with at least one child. Here, 10, 20, and 30.
+- Edge: The connection between two nodes.
+- Depth: Number of edges from the root to a node.
+- Height of a Node: Number of edges on the longest downward path from that node to a leaf.
+- Height of Tree: Height of the root node.
+For consistency in these notes, root depth/level is 0, and height is measured in edges. Some textbooks count levels starting from 1.
+
+
+Important Properties of a Binary Tree
+=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=
+Property 1: Maximum nodes at a level
+- If the root is at Level 0, then the maximum number of nodes at Level L is:
+
+	Max Nodes = 2^L
+
+Examples:
+Level	Maximum Nodes
+0	1
+1	2
+2	4
+3	8
+4	16
+
+Property 2: Maximum nodes for height h:-
+- For a Binary Tree of height h:
+
+	Max Nodes = 2^(h+1) - 1
+
+
+Property 3: Minimum height for n nodes:-
+- For a non-empty Binary Tree with n nodes, the minimum possible height is:
+	
+	Min Height = ceil(log2(n+1)) - 1
+
+- This is achieved when the tree is as full as possible at each level.
+
+Property 4: Number of edges:-
+For any non-empty tree with n nodes:
+	
+	E=n-1
+
+
+Property 5: Maximum degree:-
+- The maximum number of children any node can have in a Binary Tree is 2.
+
+
+
+Binary Tree Implementation and Recursive Traversal:-
+===================================================
+package com.chitkara;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Main {
+	public static void main(String[] args) {
+		BinaryTree tree = new BinaryTree(10);
+		tree.addLeft(tree.root, 20);
+		tree.addRight(tree.root, 30);
+		
+		Node node20 = tree.root.left;
+		node20.left = new Node(40);
+		node20.right = new Node(50);
+		
+		Node node30 = tree.root.right;
+		node30.left = new Node(60);
+		node30.right = new Node(70);
+		
+		System.out.println("Preorder");
+		tree.preorder(tree.root);
+		System.out.println();
+		System.out.println("Postorder");
+		tree.postorder(tree.root);
+		System.out.println();
+		System.out.println("Inorder");
+		tree.inorder(tree.root);
+		System.out.println();
+		System.out.println("Levelorder");
+		tree.levelorder(tree.root);
+		System.out.println();
+		
+		
+	}
+}
+class Node{
+	int data;
+	Node left;
+	Node right;
+	Node(int data){
+		this.data = data;
+	}
+}
+class BinaryTree{
+	Node root;
+	BinaryTree(int data){
+		this.root = new Node(data);
+	}
+	
+	public void addLeft(Node parent, int data) {
+		if(parent != null && parent.left == null) {
+			parent.left = new Node(data);
+		}
+	}
+	public void addRight(Node parent, int data) {
+		if(parent != null && parent.right  == null) {
+			parent.right = new Node(data);
+		}
+	}
+//	DFS - Preorder
+	public void preorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		System.out.print(root.data+" ");
+		preorder(root.left);
+		preorder(root.right);
+	}
+//	DFS - Postorder
+	public void postorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		postorder(root.left);
+		postorder(root.right);
+		System.out.print(root.data+" ");
+	}
+//	DFS - Inorder
+	public void inorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		inorder(root.left);
+		System.out.print(root.data+" ");
+		inorder(root.right);
+	}
+//	BFS - Levelorder
+	public void levelorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		Queue<Node> queue = new LinkedList<>();
+		queue.offer(root);
+		while(!queue.isEmpty()) {
+			Node curr  = queue.poll();
+			System.out.print(curr.data+" ");
+			
+			if(curr.left != null) {
+				queue.add(curr.left);
+			}
+			if(curr.right != null) {
+				queue.add(curr.right);
+			}
+		}
+	}
+	
+	
+}
+
+Output:-
+=-=-=-=
+Preorder
+10 20 40 50 30 60 70 
+Postorder
+40 50 20 60 70 30 10 
+Inorder
+40 20 50 10 60 30 70 
+Levelorder
+10 20 30 40 50 60 70 
