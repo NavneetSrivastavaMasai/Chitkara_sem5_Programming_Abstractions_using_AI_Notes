@@ -1418,3 +1418,153 @@ Inorder
 40 20 50 10 60 30 70 
 Levelorder
 10 20 30 40 50 60 70 
+
+
+Binary Tree Traversal DFS Iterative:-
+=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+package com.chitkara;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
+public class Main {
+	public static void main(String[] args) {
+		BinaryTree tree = new BinaryTree(10);
+		tree.addLeft(tree.root, 20);
+		tree.addRight(tree.root, 30);
+		
+		Node node20 = tree.root.left;
+		node20.left = new Node(40);
+		node20.right = new Node(50);
+		
+		Node node30 = tree.root.right;
+		node30.left = new Node(60);
+		node30.right = new Node(70);
+		
+		System.out.println("Iterative Preorder:-");
+		tree.preorderIte(tree.root);
+		System.out.println();
+		
+		System.out.println("Iterative Postorder:-");
+		tree.postorderIte(tree.root);
+		System.out.println();
+		
+		System.out.println("Iterative Inorder:-");
+		tree.inorderIte(tree.root);
+		System.out.println();
+		
+		
+				
+	}
+}
+class Node{
+	int data;
+	Node left;
+	Node right;
+	Node(int data){
+		this.data = data;
+	}
+}
+class BinaryTree{
+	Node root;
+	BinaryTree(int data){
+		this.root = new Node(data);
+	}
+	
+	public void addLeft(Node parent, int data) {
+		if(parent != null && parent.left == null) {
+			parent.left = new Node(data);
+		}
+	}
+	public void addRight(Node parent, int data) {
+		if(parent != null && parent.right  == null) {
+			parent.right = new Node(data);
+		}
+	}
+
+//	DFS - Preorder - Iterative
+	public void preorderIte(Node root) {
+		if(root == null) {
+			return;
+		}
+		Stack<Node> st = new Stack<>();
+		st.push(root);
+		while(!st.isEmpty()) {
+			Node current = st.pop();
+			System.out.print(current.data + " ");
+			if(current.right != null) {
+				st.push(current.right);
+			}
+			if(current.left != null) {
+				st.push(current.left);
+			}
+		}
+		
+	}
+//	DFS - Inorder - Iterative
+	public void inorderIte(Node root) {
+		if(root == null) {
+			return;
+		}
+		Stack<Node> stack = new Stack<>();
+		Node curr = root;
+		while(!stack.isEmpty() || curr != null) {
+			while(curr!=null) {
+				stack.push(curr);
+				curr = curr.left;
+			}
+			curr = stack.pop();
+			System.out.print(curr.data +" ");
+			curr = curr.right;
+		}
+	}
+//	DFS - Postorder - Iterative
+	public void postorderIte(Node root) {
+		if(root == null) {
+			return;
+		}
+		Stack<Node> st1 = new Stack<Node>();
+		Stack<Node> st2 = new Stack<Node>();
+		st1.push(root);
+		while(!st1.isEmpty()) {
+			Node curr = st1.pop();
+			st2.push(curr);
+			if(curr.left != null) {
+				st1.push(curr.left);
+			}
+			if(curr.right != null) {
+				st1.push(curr.right);
+			}
+		}
+		while(!st2.isEmpty()) {
+			System.out.print(st2.pop().data+" ");
+		}
+	}
+	
+	
+	
+}
+
+Output:-
+------
+Iterative Preorder:-
+10 20 40 50 30 60 70 
+Iterative Postorder:-
+40 50 20 60 70 30 10 
+Iterative Inorder:-
+40 20 50 10 60 30 70 
+
+
+Practice Questions from Leetcode till what we have studied yet:-
+---------------------------------------------------------------
+- 144
+- 94
+- 145
+- 102
+- 589
+- 590
+- 429
+
+
