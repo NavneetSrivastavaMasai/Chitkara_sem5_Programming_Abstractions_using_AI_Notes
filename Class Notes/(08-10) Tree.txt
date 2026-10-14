@@ -745,12 +745,12 @@ Types of General Tree Traversal
                        TREE TRAVERSAL
                               │
              ┌────────────┴────────────┐
-             │                   	      │
+             │                   	      		│
             DFS                              BFS
      Depth First Search            Breadth First Search
-             │                            │
-       ┌─────┴─────┐                   │
-       │              │                   │
+             │                            	│
+       ┌─────┴─────┐                   	│
+       │              │                   	│
    Preorder       Postorder             Level Order
 
 
@@ -1567,4 +1567,183 @@ Practice Questions from Leetcode till what we have studied yet:-
 - 590
 - 429
 
+Leetcode 102:-
+=-=-=-=-=-=-=
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> ans=new ArrayList<>();
+        if(root  == null){
+            return ans;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            List<Integer> tree=new ArrayList<>();
+            int treelen=queue.size();            
+            for(int i=0;i<treelen;i++){
+                TreeNode curr=queue.poll();
+                if(curr.left != null)queue.offer(curr.left);
+                if(curr.right != null)queue.offer(curr.right);
+                tree.add(curr.val);
+            }
+            ans.add(tree);
+        }
+        return ans;
+    }
+}
+
+
+Creation of Binary Tree
+=-=-=-=-=-=-=-=-=-=-=-=
+Creation of Binary Tree using Level Order Data:-
+===============================================
+- [1, 2, 3, 4, 5, 6, 7]
+
+Code:-
+-----
+public class Demo {
+	public static void main(String[] args) {
+		int[] level = {1,2,3,4,5,6,7};
+		Node root = buildTreeUsingLevelOrder(level,0);
+		preorder(root);
+		System.out.println();
+	}
+	public static Node buildTreeUsingLevelOrder(int [] level, int ind) {
+		if(ind >= level.length) {
+			return null;
+		}
+		Node root = new Node(level[ind]);
+		root.left = buildTreeUsingLevelOrder(level, ind*2+1);
+		root.right = buildTreeUsingLevelOrder(level, ind*2+2);
+		return root;	
+	}	
+	public static void preorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		System.out.print(root.data+" ");
+		preorder(root.left);
+		preorder(root.right);
+		
+	}
+}
+class Node{
+	int data;
+	Node left;
+	Node right;
+	Node(int data){
+		this.data = data;
+	}
+}
+
+Output:-
+-------
+1 2 4 5 3 6 7 
+
+Creation of Binary Tree using Preorder Data with null marker:-
+=============================================================
+- [8, 4, 2, -1, -1, 6, -1, -1, 12, 10, -1, -1, 14, -1, -1]
+
+Code:-
+-----
+package com.chitkara2;
+public class Demo {
+	public static void main(String[] args) {
+		int[] preorder = {8, 4, 2, -1, -1, 6, -1, -1, 12, 10, -1, -1, 14, -1, -1};
+		Node root = buildTreeUsingPreOrderWithNullMarker(preorder, new int[] {0});
+		preorder(root);
+		System.out.println();
+	}	
+	public static Node buildTreeUsingPreOrderWithNullMarker(int [] preorder, int [] ind) {
+		if(ind[0] == preorder.length) {
+			return null;
+		}
+		int value = preorder[ind[0]];
+		ind[0]++;
+		if(value == -1) {
+			return null;
+		}
+		Node root = new Node(value);
+		root.left = buildTreeUsingPreOrderWithNullMarker(preorder, ind);
+		root.right = buildTreeUsingPreOrderWithNullMarker(preorder, ind);
+		return root;
+	}	
+	public static void preorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		System.out.print(root.data+" ");
+		preorder(root.left);
+		preorder(root.right);
+		
+	}
+}
+class Node{
+	int data;
+	Node left;
+	Node right;
+	Node(int data){
+		this.data = data;
+	}
+}
+
+Output:-
+-------
+8 4 2 6 12 10 14
+
+
+Creation of Binary Tree using Postorder Data with null marker:-
+==============================================================
+- [-1, -1, 2, -1, -1, 6, 4, -1, -1, 10, -1, -1, 14, 12, 8]
+
+Code:-
+-----
+package com.chitkara2;
+
+public class Demo {
+	public static void main(String[] args) {
+		int[] postorder = {-1, -1, 2, -1, -1, 6, 4, -1, -1, 10, -1, -1, 14, 12, 8};
+		root = buildTreeUsingPreOrderWithNullMarker(postorder, new int[] {postorder.length -1});
+		preorder(root);
+		System.out.println();
+	}
+
+	public static Node buildTreeUsingPostOrderWithNullMarker(int[] postorder, int[] ind) {
+		if (ind[0] < 0) {
+			return null;
+		}
+		int value = postorder[ind[0]];
+		ind[0]--;
+		if (value == -1) {
+			return null;
+		}
+		Node root = new Node(value);
+		root.right = buildTreeUsingPostOrderWithNullMarker(postorder, ind);
+		root.left = buildTreeUsingPostOrderWithNullMarker(postorder, ind);
+		return root;
+	}
+
+	public static void preorder(Node root) {
+		if (root == null) {
+			return;
+		}
+		System.out.print(root.data + " ");
+		preorder(root.left);
+		preorder(root.right);
+
+	}
+}
+
+class Node {
+	int data;
+	Node left;
+	Node right;
+
+	Node(int data) {
+		this.data = data;
+	}
+}
+
+Output:-
+8 4 2 6 12 10 14 
 
