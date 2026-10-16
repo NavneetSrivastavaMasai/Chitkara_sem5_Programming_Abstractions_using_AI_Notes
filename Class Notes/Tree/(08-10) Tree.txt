@@ -1747,3 +1747,251 @@ class Node {
 Output:-
 8 4 2 6 12 10 14 
 
+
+
+
+Creation of Binary Tree using Preorder and Inorder Data:-
+=========================================================
+- 105 (Leetcode)
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = inorder.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i=0; i<n; i++){
+            map.put(inorder[i], i);
+        }
+        TreeNode root = buildT(preorder, 0, n-1, new int[]{0}, map);
+        return root;
+    }
+    public TreeNode buildT(int[] preorder, int start, int end, int[] ind, Map<Integer, Integer> map){
+        if(start > end){
+            return null;
+        }
+        int val = preorder[ind[0]++];
+        int mid = map.get(val);
+        TreeNode root = new TreeNode(val);
+        root.left = buildT(preorder, start, mid-1, ind, map);
+        root.right = buildT(preorder, mid+1, end, ind, map);
+        return root;
+    }
+}
+
+
+Creation of Binary Tree using Postorder and Inorder Data:-
+=========================================================
+- 106 (Leetcode) 
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int n = inorder.length;
+        for(int i=0; i<n; i++){
+            map.put(inorder[i] , i);
+        }
+        TreeNode root = buildT(postorder, 0, n-1, new int[]{n-1}, map);
+        return root;
+    }
+    public TreeNode buildT(int[] postorder, int start, int end, int[] ind, Map<Integer, Integer> map){
+        if(start > end){
+            return null;
+        }
+        int value = postorder[ind[0]--];
+        int mid = map.get(value);
+        TreeNode root = new TreeNode(value);
+        root.right = buildT(postorder, mid+1, end, ind, map);
+        root.left = buildT(postorder, start, mid-1, ind, map);
+        return root;
+    }
+}
+
+
+Types of Binary Tree
+=====================
+A. Full Binary Tree
+---------------------
+A Binary Tree in which every node has either 0 or 2 children.
+           10
+          /  \
+         20   30
+        / \
+       40  50
+
+
+- A node cannot have exactly one child.
+- Also called a proper or strict Binary Tree in many textbooks.
+
+B. Complete Binary Tree
+-----------------------
+A Binary Tree in which:
+- All levels are completely filled except possibly the last level.
+- The last level is filled from left to right, without gaps.
+           10
+          /  \
+         20   30
+        / \   /
+       40 50 60
+
+
+- This concept is especially important for implementing a Heap.
+
+C. Perfect Binary Tree
+-----------------------
+A Binary Tree in which:
+- Every internal node has exactly two children.
+- All leaf nodes are at the same level.
+           10
+          /  \
+         20   30
+        / \   / \
+       40 50 60 70
+
+
+For height h, a Perfect Binary Tree has:
+	
+	N=2^{h+1}-1
+
+D. Skewed Binary Tree
+-------------------------
+A Binary Tree in which every node has at most one child.
+Left-skewed:
+        10
+       /
+      20
+     /
+    30
+   /
+  40
+
+
+Right-skewed:
+  10
+    \
+     20
+       \
+        30
+          \
+           40
+
+
+- A skewed Binary Tree behaves like a linked list.
+- For n nodes, its height is n-1.
+
+E. Balanced Binary Tree
+------------------------
+- A Binary Tree whose height is kept reasonably small relative to the number of nodes.
+- A balanced structure helps prevent operations from becoming unnecessarily slow.
+- The exact definition of balanced depends on the tree type or balancing rule.
+
+Different types of Questions on Binary Tree:-
+====-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=======
+No.	Topic				Need to Learn
+--------------------------------------------------------------------------------------
+1	Count Nodes			Total nodes, leaf nodes aur sum of all nodes
+2	Height & Depth			Height of tree, depth of a node, maximum depth
+3	Search in Binary Tree		Find a particular value
+4	Maximum & Minimum		Find maximum/minimum value in Tree
+5	Diameter of Binary Tree		Longest path between 2 Nodes in a Tree
+6	Same Tree			Check if there two trees are identical or not
+7	Invert Binary Tree		Swap Left aur right children
+8	Subtree of Another Tree		Check if one tree is subtree of another tree
+9	Path Sum			Root-to-leaf path sum is equal to the target or not
+
+Leetcode Questions:-
+=-=-=-=-=-=-=-=--=-=
+Class Room Questions:-
+---------------------
+
+
+222	Count Complete Tree Nodes	
+Code:-
+=-=-=
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int countNodes(TreeNode root) {
+        if(root == null){
+            return 0;
+        }    
+        int left = countLeft(root);
+        int right = countRight(root);
+        if(left == right){
+            return (int)Math.pow(2, left) -1;
+        }
+        return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+    public int countLeft(TreeNode root){
+        int count = 0;
+        while(root != null){
+            root = root.left;
+            count++;
+        }
+        return count;
+    }
+    public int countRight(TreeNode root){
+        int count = 0;
+        while(root != null){
+            root = root.right;
+            count++;
+        }
+        return count;
+    }
+}
+
+
+
+872	Leaf-Similar Trees
+104	Maximum Depth of Binary Tree	
+111	Minimum Depth of Binary Tree
+100	Same Tree	
+543	Diameter of Binary Tree	
+112	Path Sum
+226	Invert Binary Tree
+572	Subtree of Another Tree	Same 
+101	Symmetric Tree
+
+
+
