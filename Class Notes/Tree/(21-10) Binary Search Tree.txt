@@ -1,0 +1,493 @@
+BINARY SEARCH TREE (BST)
+========================
+- Binary Search Tree (BST) is a special type of Binary Tree in which nodes follow a specific ordering property.
+
+BST Properties:
+1. All values in the left subtree of a node are smaller than the node's value.
+2. All values in the right subtree of a node are greater than the node's value.
+3. Both left and right subtrees must also satisfy the BST property.
+
+Example:
+
+             50
+            /  \
+           30   70
+          / \   / \
+         20 40 60 80
+
+For node 50:
+Left subtree values: 20, 30, 40
+Right subtree values: 60, 70, 80
+
+- All left subtree values are smaller than 50, and all right subtree values are greater than 50.
+
+IMPORTANT:-
+-----------
+The BST property applies to the entire subtree, not just the immediate children.
+
+
+BINARY TREE VS BINARY SEARCH TREE
+=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Binary Tree:
+- Each node can have at most two children.
+- There is no mandatory ordering rule.
+- Searching may require visiting every node.
+
+Binary Search Tree:
+- Each node can have at most two children.
+- Left subtree values are smaller than the node.
+- Right subtree values are greater than the node.
+- Searching can eliminate half of the remaining search path at each step.
+
+A BST is a type of Binary Tree, but every Binary Tree is not a BST.
+
+
+NODE STRUCTURE IN JAVA
+=--==--=-=-=-=-==--=-=
+
+Each node contains:
+1. data: Value stored in the node.
+2. left: Reference to the left child.
+3. right: Reference to the right child.
+
+class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+
+INSERTION IN BST
+-=-==--=-==--=-=-=
+
+Insertion means adding a new value while maintaining the BST property.
+
+Algorithm:
+1. If the current node is null, create a new node.
+2. If the value is smaller than the current node, move to the left subtree.
+3. If the value is greater than the current node, move to the right subtree.
+4. Repeat until an empty position is found.
+5. Return the updated root of the subtree.
+
+Java Code:
+----------
+static Node insert(Node root, int value) {
+    if (root == null) {
+        return new Node(value);
+    }
+
+    if (value < root.data) {
+        root.left = insert(root.left, value);
+    } else if (value > root.data) {
+        root.right = insert(root.right, value);
+    }
+
+    return root;
+}
+
+Example:
+
+Insert: 50, 30, 70, 20, 40
+
+Step 1: 50 becomes the root.
+
+Step 2: 30 < 50, so insert 30 on the left.
+
+Step 3: 70 > 50, so insert 70 on the right.
+
+Step 4: 20 < 50 and 20 < 30, so insert 20 on the left of 30.
+
+Step 5: 40 < 50 but 40 > 30, so insert 40 on the right of 30.
+
+Final BST:
+
+          50
+         /  \
+        30   70
+       / \
+      20  40
+
+Why do we return root?
+The returned reference reconnects the modified subtree to its parent. It also allows the first inserted node to become the root.
+
+
+SEARCHING IN BST
+=-=-=-=-=-=-=-=-=
+
+Searching uses the BST ordering property to find a value efficiently.
+
+Algorithm:
+1. If root is null, the value does not exist.
+2. If root.data equals the key, the value is found.
+3. If the key is smaller than root.data, search the left subtree.
+4. Otherwise, search the right subtree.
+
+Java Code:
+
+static boolean search(Node root, int key) {
+    if (root == null) {
+        return false;
+    }
+
+    if (root.data == key) {
+        return true;
+    }
+
+    if (key < root.data) {
+        return search(root.left, key);
+    }
+
+    return search(root.right, key);
+}
+
+Example:
+Search for 40 in the following BST:
+
+          50
+         /  \
+        30   70
+       / \
+      20  40
+
+Comparisons:
+1. 40 < 50, so move left.
+2. 40 > 30, so move right.
+3. Node 40 is found.
+
+Output: true
+
+
+ITERATIVE SEARCH
+=-=-=-=-=-=-=-=-=
+
+Searching can also be implemented without recursion.
+
+Java Code:
+---------
+static boolean searchIterative(Node root, int key) {
+    while (root != null) {
+        if (root.data == key) {
+            return true;
+        }
+
+        if (key < root.data) {
+            root = root.left;
+        } else {
+            root = root.right;
+        }
+    }
+
+    return false;
+}
+
+Advantage:-
+The iterative implementation uses O(1) auxiliary space.
+
+
+TREE TRAVERSALS IN BST
+=-=-=-=-=-=-=-=-=-=-=-=
+
+A. INORDER TRAVERSAL (LEFT, ROOT, RIGHT)
+-----------------------------------------
+Java Code:
+
+static void inorder(Node root) {
+    if (root == null) {
+        return;
+    }
+
+    inorder(root.left);
+    System.out.print(root.data + " ");
+    inorder(root.right);
+}
+
+For the BST:
+
+          50
+         /  \
+        30   70
+       / \   / \
+      20 40 60 80
+
+Output:
+20 30 40 50 60 70 80
+
+IMPORTANT PROPERTY:
+Inorder traversal of a BST produces values in ascending order when keys are unique.
+
+
+B. PREORDER TRAVERSAL (ROOT, LEFT, RIGHT)
+-----------------------------------------
+Java Code:
+
+static void preorder(Node root) {
+    if (root == null) {
+        return;
+    }
+
+    System.out.print(root.data + " ");
+    preorder(root.left);
+    preorder(root.right);
+}
+
+Output:
+50 30 20 40 70 60 80
+
+
+C. POSTORDER TRAVERSAL (LEFT, RIGHT, ROOT)
+------------------------------------------
+Java Code:
+
+static void postorder(Node root) {
+    if (root == null) {
+        return;
+    }
+
+    postorder(root.left);
+    postorder(root.right);
+    System.out.print(root.data + " ");
+}
+
+Output:
+20 40 30 60 80 70 50
+
+
+D. LEVEL ORDER TRAVERSAL
+-------------------------
+Level order traversal visits nodes level by level using a Queue.
+
+Java Code:
+
+import java.util.Queue;
+import java.util.LinkedList;
+
+static void levelOrder(Node root) {
+    if (root == null) {
+        return;
+    }
+
+    Queue<Node> queue = new LinkedList<>();
+    queue.offer(root);
+
+    while (!queue.isEmpty()) {
+        Node current = queue.poll();
+
+        System.out.print(current.data + " ");
+
+        if (current.left != null) {
+            queue.offer(current.left);
+        }
+
+        if (current.right != null) {
+            queue.offer(current.right);
+        }
+    }
+}
+
+Output:
+50 30 70 20 40 60 80
+
+
+FIND MINIMUM AND MAXIMUM
+=-=-=-=-=-=-=-=-=-=-=-=-=
+
+MINIMUM:
+The minimum value is found at the leftmost node.
+
+Java Code:
+
+static int findMin(Node root) {
+    if (root == null) {
+        throw new IllegalArgumentException("BST is empty");
+    }
+
+    while (root.left != null) {
+        root = root.left;
+    }
+
+    return root.data;
+}
+
+MAXIMUM:
+The maximum value is found at the rightmost node.
+
+Java Code:
+
+static int findMax(Node root) {
+    if (root == null) {
+        throw new IllegalArgumentException("BST is empty");
+    }
+
+    while (root.right != null) {
+        root = root.right;
+    }
+
+    return root.data;
+}
+
+
+DELETION IN BST
+=-=-=-=-=-=-=-=
+- Deletion is an important BST operation. There are three cases.
+
+CASE 1: NODE HAS NO CHILDREN
+
+Example:
+
+       30
+      /  \
+     20   40
+
+Delete 20.
+
+Since 20 is a leaf node, simply remove it.
+
+Result:
+
+       30
+         \
+          40
+
+
+CASE 2: NODE HAS ONE CHILD
+
+If a node has only one child, replace the node with its child.
+
+Example:
+
+       30
+      /
+     20
+       \
+        25
+
+Delete 20.
+
+Node 25 takes the place of node 20.
+
+Result:
+
+       30
+      /
+     25
+
+
+CASE 3: NODE HAS TWO CHILDREN
+
+If a node has two children:
+1. Find its inorder successor.
+2. The inorder successor is the minimum value in the right subtree.
+3. Copy the successor's value into the node being deleted.
+4. Delete the successor from its original position.
+
+Alternatively, the inorder predecessor can be used.
+
+Java Code:
+
+static Node delete(Node root, int key) {
+    if (root == null) {
+        return null;
+    }
+
+    if (key < root.data) {
+        root.left = delete(root.left, key);
+    } else if (key > root.data) {
+        root.right = delete(root.right, key);
+    } else {
+        // Case 1 and Case 2
+        if (root.left == null) {
+            return root.right;
+        }
+
+        if (root.right == null) {
+            return root.left;
+        }
+
+        // Case 3: Two children
+        Node successor = root.right;
+
+        while (successor.left != null) {
+            successor = successor.left;
+        }
+
+        root.data = successor.data;
+
+        root.right = delete(root.right, successor.data);
+    }
+
+    return root;
+}
+
+Usage:
+
+root = delete(root, 30);
+
+IMPORTANT:
+Copying the successor's value is not sufficient. The successor must also be deleted from its original position.
+
+
+TIME COMPLEXITY
+=-=-=-=-=-=-=-=
+
+Let:
+n = Total number of nodes
+h = Height of the BST
+
+Operation             Time Complexity
+-------------------------------------
+Search                 O(h)
+Insertion              O(h)
+Deletion               O(h)
+Find Minimum           O(h)
+Find Maximum           O(h)
+Inorder Traversal      O(n)
+Preorder Traversal     O(n)
+Postorder Traversal    O(n)
+Level Order Traversal  O(n)
+
+IMPORTANT BST PROPERTIES
+=-=-=-=-=-=-=-=-=-=-=-=-=
+1. Every node has at most two children.
+2. All left subtree values are smaller than the node.
+3. All right subtree values are greater than the node.
+4. Inorder traversal produces sorted values for unique keys.
+5. Minimum value is the leftmost node.
+6. Maximum value is the rightmost node.
+7. Insertion order affects the shape of the BST.
+8. A BST may be balanced or skewed.
+9. The inorder successor is the next greater key.
+10. The inorder predecessor is the next smaller key.
+
+
+VALID BST EXAMPLE
+=-=-=-=-=-=-=-=-=
+
+          50
+         /
+        30
+          \
+           45
+
+This is a valid BST because:
+45 > 30
+45 < 50
+
+A node must satisfy the ordering constraints imposed by all its ancestors, not just its immediate parent.
+
+INVALID BST EXAMPLE:
+
+          50
+         /
+        30
+          \
+           60
+
+This is invalid because 60 lies in the left subtree of 50, but 60 > 50.
+
