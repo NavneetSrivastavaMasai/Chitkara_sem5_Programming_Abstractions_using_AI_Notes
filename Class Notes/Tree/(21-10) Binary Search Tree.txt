@@ -482,6 +482,7 @@ This is a valid BST because:
 A node must satisfy the ordering constraints imposed by all its ancestors, not just its immediate parent.
 
 INVALID BST EXAMPLE:
+=-=-=-=-=-=-=-=-=-=
 
           50
          /
@@ -491,3 +492,216 @@ INVALID BST EXAMPLE:
 
 This is invalid because 60 lies in the left subtree of 50, but 60 > 50.
 
+
+
+Imlementation of Binary Search Tree with some basic functionalities:-
+=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=--=-=-=-=-=-=--=-=-=-=-=-=-=-=
+1. Basic functionalities
+- Insert a node into the BST
+- Search for a node
+- Find minimum and maximum values
+- Delete a node
+- Traversal
+
+
+int[] arr = {50, 30, 70, 20, 40, 60, 80, 35, 45, 65, 90};
+
+Code:-
+=-=-=-=
+package com.chitkara;
+
+public class Main {
+public static void main(String[] args) {
+	int[] arr = {50, 30, 70, 20, 40, 60, 80, 35, 45, 65, 90};
+	BinarySearchTree bst = new BinarySearchTree();
+	
+	for(int i=0; i<arr.length; i++) {
+		bst.insert(arr[i]);
+	}
+	System.out.println("Inorder data");
+	bst.inorder();
+	System.out.println();
+	bst.delete(50);
+	System.out.println("Inorder data");
+	bst.inorder();
+	System.out.println();
+	System.out.println("Min Value");
+	System.out.println(bst.getMin());
+	System.out.println("Max Value");
+	System.out.println(bst.getMax());
+	System.out.println("Seacrhing 20");
+	System.out.println(bst.search(20));
+	System.out.println("Seacrhing 200");
+	System.out.println(bst.search(200));
+	
+}
+}
+
+class Node {
+	int data;
+	Node left;
+	Node right;
+
+	Node(int data) {
+		this.data = data;
+	}
+}
+
+class BinarySearchTree {
+	private Node root;
+
+	public void insert(int data) {
+		root = insert(root, data);
+	}
+
+	private Node insert(Node root, int data) {
+		if (root == null) {
+			return new Node(data);
+		}
+		if (root.data > data) {
+			root.left = insert(root.left, data);
+		} else if (root.data < data) {
+			root.right = insert(root.right, data);
+		}
+		return root;
+	}
+
+	public boolean search(int data) {
+		return search(root, data);
+	}
+
+	private boolean search(Node root, int data) {
+		if (root == null) {
+			return false;
+		}
+		if (root.data == data) {
+			return true;
+		}
+		if (root.data > data) {
+			return search(root.left, data);
+		}
+		return search(root.right, data);
+	}
+
+	public int getMin() {
+		return getMin(root);
+	}
+
+	private int getMin(Node root) {
+		while (root.left != null) {
+			root = root.left;
+		}
+		return root.data;
+	}
+
+	public int getMax() {
+		return getMax(root);
+	}
+
+	private int getMax(Node root) {
+		while (root.right != null) {
+			root = root.right;
+		}
+		return root.data;
+	}
+	public void delete(int data) {
+		root = delete(root, data);
+	}
+	private Node delete(Node root, int data) {
+		if(root == null) {
+			return null;
+		}
+		if(root.data > data) {
+			root.left = delete(root.left,data);
+		}else if(root.data < data) {
+			root.right = delete(root.right,data);
+		}else {
+			if(root.left == null && root.right == null) {
+				return null;
+			}
+			if(root.left == null) {
+				return root.right;
+			}
+			if(root.right == null) {
+				return root.left;
+			}
+			int parentReplacement = getMin(root.right);
+			root.data = parentReplacement;
+			root.right = delete(root.right,parentReplacement);
+		}
+		return root;
+	}
+	public void inorder() {
+		inorder(root);
+	}
+	private void inorder(Node root) {
+		if(root == null) {
+			return;
+		}
+		inorder(root.left);
+		System.out.print(root.data +" ");
+		inorder(root.right);
+	}
+}
+
+Output:-
+=-=-=-=
+Inorder data
+20 30 35 40 45 50 60 65 70 80 90 
+Inorder data
+20 30 35 40 45 60 65 70 80 90 
+Min Value
+20
+Max Value
+90
+Seacrhing 20
+true
+Seacrhing 200
+false
+
+
+IMPORTANT LEETCODE PROBLEMS
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+1. LeetCode 700 - Search in a Binary Search Tree
+2. LeetCode 701 - Insert into a Binary Search Tree
+3. LeetCode 450 - Delete Node in a BST
+4. LeetCode 98 - Validate Binary Search Tree
+5. LeetCode 230 - Kth Smallest Element in a BST
+
+6. LeetCode 235 - Lowest Common Ancestor of a BST
+Code:-
+-----
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while(root != null){
+            if(root.val > p.val && root.val > q.val){
+                root = root.left;
+            }else if(root.val < p.val && root.val < q.val){
+                root = root.right;
+            }else{
+                return root;
+            }
+        }
+        return null;
+    }
+}
+
+7. LeetCode 108 - Convert Sorted Array to BST
+Code:-
+------
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return buildTree(nums, 0, nums.length-1);
+    }
+    public TreeNode buildTree(int[] nums, int start, int end){
+        if(start > end){
+            return null;
+        }
+        int mid = start + (end-start)/2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = buildTree(nums, start, mid-1);
+        root.right = buildTree(nums, mid+1, end);
+        return root;
+    }
+}
