@@ -238,6 +238,101 @@ Output:-
 [60, 42, 48, 25, 30, 35, 18, 7, 3, 12]
 60 48 42 35 30 25 18 12 7 3 
 
+HEAPIFY UP AND HEAPIFY DOWN
+============================
+1. INSERTION - HEAPIFY UP
+---------------------------
+When we insert a new element into a Heap, we use the Heapify Up process to maintain the Heap property.
+
+Steps:
+1. Insert the new element at the end of the array.
+2. Compare the element with its parent.
+3. In a MaxHeap, if the element is greater than its parent, swap them.
+4. Repeat this process until the Heap property is satisfied or the element reaches the root.
+
+Example: Insert 50 into a MaxHeap
+
+Step 1: Insert 50 at the end.
+
+        40
+       /  \
+      20   30
+     /  \
+    10   50
+
+Step 2: Compare 50 with its parent, 20. Since 50 is greater than 20, swap them.
+
+        40
+       /  \
+      50   30
+     /  \
+    10   20
+
+Step 3: Compare 50 with its new parent, 40. Since 50 is greater than 40, swap them.
+
+        50
+       /  \
+      40   30
+     /  \
+    10   20
+
+Result:
+The MaxHeap property is restored, and 50 reaches its correct position.
+
+This process is called Heapify Up. It is also known as Sift Up or Bubble Up.
+
+
+2. DELETION - HEAPIFY DOWN
+----------------------------
+When we delete the root (maximum element) from a MaxHeap, we use the Heapify Down process to maintain the Heap property.
+
+Steps:
+1. Remove the root element.
+2. Move the last element to the root position.
+3. Compare the root with its children.
+4. If a child is greater than the root, swap the root with the larger child.
+5. Repeat this process until the Heap property is restored or the element reaches its correct position.
+
+Example: Delete 50 from a MaxHeap
+
+Initial MaxHeap:
+
+        50
+       /  \
+      40   30
+     /  \
+    10   20
+
+Step 1: Delete 50 and move the last element, 20, to the root.
+
+        20
+       /  \
+      40   30
+     /
+    10
+
+Step 2: Compare 20 with its children, 40 and 30. Since 40 is the larger child, swap 20 and 40.
+
+        40
+       /  \
+      20   30
+     /
+    10
+
+Result:
+The MaxHeap property is restored.
+
+This process is called Heapify Down. It is also known as Sift Down.
+
+
+IMPORTANT POINTS TO REMEMBER
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+1. Insertion usually uses Heapify Up.
+2. Deleting the root usually uses Heapify Down.
+3. In Heapify Up, the element moves towards the root.
+4. In Heapify Down, the element moves towards the leaf nodes.
+5. In a MaxHeap, every parent is greater than or equal to its children.
+6. In a MinHeap, every parent is less than or equal to its children.
 
 
 6. HEAP SORT
