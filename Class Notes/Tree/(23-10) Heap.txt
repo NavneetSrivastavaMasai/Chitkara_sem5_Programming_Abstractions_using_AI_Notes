@@ -1,0 +1,275 @@
+HEAPS
+=====
+
+1. WHAT IS A HEAP?
+-=-==--=-=-=-==--=
+A Heap is a Complete Binary Tree that follows a specific ordering property.
+
+Complete Binary Tree:
+- All levels are completely filled except possibly the last level.
+- The last level is filled from left to right.
+
+Types of Heap:
+
+1. Min Heap:
+   Every parent is smaller than or equal to its children.
+   The minimum element is at the root.
+
+2. Max Heap:
+   Every parent is greater than or equal to its children.
+   The maximum element is at the root.
+
+Important:
+- A Heap is NOT a sorted tree or sorted array.
+- Heap ordering is required only between a parent and its children.
+- In a Heap, an arbitrary element may take O(n) time to search.
+- A Heap is commonly implemented using an array.
+
+Example of a Min Heap:
+
+          10
+         /  \
+        20   30
+       / \
+      40  50
+
+Array representation: [10, 20, 30, 40, 50]
+
+
+2. HEAP VS ARRAY
+---------------
+- An array is a way to store elements in indexed positions.
+- A Heap is a data structure with a parent-child ordering property, usually stored inside an array.
+
+Normal Array:
+- No ordering property is guaranteed.
+- Access by index: O(1).
+- Searching: O(n), if unsorted.
+- Inserting at the end of a dynamic array: O(1) amortized.
+- Finding minimum/maximum: O(n), if unsorted.
+
+Heap:
+- Follows Min Heap or Max Heap property.
+- Root gives minimum (Min Heap) or maximum (Max Heap): O(1).
+- Insert: O(log n).
+- Delete root: O(log n).
+- Search for an arbitrary value: O(n).
+- Stored in an array; does not require node pointers.
+
+3. ARRAY REPRESENTATION OF A HEAP
+---------------------------------
+For a Heap stored in a zero-indexed array, for a node at index i:
+
+Left child  = 2 * i + 1
+Right child = 2 * i + 2
+Parent      = (i - 1) / 2   (for i > 0; integer division)
+
+Example:
+Array: [10, 20, 30, 40, 50]
+
+Index:   0   1   2   3   4
+Value:  10  20  30  40  50
+
+For index 1 (value 20):
+Left child index  = 3 (value 40)
+Right child index = 4 (value 50)
+Parent index      = 0 (value 10)
+
+
+4. INSERTION IN A HEAP
+----------------------
+Insertion steps:
+1. Insert the new element at the end of the array.
+2. Compare it with its parent.
+3. If the Heap property is violated, swap with the parent.
+4. Repeat until the property is satisfied or the root is reached.
+
+This is called Heapify Up (or Sift Up).
+
+Example: Insert 15 into the Min Heap [10, 20, 30, 40, 50]
+
+After adding at the end:
+[10, 20, 30, 40, 50, 15]
+
+15 is smaller than its parent 30, so swap:
+[10, 20, 15, 40, 50, 30]
+
+Now 15 is greater than its parent 10, so stop.
+
+Final Min Heap:
+          10
+         /  \
+        20   15
+       / \   /
+      40 50 30
+
+Time Complexity: O(log n)
+Auxiliary Space: O(1) for iterative insertion, excluding array resizing.
+
+
+5. DELETION FROM A HEAP
+-----------------------
+The standard Heap deletion operation removes the root:
+- Min Heap: removes the minimum element.
+- Max Heap: removes the maximum element.
+
+Deletion steps:
+1. Save the root value.
+2. Move the last element to the root.
+3. Remove the last array position.
+4. Compare the new root with its children.
+5. In a Min Heap, swap with the smaller child if needed.
+   In a Max Heap, swap with the larger child if needed.
+6. Continue until the Heap property is restored.
+
+This is called Heapify Down (or Sift Down).
+
+Example: Delete the minimum from [10, 20, 15, 40, 50, 30]
+
+- Remove 10 and move 30 to the root:
+  [30, 20, 15, 40, 50]
+- Compare 30 with children 20 and 15; swap with 15:
+  [15, 20, 30, 40, 50]
+- Heap property is now satisfied.
+
+Time Complexity: O(log n)
+
+
+Complete Implementation of a Heap Data Structure:-
+--------------------------------------------------
+- Creating an min heap using an array in O(n logn) time complexity.
+
+Code:-
+=----=
+package com.chitkara;
+
+import java.util.Arrays;
+
+public class Main {
+	public static void main(String[] args) {
+		int[] arr = { 35, 12, 48, 7, 25, 60, 18, 42, 3, 30 };
+		int n = arr.length;
+		MaxHeap heap = new MaxHeap(n);
+		for (int i = 0; i < n; i++) {
+			heap.insert(arr[i]);
+		}
+
+		System.out.println(Arrays.toString(heap.heap));
+
+		for (int i = 0; i < n; i++) {
+			System.out.println(heap.deleteRoot());
+		}
+	}
+}
+
+class MaxHeap {
+	int size;
+	int[] heap;
+
+	MaxHeap(int capacity) {
+		this.heap = new int[capacity];
+		this.size = 0;
+	}
+
+	public void insert(int data) {
+		if (size == heap.length) {
+			System.out.println("Heap is full");
+			return;
+		}
+		heap[size] = data;
+		heapifyUP(size);
+		size++;
+	}
+
+	public void heapifyUP(int index) {
+		while (index > 0) {
+			int parent = (index - 1) / 2;
+			if (heap[parent] >= heap[index]) {
+				break;
+			}
+			swap(parent, index);
+			index = parent;
+		}
+	}
+
+	public void swap(int i, int j) {
+		int temp = heap[i];
+		heap[i] = heap[j];
+		heap[j] = temp;
+	}
+
+	public int deleteRoot() {
+		if (size <= 0) {
+			System.out.println("Heap is Empty");
+			return -1;
+		}
+		int deletedVal = heap[0];
+		size--;
+		heap[0] = heap[size];
+		if (size > 0) {
+			heapifyDOWN(0);
+		}
+		return deletedVal;
+	}
+
+	public void heapifyDOWN(int index) {
+		while (index < size) {
+			int left = 2 * index + 1;
+			int right = 2 * index + 2;
+			int large = index;
+			if (left < size && heap[left] > heap[large]) {
+				large = left;
+			}
+			if (right < size && heap[right] > heap[large]) {
+				large = right;
+			}
+			if (large == index) {
+				break;
+			}
+			swap(large, index);
+			index = large;
+		}
+	}
+
+}
+
+Output:-
+-------
+[60, 42, 48, 25, 30, 35, 18, 7, 3, 12]
+60 48 42 35 30 25 18 12 7 3 
+
+
+
+6. HEAP SORT
+------------
+Heap Sort is a comparison-based sorting algorithm that uses a Heap.
+
+To sort an array in ascending order:
+1. Build a Max Heap from the array.
+2. Swap the root (maximum) with the last element in the Heap.
+3. Reduce the Heap size by one; the last element is now in its final position.
+4. Heapify Down from the root.
+5. Repeat until the Heap size is one.
+
+Example:
+Input:  [4, 10, 3, 5, 1]
+Sorted: [1, 3, 4, 5, 10]
+
+Complexities:
+- Build Heap: O(n) using bottom-up heap construction.
+- Heap Sort: O(n log n) time in best, average, and worst cases.
+- Extra space: O(1) for standard in-place Heap Sort.
+- Heap Sort is not stable.
+
+
+9. QUICK REVISION
+-----------------
+- Min Heap root = minimum element.
+- Max Heap root = maximum element.
+- Heap is a Complete Binary Tree.
+- Heap is not a sorted array.
+- Insert = add at end + Heapify Up.
+- Delete root = move last element to root + Heapify Down.
+- Build Heap = O(n).
+- Heap Sort = O(n log n).
+- Heap search for an arbitrary value = O(n).
