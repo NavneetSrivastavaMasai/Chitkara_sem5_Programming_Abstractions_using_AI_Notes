@@ -335,6 +335,36 @@ IMPORTANT POINTS TO REMEMBER
 6. In a MinHeap, every parent is less than or equal to its children.
 
 
+Creation of Max Heap in O(n) Time complexity in given time:-
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Bottom-Up Approach
+------------------
+- Bottom-Up Approach is used to create a MaxHeap from an existing array in O(n) time.
+
+- In a MaxHeap, every parent node is greater than or equal to its children.
+
+Algorithm
+=-=-=-=-=
+1. Find the last non-leaf node: n / 2 - 1.
+2. Start from this index and move towards index 0.
+3. Apply Heapify Down at every node.
+4. The array becomes a MaxHeap.
+
+Why O(n)?
+=-=-=-=-=
+- Most nodes are near the bottom of the tree, so they require very little work. Only a few nodes near the root may move through multiple levels.
+- Therefore, the total time complexity of building a MaxHeap is O(n).
+
+Comparison
+=-=-=-=-=-=
+- Bottom-Up Build Heap: O(n)
+- One-by-One Insertion: O(n log n)
+
+IMPORTANT:
+----------
+- Bottom-Up Approach uses Heapify Down, while insertion usually uses Heapify Up.
+
+
 6. HEAP SORT
 ------------
 Heap Sort is a comparison-based sorting algorithm that uses a Heap.
@@ -357,7 +387,86 @@ Complexities:
 - Heap Sort is not stable.
 
 
-9. QUICK REVISION
+
+Code:- (Creation in O(n) and Heap Sort)
+=-=-=-=-=--=-=-=-==-=-=-=-=-=-=-=-=-=-=
+
+package com.chitkara1;
+
+import java.util.Arrays;
+
+public class Demo{
+	public static void main(String[] args) {
+		int[] arr = {12, 7, 25, 3, 18, 10, 30, 2, 15};
+		MaxHeap heap = new MaxHeap(arr);
+		System.out.println("Max Heap Data");
+		System.out.println(Arrays.toString(heap.heap));
+		System.out.println("Data after sorting");
+		heapSort(heap.heap);
+		System.out.println(Arrays.toString(heap.heap));
+	}
+
+	// Heap sort using Max Heap data
+	public static void heapSort(int[] heapData) {
+		int n = heapData.length;
+		for(int i= n-1; i>=0; i--) {
+			int temp = heapData[0];
+			heapData[0] = heapData[i];
+			heapData[i] = temp;
+			heapifyDown(heapData, 0, i);
+		}
+	}
+	public static void heapifyDown(int[] heap, int i, int size) {
+		int large = i;
+		int left = i*2 + 1;
+		int right = i*2 + 2;
+		if(left < size && heap[left] > heap[large]) {
+			large = left;
+		}
+		if(right < size && heap[right] > heap[large]) {
+			large = right;
+		}
+		if(i != large) {
+			int temp = heap[i];
+			heap[i] = heap[large];
+			heap[large] = temp;
+			
+			heapifyDown(heap, large, size);
+		}
+	}
+}
+// Creation of Max Heap in O(n) Time Complexity when we already have complete data
+class MaxHeap{
+	int[] heap;
+	MaxHeap(int[] arr){
+		this.heap = arr;
+		int n = heap.length;
+		for(int i= n/2-1; i>=0; i--) {
+			heapifyDown(i);
+		}
+	}  
+	public void heapifyDown(int index) {
+		int large = index;
+		int left = index*2 + 1;
+		int right = index*2 + 2;
+		if(left < heap.length && heap[left] > heap[large]) {
+			large = left;
+		}
+		if(right < heap.length && heap[right] > heap[large]) {
+			large = right;
+		}
+		if(index != large) {
+			int temp = heap[index];
+			heap[index] = heap[large];
+			heap[large] = temp;
+			
+			heapifyDown(large);
+		}
+	}
+}
+
+
+7. QUICK REVISION
 -----------------
 - Min Heap root = minimum element.
 - Max Heap root = maximum element.
@@ -368,3 +477,13 @@ Complexities:
 - Build Heap = O(n).
 - Heap Sort = O(n log n).
 - Heap search for an arbitrary value = O(n).
+
+
+Leetcode questions:-
+=--=-=-=-=-=-=-=-=
+1046. Last Stone Weight
+215. Kth Largest Element in an Array
+347. Top K Frequent Elements
+973. K Closest Points to Origin
+
+
