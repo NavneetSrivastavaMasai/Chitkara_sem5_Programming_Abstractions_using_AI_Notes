@@ -1,0 +1,533 @@
+GRAPH 
+======
+- A Graph is a non-linear data structure that represents objects and the connections between them.
+
+- A graph has two main components:
+  - Vertices (V) : the objects or points.
+  - Edges (E)    : the connections between those objects.
+
+Mathematical representation:
+
+    G = (V, E)
+
+Here:
+  - G represents the graph.
+  - V represents the set of vertices.
+  - E represents the set of edges.
+
+Example:
+- Suppose we have three cities: Delhi, Jaipur and Agra.
+- Roads connect Delhi to Jaipur and Jaipur to Agra.
+
+  Vertices : A, B, C
+  Edges    : A--B, B--C
+
+Therefore:
+    V = {A, B, C}
+    E = {{A, B}, {B, C}}
+
+Real-world applications: Google Maps, social networks, computer networks, flight routes, railway networks.
+
+
+PROPERTIES OF A GRAPH
+=-=-=-=-=-=-=-=-=-=-=
+- How can we decide whether a structure is a graph or not?
+- A structure is a graph when it has identifiable vertices and edges connecting pairs of vertices according to the rules of the graph being modelled.
+
+Property 1: A graph contains vertices
+  - Vertices represent the objects in the graph.
+  - Edges are not compulsory for every vertex to be connected.
+  - An isolated vertex is allowed. A graph containing only vertex A is a valid graph.
+
+Property 2: Edges connect vertices
+  - Example: an edge connects vertex A to vertex B.
+  - An edge must refer to valid vertices of that graph.
+  - In a simple graph, an edge connects two distinct vertices, and duplicate edges between the same pair are not allowed.
+
+Property 3: A graph can be connected or disconnected
+  - Connected    : every vertex can be reached from every other vertex
+                   (in an undirected graph).
+  - Disconnected : e.g. A and B are connected, but C is isolated.
+  - Both are valid graphs.
+
+Property 4: A graph may be directed or undirected
+  - Directed graph   : edges have direction.
+  - Undirected graph : edges have no direction.
+
+Property 5: A graph may be weighted or unweighted
+  - Weighted graph   : each edge stores a value such as distance or cost.
+  - Unweighted graph : edges carry no such value.
+
+Property 6: A graph may contain cycles
+  - A cycle is a route that starts and returns to the same vertex.
+  - A graph does not need a cycle to be valid.
+
+IMPORTANT CONCLUSION:
+- A graph does NOT have to be connected, weighted, directed or cyclic.
+- These are optional properties depending on the type of graph.
+
+
+VERTEX / VERTICES
+=-=-=-=-=-=-=-=-=
+
+- A vertex is a single point or object in a graph.
+  - Singular : Vertex
+  - Plural   : Vertices
+  - Another common name : Node
+
+Examples: in a social network each person is a vertex; on a map each city or location is a vertex.
+
+- What does a vertex mean in a Java program?
+- In programming, we usually assign an integer ID to each vertex.
+
+Suppose we have 4 vertices:
+
+    Vertex ID | Represents
+    ----------|-----------
+        0     | Delhi
+        1     | Jaipur
+        2     | Agra
+        3     | Mumbai
+
+- The numbers 0, 1, 2, 3 are identifiers used by the program to refer to the vertices. They are NOT the vertices' weights.
+
+    int vertices = 4;
+
+- This variable tells us the graph has 4 vertices. It does not create the graph's edges.
+
+- If we use an adjacency list, we create one neighbour list per vertex:
+
+    ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+    for (int i = 0; i < vertices; i++) {
+        adj.add(new ArrayList<>());
+    }
+
+- After this loop, the structure looks like:
+
+    Vertex 0: []
+    Vertex 1: []
+    Vertex 2: []
+    Vertex 3: []
+
+- Each vertex has an empty list because no edges have been added yet.
+- adj.get(0) gives the list of neighbours of vertex 0 (initially empty).
+
+REMEMBER: Creating vertices and adding edges are two different operations.
+
+
+EDGES
+=-=-=-=
+
+- An edge is a connection between two vertices.
+
+- If vertex 0 is connected to vertex 1, we write the edge as:
+
+    0 -- 1
+
+  - Undirected graph : the connection can be travelled in either direction.
+  - Directed graph   : the connection may be  0 -> 1  (from 0 to 1 only).
+
+How do we represent edges in a program?
+
+Undirected edge between 0 and 1 is stored in BOTH lists:
+
+    adj.get(0).add(1);
+    adj.get(1).add(0);
+
+  - First line  : 1 is a neighbour of 0.
+  - Second line : 0 is a neighbour of 1.
+
+Directed edge 0 -> 1 needs only ONE insertion:
+
+    adj.get(0).add(1);
+
+We do NOT add adj.get(1).add(0) because the reverse edge was not specified.
+
+What happens when we add an edge?
+
+Initially:
+    0 -> []
+    1 -> []
+    2 -> []
+
+After adding the undirected edge 0 -- 1:
+    0 -> [1]
+    1 -> [0]
+    2 -> []
+
+
+PATHS AND PROPERTIES OF A PATH
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+- A path is a sequence of vertices in which each consecutive pair is connected by an edge.
+
+Consider the edges:  A -- B -- C -- D
+
+Valid paths:
+  - A -> B
+  - A -> B -> C
+  - A -> B -> C -> D
+  - B -> C -> D
+
+Property 1: Every consecutive pair must be connected
+  - A -> B -> C is valid because A--B and B--C both exist.
+  - A -> D is NOT valid (no direct edge A--D, if these are the only edges).
+  - A -> C is NOT valid by itself (edge A--C does not exist),
+    but A -> B -> C is valid.
+
+Property 2: Path length counts EDGES, not vertices
+  Example: A -> B -> C -> D
+    - Vertices visited : 4
+    - Edges travelled  : 3
+    - Path length      : 3
+
+Property 3: A path in a directed graph must follow the arrows
+  Suppose the directed edges are:  A -> B -> C
+    - A -> B -> C is valid.
+    - C -> B -> A is NOT valid unless the reverse directed edges exist.
+
+Property 4: A simple path does not repeat vertices
+  - A -> B -> C -> D is a simple path (no vertex repeated).
+  - A -> B -> C -> B -> D is NOT a simple path (B appears twice).
+    If all consecutive connections exist, it is still a valid walk;
+    it just is not a simple path.
+
+Property 5: A graph need not have a path between every pair of vertices
+  - If A and B are connected but C is isolated, a path exists from
+    A to B, but none from A to C.
+  - This is allowed. The graph is still valid.
+
+
+TYPES OF GRAPHS
+=-=-=-=-=-=-=-=
+
+A. Undirected Graph
+---------------------
+-   Edges have no arrows.
+-   Example:  0 -- 1  (can be travelled 0 to 1 and 1 to 0)
+-   Real examples: two-way road, mutual friendship.
+
+B. Directed Graph
+-------------------
+-   Edges have arrows.
+-   Example:  0 -> 1  (connection from 0 to 1 only; does NOT automatically create 1 -> 0)
+-   Real examples: one-way roads, follower relationships.
+
+C. Weighted Graph
+------------------
+-   Stores a value on an edge.
+-   Example:  0 --(50)-- 1
+-   The 50 may mean 50 km, a cost of 50 units, or any quantity defined by the application.
+
+D. Unweighted Graph
+----------------------
+-   Stores only the connection, with no weight.
+-   Example:  0 -- 1
+-   Tells us the connection exists, but not a distance or cost.
+
+NOTE: A graph can be directed and weighted at the same time, or
+undirected and unweighted. Direction and weight are independent
+properties.
+
+
+WHAT DOES EDGE WEIGHT MEAN IN A PROGRAM?
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+- An edge weight is extra information associated with a connection between two vertices.
+
+Example:
+  - Vertex 0 = Delhi
+  - Vertex 1 = Jaipur
+  - Edge weight between them = 280
+  - If the weight is distance, the model stores 280 km for that connection.
+
+- In Java we must decide how to store both the neighbour and its weight.
+
+Unweighted graph (store only the neighbour):
+
+    adj.get(0).add(1);
+
+Weighted graph (store neighbour and weight together):
+
+    adj.get(0).add(new int[]{1, 280});
+
+Here:
+  - 1   is the neighbour's vertex ID.
+  - 280 is the edge weight.
+
+- The program does not automatically know what 280 means. We define its meaning in our application (km, rupees, etc.).
+
+- Weighted UNDIRECTED graph (same weight stored in both directions):
+
+    adj.get(0).add(new int[]{1, 280});
+    adj.get(1).add(new int[]{0, 280});
+
+- Weighted DIRECTED graph, edge 0 -> 1 (no reverse edge unless it exists):
+
+    adj.get(0).add(new int[]{1, 280});
+
+
+GRAPH REPRESENTATION USING AN ADJACENCY LIST
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+- An adjacency list stores each vertex along with the vertices directly connected to it.
+
+Example: undirected graph with edges
+    0 -- 1,  0 -- 2,  1 -- 3
+
+Adjacency list:
+    0 -> [1, 2]
+    1 -> [0, 3]
+    2 -> [0]
+    3 -> [1]
+
+Meaning:
+  - Vertex 0 has neighbours 1 and 2.
+  - Vertex 1 has neighbours 0 and 3.
+  - Vertex 2 has neighbour 0.
+  - Vertex 3 has neighbour 1.
+
+How do we create an adjacency list in Java?
+
+    ArrayList<ArrayList<Integer>> adj;
+
+Breaking down the declaration:
+  - The outer ArrayList stores one list for every vertex.
+  - Each inner ArrayList<Integer> stores the neighbours of one vertex.
+  - adj.get(0) returns the neighbour list of vertex 0.
+  - adj.get(0).add(1) adds vertex 1 to vertex 0's neighbour list.
+
+
+COMPLETE PROGRAM: UNDIRECTED GRAPH
+-==-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=
+
+Code:-
+----
+package com.chitkara;
+
+import java.util.ArrayList;
+
+public class Main {
+	public static void main(String[] args) {
+		Graph graph = new Graph(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 3);
+		graph.addEdge(0, 4);
+		graph.addEdge(1, 4);
+		graph.addEdge(1, 2);
+		graph.addEdge(2, 3);
+		graph.addEdge(3, 4);
+		graph.printList();
+	}
+}
+class Graph{
+	int vertices;
+	ArrayList<ArrayList<Integer>> adjList;
+	
+	Graph(int vertices){
+		this.vertices = vertices;
+		this.adjList = new ArrayList<ArrayList<Integer>>();
+		for(int i=0; i<vertices; i++) {
+			this.adjList.add(new ArrayList<Integer>());
+		}
+	}
+	
+	public void addEdge(int src, int des) {
+		adjList.get(src).add(des);
+		adjList.get(des).add(src);
+	}
+	
+	public void printList() {
+		for(int i=0; i<vertices; i++) {
+			System.out.println(i+" :-> "+adjList.get(i));
+		}
+	}
+	
+	
+	
+}
+Output:-
+------
+0 :-> [1, 3, 4]
+1 :-> [0, 4, 2]
+2 :-> [1, 3]
+3 :-> [0, 2, 4]
+4 :-> [0, 1, 3]
+
+COMPLETE PROGRAM: DIRECTED GRAPH
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Code:-
+-----
+package com.chitkara;
+
+import java.util.ArrayList;
+
+public class Main {
+	public static void main(String[] args) {
+		Graph graph = new Graph(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 4);
+		graph.addEdge(1, 2);
+		graph.addEdge(2, 3);
+		graph.addEdge(3, 0);
+		graph.addEdge(4, 1);
+		graph.addEdge(4, 3);
+		graph.printList();
+	}
+}
+class Graph{
+	int vertices;
+	ArrayList<ArrayList<Integer>> adjList;
+	
+	Graph(int vertices){
+		this.vertices = vertices;
+		this.adjList = new ArrayList<ArrayList<Integer>>();
+		for(int i=0; i<vertices; i++) {
+			this.adjList.add(new ArrayList<Integer>());
+		}
+	}
+	
+	public void addEdge(int src, int des) {
+		adjList.get(src).add(des);
+	}
+	
+	public void printList() {
+		for(int i=0; i<vertices; i++) {
+			System.out.println(i+" :-> "+adjList.get(i));
+		}
+	}
+	
+	
+	
+}
+Output:-
+-------
+0 :-> [1, 4]
+1 :-> [2]
+2 :-> [3]
+3 :-> [0]
+4 :-> [1, 3]
+
+
+
+COMPLETE PROGRAM: UNDIRECTED WEIGHTED GRAPH
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Code:-
+------
+package com.chitkara;
+
+import java.util.ArrayList;
+
+public class Main {
+	public static void main(String[] args) {
+		Graph graph = new Graph(5);
+		graph.addEdge(0, 1, 10);
+		graph.addEdge(0, 3, 30);
+		graph.addEdge(0, 4, 40);
+		graph.addEdge(1, 4, 30);
+		graph.addEdge(1, 2, 10);
+		graph.addEdge(2, 3, 10);
+		graph.addEdge(3, 4, 10);
+		graph.printList();
+	}
+}
+class Edge{
+	int desc;
+	int weight;
+	Edge(int desc, int weight){
+		this.desc = desc;
+		this.weight = weight;
+	}
+	@Override
+	public String toString() {
+		return "[Destination=" + desc + ", Weight=" + weight + "]";
+	}
+	
+}
+class Graph{
+	int vertices;
+	ArrayList<ArrayList<Edge>> adjList;
+	
+	Graph(int vertices){
+		this.vertices = vertices;
+		this.adjList = new ArrayList<ArrayList<Edge>>();
+		for(int i=0; i<vertices; i++) {
+			this.adjList.add(new ArrayList<Edge>());
+		}
+	}
+	
+	public void addEdge(int src, int des, int weight) {
+		adjList.get(src).add(new Edge(des, weight));
+		adjList.get(des).add(new Edge(src, weight));
+	}
+	
+	public void printList() {
+		for(int i=0; i<vertices; i++) {
+			System.out.println(i+" :-> "+adjList.get(i));
+		}
+	}
+	
+	
+	
+}
+
+Output:-
+-------
+0 :-> [[Destination=1, Weight=10], [Destination=3, Weight=30], [Destination=4, Weight=40]]
+1 :-> [[Destination=0, Weight=10], [Destination=4, Weight=30], [Destination=2, Weight=10]]
+2 :-> [[Destination=1, Weight=10], [Destination=3, Weight=10]]
+3 :-> [[Destination=0, Weight=30], [Destination=2, Weight=10], [Destination=4, Weight=10]]
+4 :-> [[Destination=0, Weight=40], [Destination=1, Weight=30], [Destination=3, Weight=10]]
+
+
+
+
+Concept          | Meaning in theory                | Meaning in Java
+-----------------|----------------------------------|----------------------------------------
+Vertex           | An object or point               | Usually an integer ID
+Edge             | A connection                     | Stored by adding a neighbour
+Path             | Sequence of connected vertices   | Sequence of valid graph connections
+Weight           | A value associated with an edge  | Stored alongside the neighbour
+Undirected graph | Connection has no direction      | Add the edge to both adjacency lists
+Directed graph   | Connection has a direction       | Add destination to the source list only
+Adjacency list   | Each vertex's neighbours         | ArrayList<ArrayList<Integer>>
+
+
+
+
+
+
+GRAPH TRAVERSAL
+===============
+- Visiting every reachable vertex of a graph in a systematic way, starting from a given source vertex, so that each vertex is processed exactly once.
+
+Why needed:
+-------------
+- A graph has no natural first or last element like an array, so we need a fixed method to walk through it (search, find paths, count components, detect cycles).
+
+Key points:
+  - Start vertex : traversal visits only vertices reachable from it.
+  - Visited array: graphs may have cycles; boolean[] visited stops infinite loops.
+  - Disconnected graph: loop over all vertices and start a new traversal from every unvisited vertex.
+  - Visiting order is not unique; it depends on the start vertex and the neighbour order in the adjacency list.
+
+Two standard traversals:
+
+    Traversal | Strategy                         | Helper structure
+    ----------|----------------------------------|-------------------
+    BFS       | Level by level, nearest first    | Queue
+    DFS       | Go deep first, then backtrack    | Stack / recursion
+
+
+
+
+
+
+
+
+
+
+
+
+
