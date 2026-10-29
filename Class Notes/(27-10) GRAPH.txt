@@ -521,6 +521,752 @@ Two standard traversals:
 
 
 
+BFS (BREADTH FIRST SEARCH)
+=-==--==--=-==-=-=-=-=-=-=
+- BFS starts at the source, visits all its direct neighbours first, then vertices 2 edges away, then 3, and so on (layer by layer).
+
+Why a queue?
+- A queue is FIFO, so vertices discovered earlier are processed earlier. This keeps nearer vertices ahead of farther ones.
+
+Algorithm:
+  1. Create visited[] (all false) and an empty queue.
+  2. Mark source visited and add it to the queue.
+  3. While the queue is not empty:
+       - Remove the front vertex (curr) and process it.
+       - For each neighbour n of curr:
+           if n is not visited -> mark visited and add to queue.
+
+IMPORTANT: Mark a vertex visited when you ADD it to the queue, not when you remove it. Otherwise duplicates enter the queue.
+
+
+EXAMPLE
+=-=-==-=
+
+Undirected graph, edges: 0--1, 0--2, 1--3, 2--3, 2--4
+
+Adjacency list:
+    0 -> [1, 2]
+    1 -> [0, 3]
+    2 -> [0, 3, 4]
+    3 -> [1, 2]
+    4 -> [2]
+
+Dry run from source 0:
+
+    Step  | Remove | Newly added | Queue after
+    ------|--------|-------------|------------
+    Start |   -    |      0      | [0]
+      1   |   0    |    1, 2     | [1, 2]
+      2   |   1    |      3      | [2, 3]
+      3   |   2    |      4      | [3, 4]
+      4   |   3    |    none     | [4]
+      5   |   4    |    none     | []
+
+BFS order : 0 1 2 3 4
+Levels    : level 0 = {0}, level 1 = {1, 2}, level 2 = {3, 4}
+
+
+JAVA CODE
+=-=--=-=-=
+package com.chitkara;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Main {
+	public static void main(String[] args) {
+		Graph graph = new Graph(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 3);
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(4, 1);
+		graph.addEdge(3, 4);
+		graph.printList();
+		System.out.println("BFS data:-");
+		graph.bfs(0);
+		System.out.println();
+	}
+
+}
+
+class Graph {
+	int vertices;
+	ArrayList<ArrayList<Integer>> adjList;
+
+	Graph(int vertices) {
+		this.vertices = vertices;
+		adjList = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < vertices; i++) {
+			adjList.add(new ArrayList<Integer>());
+		}
+	}
+
+	public void addEdge(int src, int des) {
+		adjList.get(src).add(des);
+		adjList.get(des).add(src);
+	}
+	public void printList() {
+		for (int i = 0; i < vertices; i++) {
+			System.out.println(i + " :-> " + adjList.get(i));
+		}
+	}
+	public void bfs(int start) {
+		boolean visited[] = new boolean[vertices];
+		visited[start] = true;
+		Queue<Integer> queue = new LinkedList<Integer>();
+		queue.offer(start);
+		while(!queue.isEmpty()) {
+			int curr = queue.poll();
+			System.out.print(curr +" ");
+			for(int neighbour : adjList.get(curr)) {
+				if(!visited[neighbour]) {
+					queue.offer(neighbour);
+					visited[neighbour] =  true;
+				}
+			}
+		}
+		
+	}
+}
+Output:-
+------
+0 :-> [1, 3]
+1 :-> [0, 2, 3, 4]
+2 :-> [1, 4]
+3 :-> [0, 1, 4]
+4 :-> [2, 1, 3]
+BFS data:-
+0 1 3 2 4 
+
+
+COMPLEXITY
+----------
+
+    Representation   | Time     | Space
+    -----------------|----------|-------
+    Adjacency list   | O(V + E) | O(V)
+    Adjacency matrix | O(V^2)   | O(V)
+
+  - Each vertex enters the queue at most once  -> O(V)
+  - Each edge is examined once (twice if undirected) -> O(E)
+  - Extra space = visited array + queue
+
+
+IMPORTANT PROPERTIES
+=-------------------=
+
+  - Gives the shortest path (fewest edges) in an UNWEIGHTED graph.
+  - Does NOT give shortest paths in weighted graphs
+    (use Dijkstra's algorithm instead).
+  - Visits vertices in non-decreasing order of distance from source.
+
+
+APPLICATIONS
+=----------=
+
+  - Shortest path in unweighted graphs (maze, minimum moves)
+  - Finding connected components
+  - Level-order traversal of trees
+  - Checking if a graph is bipartite
+  - Vertices within k edges (friends of friends)
+  - Cycle detection in an undirected graph
+
+
+DFS (DEPTH FIRST SEARCH)
+=-==--==--=-==-=-=-=-=-=-=
+
+- DFS starts at the source and explores one path as deeply as possible before backtracking.
+- When a vertex has no unvisited neighbour, DFS returns to the previous vertex and explores another unvisited neighbour.
+- DFS can be implemented using recursion (call stack) or an explicit stack.
+
+WHY RECURSION?
+- Recursion allows us to explore a neighbour by calling DFS on that neighbour.
+- Each recursive call is stored in the call stack.
+- When a call finishes, control returns to the previous call. This is called backtracking.
+
+ALGORITHM:
+  1. Create visited[] (all false).
+  2. Call DFS(source, visited).
+  3. Mark the current vertex as visited.
+  4. Process (print) the current vertex.
+  5. For each neighbour n of the current vertex:
+       - If n is not visited:
+           call DFS(n, visited).
+  6. When no unvisited neighbours remain, return to the previous call.
+
+IMPORTANT:
+- Mark a vertex visited BEFORE making recursive calls.
+- Always check visited[] before visiting a neighbour. Otherwise, cycles can cause infinite recursion.
+- Pass the SAME visited[] array to every recursive call. Do not create a new array inside each call.
+- DFS traversal order depends on the order in which neighbours are stored in the adjacency list.
+
+
+EXAMPLE
+=-=-==-=
+
+Undirected graph, edges: 0--1, 0--2, 1--3, 2--3, 2--4
+
+Adjacency list:
+    0 -> [1, 2]
+    1 -> [0, 3]
+    2 -> [0, 3, 4]
+    3 -> [1, 2]
+    4 -> [2]
+
+Dry run from source 0:
+Assume neighbours are processed from left to right.
+
+Step 1:
+    Visit 0
+    DFS(0) calls DFS(1)
+
+Step 2:
+    Visit 1
+    Neighbour 0 is already visited.
+    DFS(1) calls DFS(3)
+
+Step 3:
+    Visit 3
+    Neighbour 1 is already visited.
+    DFS(3) calls DFS(2)
+
+Step 4:
+    Visit 2
+    Neighbour 0 is already visited.
+    Neighbour 3 is already visited.
+    DFS(2) calls DFS(4)
+
+Step 5:
+    Visit 4
+    All neighbours are already visited.
+    Return to vertex 2.
+
+Step 6:
+    Vertex 2 has no more unvisited neighbours.
+    Return to vertex 3, then vertex 1, then vertex 0.
+    Traversal is complete.
+
+DFS order: 0 1 3 2 4
+
+
+BACKTRACKING FLOW
+=-=-=-=-=-=-=-=-=
+
+DFS(0)
+  |
+  +--> DFS(1)
+         |
+         +--> DFS(3)
+                |
+                +--> DFS(2)
+                       |
+                       +--> DFS(4)
+                              |
+                              +--> Return
+                       |
+                       +--> Return
+                |
+                +--> Return
+         |
+         +--> Return
+  |
+  +--> Neighbour 2 is already visited
+  |
+  +--> Return
+
+
+JAVA CODE (RECURSIVE DFS)
+=-=-=-=-=-=-=-=-=-=-=-=-=
+package com.chitkara;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Main {
+	public static void main(String[] args) {
+		Graph graph = new Graph(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 3);
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(4, 1);
+		graph.addEdge(3, 4);
+		graph.printList();
+		System.out.println("DFS data:-");
+		graph.dfs(0, new boolean[5]);
+		System.out.println();
+	}
+
+}
+
+class Graph {
+	int vertices;
+	ArrayList<ArrayList<Integer>> adjList;
+
+	Graph(int vertices) {
+		this.vertices = vertices;
+		adjList = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < vertices; i++) {
+			adjList.add(new ArrayList<Integer>());
+		}
+	}
+
+	public void addEdge(int src, int des) {
+		adjList.get(src).add(des);
+		adjList.get(des).add(src);
+	}
+	public void printList() {
+		for (int i = 0; i < vertices; i++) {
+			System.out.println(i + " :-> " + adjList.get(i));
+		}
+	}
+	public void dfs(int start, boolean[] visited) {
+		visited[start] = true;
+		System.out.print(start +" ");
+		for(int neighbour : adjList.get(start)) {
+			if(!visited[neighbour]) {
+				dfs(neighbour, visited);
+			}
+		}
+	}
+}
+Output:-
+------
+0 :-> [1, 3]
+1 :-> [0, 2, 3, 4]
+2 :-> [1, 4]
+3 :-> [0, 1, 4]
+4 :-> [2, 1, 3]
+DFS data:-
+0 1 2 4 3 
+
+
+
+
+COMPLEXITY
+----------
+
+    Representation   | Time       | Space
+    -----------------|------------|-------
+    Adjacency list   | O(V + E)   | O(V)
+    Adjacency matrix | O(V^2)     | O(V)
+
+- Each vertex is visited at most once                  -> O(V)
+- Each edge is examined at most twice in an
+  undirected graph using an adjacency list            -> O(E)
+- visited[] array                                     -> O(V)
+- Recursive call stack                                -> O(V) worst case
+- Total auxiliary space                               -> O(V)
+
+IMPORTANT NOTES
+=-=-=-=-=-=-=-=
+
+1. DFS does NOT necessarily find the shortest path.
+2. DFS can be used on directed as well as undirected graphs.
+3. A visited[] array prevents repeated visits and infinite recursion caused by cycles.
+4. The code above visits only the connected component containing the source.
+5. To traverse a disconnected graph completely, start DFS from every unvisited vertex:
+
+   for (int i = 0; i < vertices; i++) {
+       if (!visited[i]) {
+           dfs(i, visited);
+       }
+   }
+
+6. DFS traversal order can change if the adjacency-list neighbour order changes.
+7. For a graph with V vertices and E edges:
+       Adjacency list  -> O(V + E)
+       Adjacency matrix -> O(V^2)
+
+DFS APPLICATIONS
+=-=-=-=-=-=-=-=-=
+
+- Finding connected components
+- Detecting cycles
+- Finding paths between vertices
+- Topological sorting (for directed acyclic graphs)
+- Exploring mazes and backtracking problems
+- Finding connected regions in grids
+
+
+Graph Representation
+=====================
+===========================================
+GRAPH REPRESENTATION USING ADJACENCY MATRIX
+===========================================
+
+- An Adjacency Matrix is a graph representation technique in which a graph is stored using a 2D array.
+
+- If a graph contains V vertices, the matrix size is:
+
+    V x V
+
+- Here:
+    Rows    -> Source vertices
+    Columns -> Destination vertices
+
+- For an unweighted graph:
+    matrix[i][j] = 1 means an edge exists from i to j.
+    matrix[i][j] = 0 means no edge exists from i to j.
+
+
+EXAMPLE
+=--==-=
+
+Consider an undirected graph:
+
+    Vertices: 0, 1, 2, 3
+
+    Edges:
+        0 -- 1
+        0 -- 2
+        1 -- 2
+        2 -- 3
+
+Adjacency Matrix:
+
+          0  1  2  3
+        +------------
+      0 | 0  1  1  0
+      1 | 1  0  1  0
+      2 | 1  1  0  1
+      3 | 0  0  1  0
+
+Explanation:
+
+    matrix[0][1] = 1
+    Edge exists between vertices 0 and 1.
+
+    matrix[0][3] = 0
+    No edge exists between vertices 0 and 3.
+
+IMPORTANT:
+For an undirected graph, the matrix is symmetric.
+
+    matrix[i][j] == matrix[j][i]
+
+
+JAVA IMPLEMENTATION (Code for Undirected Graph)
+=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=
+public class Main {
+	public static void main(String[] args) {
+		MatrixGraph graph = new MatrixGraph(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 3);
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(4, 1);
+		graph.addEdge(3, 4);
+		System.out.println("Adjacency Matrix:-");
+		graph.printList();	
+	}
+}
+class MatrixGraph{
+	int vertices;
+	int[][] mat;
+	MatrixGraph(int vertices) {
+		this.vertices = vertices;
+		mat = new int[vertices][vertices];
+	}
+	public void addEdge(int src, int des) {
+		mat[src][des] = 1;
+		mat[des][src] = 1;
+	}
+	public void printList() {
+		for(int i=0; i<vertices; i++) {
+			System.out.print(i+" :->");
+			for(int j=0; j<vertices; j++) {
+				System.out.print(mat[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+}
+
+Output:-
+------
+Adjacency Matrix:-
+0 :->0 1 0 1 0 
+1 :->1 0 1 1 1 
+2 :->0 1 0 0 1 
+3 :->1 1 0 0 1 
+4 :->0 1 1 1 0 
+
+
+DIRECTED GRAPH USING ADJACENCY MATRIX
+=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=
+
+For a directed graph, we store only the specified direction.
+
+Example:
+
+    0 ----> 1
+    |
+    |
+    v
+    2
+
+Edges:
+    0 -> 1
+    0 -> 2
+
+Matrix:
+
+          0  1  2
+        +---------
+      0 | 0  1  1
+      1 | 0  0  0
+      2 | 0  0  0
+
+For directed graphs, add an edge using:
+
+    matrix[u][v] = 1;
+
+Do NOT automatically write:
+
+    matrix[v][u] = 1;
+
+The reverse edge exists only if it is separately added.
+
+
+WEIGHTED GRAPH USING MATRIX
+-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+For a weighted graph, store the weight instead of 1.
+
+Example:
+
+    0 --10-- 1
+    |
+    20
+    |
+    2
+
+For an undirected weighted graph:
+
+    matrix[0][1] = 10;
+    matrix[1][0] = 10;
+
+    matrix[0][2] = 20;
+    matrix[2][0] = 20;
+
+IMPORTANT:
+- If weight 0 is valid, do not use 0 alone to mean "no edge". Use a separate boolean matrix or another suitable way to represent edge existence.
+
+
+COMPLEXITY
+-=-=-=--=-=
+
+Operation                  Complexity
+-------------------------------------
+Space                      O(V^2)
+Check edge                 O(1)
+Add edge                   O(1)
+Remove edge                O(1)
+Find all neighbours        O(V)
+Traverse entire graph      O(V^2)
+
+ADVANTAGES:
+- Simple to implement.
+- Checking whether an edge exists takes O(1).
+- Suitable for dense graphs.
+
+DISADVANTAGES:
+- Requires O(V^2) memory.
+- Can waste memory when the graph has few edges.
+
+============================================================
+GRAPH REPRESENTATION USING LINKED LIST
+============================================================
+
+INTRODUCTION
+=-=-=-=-=-=-=
+
+- A graph can be represented using a linked list for the neighbours of every vertex.
+- Each linked-list node stores:
+    1. The adjacent vertex.
+    2. A reference to the next node.
+
+- We maintain an array called head[].
+
+    head[i] -> First node in the linked list of vertex i.
+
+NOTE:
+- An adjacency list is a logical graph representation.
+- It can be implemented using ArrayList, LinkedList or custom linked-list nodes.
+
+EXAMPLE
+=-=-=-=
+
+Consider an undirected graph:
+
+    0 -- 1
+    |    |
+    2 -- 3
+
+Edges:
+    0 -- 1
+    0 -- 2
+    1 -- 3
+    2 -- 3
+
+Linked-list representation:
+
+    head[0] -> 2 -> 1 -> null
+    head[1] -> 3 -> 0 -> null
+    head[2] -> 3 -> 0 -> null
+    head[3] -> 2 -> 1 -> null
+
+The order of neighbours depends on insertion order.
+
+Since each edge is undirected, it is stored in both
+vertices' linked lists.
+
+
+NODE STRUCTURE
+=-=-=-=-=-=-=-=
+
+    static class Node {
+        int vertex;
+        Node next;
+
+        Node(int vertex) {
+            this.vertex = vertex;
+            this.next = null;
+        }
+    }
+
+Explanation:
+
+    vertex -> Stores the adjacent vertex number.
+    next   -> Reference to the next linked-list node.
+
+
+JAVA IMPLEMENTATION (Code for Undirected Graph)
+=--=-=-=-=--=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+public class Main {
+	public static void main(String[] args) {
+		GraphUsingLinkedList graph = new GraphUsingLinkedList(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 3);
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(4, 1);
+		graph.addEdge(3, 4);
+		System.out.println("Graph Using Linked List:-");
+		graph.printList();	
+	}
+}
+class Node{
+	int vertex;
+	Node next;
+	Node(int vertex){
+		this.vertex = vertex;
+		this.next = null;
+	}
+}
+class GraphUsingLinkedList{
+	Node[] heads;
+	int vertices;
+	GraphUsingLinkedList(int vertices) {
+		this.vertices = vertices;
+		heads = new Node[vertices];
+	}
+	public void addEdge(int src, int des) {
+		Node newNode = new Node(des);
+		newNode.next = heads[src];
+		heads[src] = newNode;
+		
+		newNode = new Node(src);
+		newNode.next = heads[des];
+		heads[des] = newNode;
+	}
+	public void printList() {
+		for(int i=0; i<vertices; i++) {
+			Node curr = heads[i];
+			System.out.print(i+" :-> ");
+			while(curr!=null) {
+				System.out.print(curr.vertex+" ");
+				curr = curr.next;
+			}
+			System.out.println();
+		}
+	}
+}
+
+Output:-
+------
+Graph Using Linked List:-
+0 :-> 3 1 
+1 :-> 4 3 2 0 
+2 :-> 4 1 
+3 :-> 4 1 0 
+4 :-> 3 1 2 
+
+
+
+COMPLEXITY
+=-=-=--=-=
+
+Operation                  Complexity
+-------------------------------------
+Space                      O(V + E)
+Add edge at head           O(1)
+Check edge                 O(degree(u))
+Remove edge                O(degree(u) + degree(v))
+Find neighbours            O(degree(u))
+Traverse entire graph      O(V + E)
+
+- For an undirected graph, each edge is stored twice.
+- The overall space complexity remains O(V + E).
+
+ADVANTAGES:
+- Memory efficient for sparse graphs.
+- Iterating over neighbours is efficient.
+- Adding an edge at the head takes O(1).
+
+DISADVANTAGES:
+- Checking whether an edge exists requires searching the linked list.
+- Linked nodes require extra memory for references.
+- Implementation is more involved than an adjacency matrix.
+
+
+============================================================
+MATRIX VS LINKED LIST REPRESENTATION
+============================================================
+
+Feature                 Adjacency Matrix    Linked List
+--------------------------------------------------------
+Space                   O(V^2)               O(V + E)
+Check edge              O(1)                 O(degree(u))
+Add edge                O(1)                 O(1) at head
+Remove edge             O(1)                 O(degree(u) + degree(v))
+Find neighbours         O(V)                 O(degree(u))
+Dense graphs            Often suitable       May use less memory
+Sparse graphs           May waste memory     Usually suitable
+
+
+IMPORTANT CONCLUSION
+--------------------
+1. Adjacency Matrix uses a 2D array.
+2. Linked-list representation stores neighbours in linked nodes.
+3. For undirected graphs, each edge must be represented in both directions.
+4. For directed graphs, store only the specified direction.
+5. BFS and DFS can be implemented using either representation.
+6. Adjacency-list DFS/BFS takes O(V + E) time.
+7. Matrix-based DFS/BFS takes O(V^2) time.
+
+
+
+
 
 
 
