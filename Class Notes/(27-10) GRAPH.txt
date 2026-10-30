@@ -1265,7 +1265,285 @@ IMPORTANT CONCLUSION
 7. Matrix-based DFS/BFS takes O(V^2) time.
 
 
+CYCLE DETECTION IN GRAPHS
+=========================
+WHAT IS A CYCLE?
+----------------
 
+- A cycle is a path that starts at a vertex and returns to the same vertex by following edges, without repeating any other vertex.
+(In a simple undirected graph, a cycle needs at least 3 vertices.)
+
+Cycle exists (edges 0-1, 1-2, 2-0):
+
+        0 ---- 1
+         \    /
+          \  /
+           2
+
+No cycle (edges 0-1, 1-2):
+
+        0 ---- 1 ---- 2
+
+IMPORTANT: The detection logic is DIFFERENT for directed and undirected graphs.
+
+
+UNDIRECTED GRAPH: CYCLE DETECTION
+=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+- Edge 0-1 is stored in both lists: 1 in list of 0, and 0 in list of 1.
+
+CORE IDEA:
+- During DFS, if a neighbour is already visited and is NOT the parent of the current vertex, a cycle exists.
+
+Why the parent check?
+- Take a single edge 0 -- 1. DFS goes 0 -> 1. At vertex 1, neighbour 0 is already visited, but 0 is the parent of 1. This is just the same undirected edge seen in reverse, not a cycle.
+
+Algorithm:-
+=-=-=-=-=-=
+  1. Create visited[].
+  2. Loop over every vertex (graph may be disconnected).
+  3. If a vertex is unvisited, run DFS from it with parent = -1.
+  4. In DFS: mark current vertex visited. For each neighbour:
+       a. Unvisited -> DFS(neighbour, parent = current).
+          If that call returns true, return true.
+       b. Visited and neighbour != parent -> cycle found, return true.
+  5. If no component has a cycle, return false.
+
+Condition to remember:
+
+    if (!visited[neighbour]) { ...recurse... }
+    else if (neighbour != parent) { return true; }
+
+Note: This assumes a simple graph (no parallel edges between the
+same pair of vertices).
+
+Code:-
+=-=-=
+public class Main {
+	public static void main(String[] args) {
+		Graph graph = new Graph(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 3);
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(4, 1);
+		graph.addEdge(3, 4);
+		graph.printList();
+		System.out.println(graph.hasCycle());
+	}
+	
+}
+
+class Graph {
+	int vertices;
+	ArrayList<ArrayList<Integer>> adjList;
+
+	Graph(int vertices) {
+		this.vertices = vertices;
+		adjList = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < vertices; i++) {
+			adjList.add(new ArrayList<Integer>());
+		}
+	}
+
+	public void addEdge(int src, int des) {
+		adjList.get(src).add(des);
+		adjList.get(des).add(src);
+	}
+
+	public void printList() {
+		for (int i = 0; i < vertices; i++) {
+			System.out.println(i + " :-> " + adjList.get(i));
+		}
+	}
+
+	public void bfs(int start) {
+
+		boolean[] visited = new boolean[vertices];
+		visited[start] = true;
+
+		Queue<Integer> queue = new LinkedList<Integer>();
+		queue.offer(start);
+
+		while (!queue.isEmpty()) {
+			int curr = queue.poll();
+			System.out.print(curr + " ");
+			for (int neighbour : adjList.get(curr)) {
+				if (!visited[neighbour]) {
+					visited[neighbour] = true;
+					queue.offer(neighbour);
+				}
+			}
+		}
+	}
+
+	public void dfs(int start, boolean visited[]) {
+		System.out.print(start + " ");
+		visited[start] = true;
+		for (int neighbour : adjList.get(start)) {
+			if (!visited[neighbour]) {
+				dfs(neighbour, visited);
+			}
+		}
+	}
+	//Checking cycle in Undirected Graph
+	public boolean hasCycle() {
+		boolean [] visited = new boolean[vertices];
+		for(int i=0; i<vertices; i++) {
+			if(dfs(i, -1, visited)) {
+				return true;
+			}
+		}		
+		return false;
+	}
+	//Helper function for check cycle
+	public boolean dfs(int curr, int parent, boolean [] visited) {
+		visited[curr] = true;
+		for(int neighbour : adjList.get(curr)) {
+			if(!visited[neighbour]) {
+				if(dfs(neighbour, curr, visited)) {
+					return true;
+				}
+			}else if(neighbour != parent) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+Output:-
+-------
+0 :-> [1, 3]
+1 :-> [0, 2, 3, 4]
+2 :-> [1, 4]
+3 :-> [0, 1, 4]
+4 :-> [2, 1, 3]
+true
+
+
+DIRECTED GRAPH: CYCLE DETECTION
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+DIRECTED GRAPH: CYCLE DETECTION USING visited[] AND recStack[]
+--------------------------------------------------------------
+
+- Edge 0 -> 1 does NOT mean 1 -> 0 exists, so the parent check is not enough. We pass THREE things to DFS:
+
+    dfs(curr, visited, recStack)
+
+    curr     : index of the current vertex
+    visited[]  : true if the vertex has EVER been visited
+    recStack[] : true if the vertex is on the CURRENT DFS path
+                 (recursion stack)
+
+CORE IDEA:
+- If DFS reaches a neighbour that is visited AND is still on the current path (recStack[neighbour] == true), we have come back to an active vertex. This is a back edge, so a directed cycle exists.
+- A neighbour that is visited but NOT on the current path is already completely processed, so it is NOT a cycle.
+
+Algorithm:
+  1. Create visited[] and recStack[], both initially all false.
+  2. Loop over every vertex (graph may be disconnected).
+     If a vertex is not visited, run dfs(i, visited, recStack).
+     If it returns true, return true.
+  3. In dfs(curr, visited, recStack):
+       a. Set visited[curr] = true and recStack[curr] = true.
+       b. For each outgoing neighbour of curr:
+            i.  Not visited -> dfs(neighbour, visited, recStack).
+                If that call returns true, return true.
+            ii. Visited and recStack[neighbour] == true
+                -> cycle found, return true.
+            (Visited and recStack[neighbour] == false -> ignore.)
+       c. After all neighbours are processed, set
+          recStack[curr] = false (backtrack: leave the path).
+       d. Return false.
+  4. If no DFS call finds a cycle, return false.
+
+Condition to remember:
+
+    if (!visited[neighbour]) { ...recurse... }
+    else if (recStack[neighbour]) { return true; }
+
+IMPORTANT: Do not forget recStack[curr] = false before returning. Otherwise every visited vertex stays "on the path" and graphs without a cycle (like 0->1, 0->2, 1->3, 2->3) wrongly give true.
+
+
+Code:-
+=-=-=
+public class Main {
+	public static void main(String[] args) {
+		DirectedGraph graph = new DirectedGraph(5);
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 3);
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(4, 1);
+		graph.addEdge(3, 4);
+		graph.printList();
+		System.out.println(graph.hasCycle());
+	}
+	
+}
+
+class DirectedGraph {
+	int vertices;
+	ArrayList<ArrayList<Integer>> adjList;
+	DirectedGraph(int vertices) {
+		this.vertices = vertices;
+		adjList = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < vertices; i++) {
+			adjList.add(new ArrayList<Integer>());
+		}
+	}
+	public void addEdge(int src, int des) {
+		adjList.get(src).add(des);
+	}
+	public void printList() {
+		for (int i = 0; i < vertices; i++) {
+			System.out.println(i + " :-> " + adjList.get(i));
+		}
+	}
+	public boolean hasCycle() {
+		boolean [] visited = new boolean[vertices];
+		boolean [] recStack = new boolean[vertices];
+		for(int i=0; i<vertices; i++) {
+			if(dfs(i, visited, recStack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean dfs(int curr, boolean [] visited, boolean [] recStack) {
+		visited[curr] = true;
+		recStack[curr] = true;
+		for(int neighbour : adjList.get(curr)) {
+			if(!visited[neighbour]) {
+				if(dfs(neighbour, visited, recStack)) {
+					return true;
+				}
+			}else if(recStack[neighbour]) {
+				return true;
+			}
+		}
+		recStack[curr] = false;
+		return false;
+	}
+	
+	
+}
+
+Output:-
+------
+0 :-> [1, 3]
+1 :-> [2, 3]
+2 :-> [4]
+3 :-> [4]
+4 :-> [1]
+true
+
+- Leetcode 684 (Try once at home)
 
 
 
