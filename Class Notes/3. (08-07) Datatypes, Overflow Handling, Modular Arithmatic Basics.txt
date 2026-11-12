@@ -210,9 +210,6 @@ Explicit Casting: int → char
 - Syntax
 	char variable = (char) integerValue;
 
-Example:-
-==--=-==
-
 
 Wrapper Classes:-
 =--==-=-=-=-=-=

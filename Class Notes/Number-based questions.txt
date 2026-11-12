@@ -14,4 +14,3 @@ Number-based questions
 | Power of Three            |    **326** | Power of Three            | Easy       |
 | Power of Four             |    **342** | Power of Four             | Easy       |Gives for Class Practice at 06-07-2026
 | Ugly Number               |    **263** | Ugly Number               | Easy       |
-------------------------------------------------------------------------------------

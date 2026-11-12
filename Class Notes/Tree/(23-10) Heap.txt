@@ -335,7 +335,7 @@ IMPORTANT POINTS TO REMEMBER
 6. In a MinHeap, every parent is less than or equal to its children.
 
 
-Creation of Max Heap in O(n) Time complexity in given time:-
+Creation of Max Heap in O(n) Time complexity in given data:-
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Bottom-Up Approach
 ------------------
