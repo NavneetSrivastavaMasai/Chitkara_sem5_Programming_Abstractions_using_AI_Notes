@@ -1546,6 +1546,843 @@ true
 - Leetcode 684 (Try once at home)
 
 
+CONNECTED COMPONENTS IN A GRAPH
+===============================
+WHAT IS A CONNECTED COMPONENT?
+------------------------------
+
+- In an undirected graph, a connected component is a maximal group of vertices in which every vertex can reach every other vertex through some path.
+
+  - A path is enough; a direct edge between every pair is not needed.
+  - No edge connects one component to another.
+  - An isolated vertex is also a component on its own.
+
+Example:
+    Vertices : 0, 1, 2, 3, 4, 5
+    Edges    : (0,1), (1,2), (3,4)
+
+    Component 1 : {0, 1, 2}
+    Component 2 : {3, 4}
+    Component 3 : {5}
+
+    Total = 3
+
+Uses: counting separate groups, finding vertices reachable from a start vertex, spotting isolated parts, problems like "Number of Provinces".
+
+
+COUNTING COMPONENTS USING DFS
+-----------------------------
+
+Idea: every time we find an UNVISITED vertex, we have found a new component.
+
+Algorithm:
+  1. Create visited[] (all false) and count = 0.
+  2. Loop over every vertex from 0 to V-1.
+  3. If the vertex is unvisited:
+       a. count++
+       b. Run DFS from it (marks the whole component visited).
+  4. After the loop, count = number of connected components.
+
+- Why the outer loop?
+- DFS from vertex 0 reaches only its own component. The loop makes sure every other component is also discovered.
+
+Key code:
+
+    for (int i = 0; i < vertices; i++) {
+        if (!visited[i]) {
+            count++;
+            dfs(i, visited);
+        }
+    }
+
+count++ runs only when a NEW component is found.
+
+CODE
+-----
+class Graph {
+
+    int vertices;
+    ArrayList<ArrayList<Integer>> adjList;
+
+    Graph(int vertices) {
+        this.vertices = vertices;
+
+        adjList = new ArrayList<>();
+
+        for (int i = 0; i < vertices; i++) {
+            adjList.add(new ArrayList<>());
+        }
+    }
+
+    void addEdge(int u, int v) {
+        adjList.get(u).add(v);
+        adjList.get(v).add(u);
+    }
+
+    void displayGraph() {
+        for (int i = 0; i < vertices; i++) {
+            System.out.println(i + " -> " + adjList.get(i));
+        }
+    }
+
+    void dfs(int vertex, boolean[] visited) {
+
+        visited[vertex] = true;
+
+        System.out.print(vertex + " ");
+
+        for (int neighbour : adjList.get(vertex)) {
+
+            if (!visited[neighbour]) {
+                dfs(neighbour, visited);
+            }
+        }
+    }
+
+    void connectedComponents() {
+
+        boolean[] visited = new boolean[vertices];
+
+        int count = 0;
+
+        System.out.println("\nConnected Components:");
+
+        for (int i = 0; i < vertices; i++) {
+
+            if (!visited[i]) {
+
+                count++;
+
+                System.out.print("Component " + count + ": ");
+
+                dfs(i, visited);
+
+                System.out.println();
+            }
+        }
+
+        System.out.println("Total Connected Components: " + count);
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        Graph graph = new Graph(7);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+
+        graph.addEdge(3, 4);
+
+        graph.addEdge(5, 6);
+
+        System.out.println("Graph Representation:");
+        graph.displayGraph();
+
+        graph.connectedComponents();
+    }
+}
+
+
+COMPLEXITY
+----------
+
+    Time  : O(V + E)  (each vertex once, each edge a constant number of times)
+    Space : O(V)      (visited[] + recursion stack)
+
+    V = number of vertices, E = number of edges
+    The adjacency list itself takes O(V + E) and is not counted as
+    auxiliary space.
+
+
+DIRECTED GRAPHS
+---------------
+
+- The definition above is for UNDIRECTED graphs only. For directed graphs there are two kinds of connectivity:
+
+  - Weakly connected components : treat edges as undirected.
+  - Strongly connected components (SCC) : every vertex can reach every other vertex by following edge directions.
+
+
+SUMMARY
+-------
+  - A connected component is a separate connected group in an undirected graph.
+  - Every isolated vertex is its own component.
+  - Each DFS started from an unvisited vertex discovers exactly one component.
+  - The outer loop handles disconnected graphs.
+  - Time complexity with an adjacency list is O(V + E).
+
+
+Leetcode 200:-
+=============
+Number of Islands:-
+=================
+Code:-
+-----
+class Solution {
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int count = 0;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == '1'){
+                    count++;
+                    dfs(grid, i, j, m, n);
+                }
+            }
+        }
+        return count;
+    }
+    public void dfs(char[][]grid, int row, int col, int m, int n){
+        if(row < 0 || col < 0 || row >= m || col >= n || grid[row][col] == '0'){
+            return;
+        }
+        grid[row][col] = '0';
+        dfs(grid, row-1, col, m, n);
+        dfs(grid, row+1, col, m, n);
+        dfs(grid, row, col-1, m, n);
+        dfs(grid, row, col+1, m, n);
+    }
+}
+
+
+Leetcode 994
+==============
+Rotting Oranges:-
+================
+Code:-
+-----
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        int fresh = 0;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == 2){
+                    queue.offer(new int[]{i,j});
+                }
+                if(grid[i][j] ==1){
+                    fresh++;
+                }
+            }
+        }
+        int min = 0;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            boolean rot = false;
+            for(int i=0; i<size; i++){
+                int[] cordinate = queue.poll();
+                int row = cordinate[0];
+                int col = cordinate[1];
+                //Top
+                if(row -1 >= 0 && grid[row-1][col] == 1){
+                    grid[row-1][col] = 2;
+                    queue.offer(new int[]{row-1, col});
+                    rot = true;
+                    fresh--;
+                }
+                //Bottom
+                if(row +1 < m && grid[row+1][col] == 1){
+                    grid[row+1][col] = 2;
+                    queue.offer(new int[]{row+1, col});
+                    rot = true;
+                    fresh--;
+                }
+                //Left
+                if(col -1 >= 0 && grid[row][col-1] == 1){
+                    grid[row][col-1] = 2;
+                    queue.offer(new int[]{row, col-1});
+                    rot = true;
+                    fresh--;
+                }
+                //Right
+                if(col + 1 < n && grid[row][col+1] == 1){
+                    grid[row][col+1] = 2;
+                    queue.offer(new int[]{row, col+1});
+                    rot = true;
+                    fresh--;
+                }
+            }
+            if(rot)
+                min++;
+        }
+        if(fresh > 0){
+            return -1;
+        }
+        return min;
+
+    }
+}
+
+
+Some Basic Terminology for Dijkstra Algo:-
+==========================================
+PATH AND PATH COST
+=-=-=-=-=-=-=-=-=-=
+
+1. What is a Path?
+
+- A path is a sequence of vertices connected through edges in a graph (normally, no vertex is repeated).
+
+In simple words:
+- A path tells us how to travel from one vertex to another vertex.
+
+Weighted Graph:   Every edge has a weight (cost).
+Unweighted Graph: Edges have no weight (every edge is treated as cost 1).
+
+Example:
+--------
+          4         3
+     A ------- B ------- D
+     |                   |
+   2 |                   | 5
+     |                   |
+     C ------------------+
+
+Some possible paths from A to D are:
+
+Path 1: A -> B -> D
+Path 2: A -> C -> D
+
+2. What is Path Cost?
+
+- Path Cost is the total sum of the weights of all edges present in a particular path.
+
+Path 1: A -> B -> D
+A to B = 4
+B to D = 3
+Total Path Cost = 4 + 3 = 7
+
+Path 2: A -> C -> D
+A to C = 2
+C to D = 5
+Total Path Cost = 2 + 5 = 7
+
+Formula:
+Path Cost = Sum of all edge weights in that path.
+
+IMPORTANT POINTS:
+
+1. A path contains vertices and edges.
+2. Edge weight represents the cost of travelling between two connected vertices.
+3. Path cost is the sum of all edge weights.
+4. Different paths between the same vertices can have the same or different costs.
+
+
+==============
+SHORTEST PATH
+==============
+
+1. What is a Shortest Path?
+- A shortest path is a path between a source vertex and a destination vertex having the minimum total path cost.
+
+In simple words:
+- Among all possible paths between two vertices, the path having the minimum total weight is called the shortest path.
+
+Using the same graph:
+
+Path 1: A -> B -> D, Cost = 4 + 3 = 7
+Path 2: A -> C -> D, Cost = 2 + 5 = 7
+
+- Both paths have the same minimum cost. Therefore, both are shortest paths.
+(A shortest path is not always unique.)
+
+2. Important Difference:
+
+- Shortest Path does not always mean the path having the minimum number of edges.
+- It means the path having the minimum total edge weight.
+
+Example:
+
+A -> B -> D
+Edge weights = 2 + 3
+Total Cost = 5
+
+A -> C -> E -> D
+Edge weights = 1 + 1 + 1
+Total Cost = 3
+
+Path 1 contains 2 edges.
+Path 2 contains 3 edges.
+But Path 2 is shorter in terms of total cost.
+
+IMPORTANT TERMINOLOGY:
+=-=-=-=-=-=-=-=-=-=-=
+Source Vertex:-
+-----------------
+- The vertex from which we start travelling.
+
+Destination Vertex:-
+---------------------
+- The vertex whose shortest distance we want to find.
+
+Shortest Distance:-
+-----------------
+-The minimum total path cost from source to destination.
+
+Unreachable Vertex:-
+-------------------
+-A vertex that cannot be reached from the source vertex. Its distance stays INF.
+
+Note:
+- The notes below assume all edge weights are non-negative. Graphs with negative edges need different algorithms.
+
+
+==================
+DISTANCE ARRAY
+==================
+
+1. What is a Distance Array?
+
+- A Distance Array is an array used to store the shortest known distance from a source vertex to every other vertex in a graph.
+
+- Suppose we have 4 vertices: A, B, C, D and the source vertex is A.
+
+Assuming:
+A = 0
+B = 1
+C = 2
+D = 3
+
+- Initially, we do not know the shortest distance to any other vertex, so we initialize:
+
+dist[] = {0, INF, INF, INF}
+
+Here:
+dist[0] = 0
+dist[1] = INF
+dist[2] = INF
+dist[3] = INF
+
+2. Why do we initialize distances with INF?
+
+- INF means Infinity.
+- We use Infinity to represent that the distance to a vertex is currently unknown or unreachable.
+
+- Distance of Source = 0
+- Distance of All Other Vertices = INF
+
+- Why is source distance 0?
+- Because the cost of travelling from a vertex to itself is zero.
+
+3. Java Implementation:
+
+int[] dist = new int[V];
+Arrays.fill(dist, Integer.MAX_VALUE);
+dist[source] = 0;
+
+Here:
+V = Total number of vertices.
+- Integer.MAX_VALUE represents a very large value which we use to represent Infinity.
+
+WARNING:
+- Integer.MAX_VALUE + weight overflows and becomes a negative number. So always check that dist[u] is not INF before adding a weight to it.
+
+IMPORTANT POINTS:
+
+1. Distance Array stores the shortest known distance from the source vertex.
+2. Source vertex always has distance 0.
+3. Initially, all other vertices have Infinity.
+4. Whenever we find a better path, we update the distance array.
+
+
+=====================
+RELAXATION TECHNIQUE
+=====================
+
+1. What is Relaxation?
+
+- Relaxation is a technique used in shortest path algorithms to improve the currently known distance of a vertex.
+
+In simple words:
+- If we find a new path to a vertex that has a smaller cost than its previously known distance, we update its distance.
+
+2. Why do we need Relaxation?
+- Because we may discover a shorter path to a vertex while exploring the graph.
+
+Example:
+
+          4
+     A ------- B
+      \       /
+     2 \     / 1
+        \   /
+          C
+
+Edges:
+A - B = 4
+A - C = 2
+C - B = 1
+
+Source Vertex = A
+
+Initially:
+dist[A] = 0
+dist[B] = INF
+dist[C] = INF
+
+        A     B     C
+       0    INF   INF
+
+STEP 1: Visit A and relax its edges
+-----------------------------------
+From A, we can reach:
+B with cost 0 + 4 = 4
+C with cost 0 + 2 = 2
+
+Update distances:
+dist[B] = 4
+dist[C] = 2
+
+        A     B     C
+       0     4     2
+
+STEP 2: Visit C (smallest distance) and relax edge C -> B
+----------------------------------------------------------
+Path: A -> C -> B
+Cost from A to C = dist[C] = 2
+Cost from C to B = 1
+New Distance to B = 2 + 1 = 3
+
+Previously dist[B] = 4.
+Since 3 < 4, we update dist[B] = 3.
+
+        A     B     C
+       0     3     2
+
+- This process of updating a distance when a shorter path is found is called RELAXATION.
+
+3. Relaxation Formula:-
+-----------------------
+dist[v] = min(dist[v], dist[u] + weight)
+
+Where:
+dist[u] = Current known distance from source to u.
+weight  = Weight of the edge between u and v.
+dist[v] = Previously known distance from source to v.
+
+The formula compares:
+1. Previously known distance to v.
+2. New distance through vertex u.Whichever is smaller becomes the updated distance.
+
+4. Java Code for Relaxation:
+
+if (dist[u] != Integer.MAX_VALUE &&
+    dist[u] + weight < dist[v]) {
+
+    dist[v] = dist[u] + weight;
+}
+
+Explanation:
+
+First Condition:
+dist[u] != Integer.MAX_VALUE
+- Checks whether vertex u is reachable from source
+(and avoids integer overflow).
+
+Second Condition:
+dist[u] + weight < dist[v]
+- Checks whether the new path is shorter than the previously known path.
+
+- If both conditions are true: update dist[v].
+
+=====================
+DIJKSTRA'S ALGORITHM
+=====================
+
+1. WHAT IS IT?
+--------------
+- Single Source Shortest Path (SSSP) algorithm
+- Finds the minimum distance from ONE source to ALL vertices
+- Always process the unvisited vertex with the smallest known distance
+
+
+2. CONDITIONS
+-------------
+- Weighted graph (directed or undirected)
+- All weights must be >= 0 (zero is allowed)
+- Negative weights -> Not allowed 
+
+WHY NEGATIVE EDGES FAIL:
+- Once a vertex is popped from the PQ (Priority Queue), Dijkstra assumes its distance is final. A negative edge discovered later could make that distance smaller, so the assumption breaks.
+
+
+3. KEY TERMS
+------------
+dist[]      : shortest known distance from source to every vertex
+Relaxation  : checking if a path through u gives a shorter distance to v
+
+   if (dist[u] + w < dist[v])
+       dist[v] = dist[u] + w;
+
+Min Heap    : PriorityQueue that gives the smallest distance first
+              (picks the min-distance vertex in O(log n))
+
+
+4. ALGORITHM STEPS
+------------------
+1. Build adjacency list
+   (undirected graph -> add edge BOTH ways)
+
+2. dist[] = INF for all, dist[src] = 0
+
+3. Push {0, src} into Min PriorityQueue
+
+4. While PQ is not empty:
+     a. Poll {d, u} with the smallest distance
+     b. If d > dist[u] -> skip (outdated entry)
+     c. For every neighbour v of u with weight w:
+          if dist[u] + w < dist[v]:
+              dist[v] = dist[u] + w
+              push {dist[v], v}
+
+5. dist[] now holds the final answers
+   (unreachable vertices stay INF)
+
+
+5. JAVA CODE
+------------
+public class Main {
+	public static void main(String[] args) {
+		UndirectedWeightedGraph graph = new UndirectedWeightedGraph(6);
+		graph.addEdge(0, 1, 2);
+		graph.addEdge(0, 2, 5);
+		graph.addEdge(1, 3, 10);
+		graph.addEdge(1, 2, 1);
+		graph.addEdge(2, 4, 3);
+		graph.addEdge(3, 4, 1);
+		graph.addEdge(3, 5, 9);
+		graph.addEdge(4, 5, 3);
+		graph.dijkstra(0);
+	}
+}
+class Edge{
+	int vertex;
+	int dis;
+	Edge(int vertex, int dis){
+		this.vertex = vertex;
+		this.dis = dis;
+	}
+}
+class UndirectedWeightedGraph {
+	int vertices;
+	ArrayList<ArrayList<Edge>> adjList;
+
+	UndirectedWeightedGraph(int vertices) {
+		this.vertices = vertices;
+		adjList = new ArrayList<ArrayList<Edge>>();
+		for (int i = 0; i < vertices; i++) {
+			adjList.add(new ArrayList<Edge>());
+		}
+	}
+	public void addEdge(int src, int des, int weight) {
+		adjList.get(src).add(new Edge(des, weight));
+		adjList.get(des).add(new Edge(src, weight));
+	}
+	public void dijkstra(int src) {
+		int[] disArr = new int[vertices];
+		Arrays.fill(disArr, Integer.MAX_VALUE);
+		disArr[src] = 0;
+		PriorityQueue<Edge> queue = new PriorityQueue<Edge>((a,b)-> Integer.compare(a.dis,b.dis));
+		queue.offer(new Edge(src,0));
+		while(!queue.isEmpty()) {
+			Edge curr = queue.poll();
+			int start = curr.vertex;
+			int sDis = curr.dis;
+			for(Edge e : adjList.get(start)) {
+				int end = e.vertex;
+				int eDis = e.dis;
+				
+				//Skip outdated entry
+				if(sDis > disArr[start]) {
+					continue;
+				}
+				//Imple of Relaxation Technique
+				if(disArr[end] > disArr[start] + eDis) {
+					disArr[end] = disArr[start] + eDis;
+					queue.offer(new Edge(end, disArr[end]));
+				}
+			}
+		}
+		for(int x : disArr) {
+			System.out.print(x +" ");
+		}
+		
+	}
+	
+}
+
+Output:-
+-------
+0 2 3 7 6 9
+
+
+6. OUTDATED ENTRY
+-----------------
+- Java PQ cannot update or delete an existing entry. So when a shorter path is found, we push a NEW entry and the old one stays.
+
+   Found dist 10 to vertex 3 -> push {10, 3}
+   Later found dist 5        -> push {5, 3}
+   PQ has both. When {10, 3} is polled, 10 > dist[3] = 5, so skip it.
+
+- Saves time (no useless processing)
+- Essential in problems that COUNT shortest paths
+
+
+7. DRY RUN
+----------
+Edges: 0-1(4), 0-2(2), 1-2(1), 1-3(5), 2-3(8), 2-4(10), 3-4(2)
+Source = 0
+
+Poll (0,0): dist[1]=4, dist[2]=2
+Poll (2,2): dist[1]=3, dist[3]=10, dist[4]=12
+Poll (3,1): dist[3]=8
+Poll (4,1): outdated, skip
+Poll (8,3): dist[4]=10
+Poll (10,3): outdated, skip
+Poll (10,4): no change
+Poll (12,4): outdated, skip
+
+Final dist = {0, 3, 2, 8, 10}
+
+
+8. COMPLEXITY
+-------------
+Time  : O((V + E) log V)   (commonly written O(E log V))
+Space : O(V + E)
+
+Without PQ (array scan to find the min): O(V^2)
+-> can be better for very dense graphs
+
+
+9. LIMITATIONS
+--------------
+- No negative edge weights
+- Cannot detect negative cycles
+- Single source only
+
+
+Test pad Dijkstra Algo solution:-
+================================
+Implement Dijkstra's Algorithm:-
+--------------------------------
+class Result {
+  /*     
+   * Complete the 'shortestDistance' function below.
+   * @params
+   *   N -> number of vertices in the graph
+   *   E -> number of edges in the graph
+   *   edges -> 2D array of size E * 3, with E rows and 3 columns,
+   *            where edges[i][0] and edges[i][1] denotes the 2 vertices having an undirected edge,
+   *            and edges[i][2] denotes the weight that the edge carries
+   *   src -> starting source vertex
+   *
+   * @return
+   *   a list of integers denoting the shortest distance between each vertex and starting vertex 'src'.
+   */
+  public ArrayList<Integer> shortestDistance(int N, int E, int[][] edges, int src) {
+    ArrayList<ArrayList<int[]>> adjList = new ArrayList<>();
+    for(int i=0; i<N; i++){
+        adjList.add(new ArrayList<>());
+    }
+    for(int i=0; i<E; i++){
+        int sr = edges[i][0];
+        int des = edges[i][1];
+        int weight = edges[i][2];
+        adjList.get(sr).add(new int[]{des,weight});
+        adjList.get(des).add(new int[]{sr,weight});
+    }
+    int[] disArr = new int[N];
+    Arrays.fill(disArr, Integer.MAX_VALUE);
+    disArr[src] = 0;
+    PriorityQueue<int[]> queue = new PriorityQueue<>((a,b) -> a[1] - b[1]);
+    queue.offer(new int[]{src,0});
+    while(!queue.isEmpty()){
+        int[] curr = queue.poll();
+        int start = curr[0];
+        for(int[] e : adjList.get(start)){
+            int end = e[0];
+            int endWeight = e[1];
+            if(disArr[end] > disArr[start] + endWeight){
+                disArr[end] = disArr[start] + endWeight;
+                queue.offer(new int[]{end, disArr[end]});
+            }
+        }
+    }
+    ArrayList<Integer> list = new ArrayList<>();
+    for(int x : disArr){
+        list.add(x);
+    }
+    return list;
+  }
+}
+
+
+Leetcode Question:-
+==================
+
+- 1976
+========
+class Solution {
+    public int countPaths(int n, int[][] roads) {
+        List<List<int[]>> adjL = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            adjL.add(new ArrayList<>());
+        }
+        for(int[] road : roads){
+            int src = road[0];
+            int des = road[1];
+            int dis = road[2];
+            adjL.get(src).add(new int[]{des,dis});
+            adjL.get(des).add(new int[]{src,dis});
+        }
+        long[] disArr = new long[n];
+        Arrays.fill(disArr,Long.MAX_VALUE);
+        disArr[0] = 0;
+
+        int []ways = new int[n];
+        ways[0] = 1;
+        
+        PriorityQueue<long[]> queue = new PriorityQueue<>((a,b) -> Long.compare(a[1],b[1]));
+        queue.offer(new long[]{0,0});
+        while(!queue.isEmpty()){
+            long[] curr = queue.poll();
+            int start = (int)curr[0];
+            for(int[] e : adjL.get(start)){
+                int end = e[0];
+                int eDis = e[1];
+                long oldDis = disArr[end];
+                long newDis = eDis + disArr[start];
+
+                if(curr[1] > disArr[start]){
+                    continue;
+                }
+
+                if(oldDis > newDis){
+                    disArr[end] = newDis;
+                    queue.offer(new long[]{end, newDis});
+                    ways[end] = ways[start];
+                }
+                if(oldDis == newDis){
+                    ways[end] = (ways[start] + ways[end])%1000000007;
+                }
+            }
+
+        }
+        return ways[n-1];
+    }
+}
+
+
+
+- 1334
+========
+
+
+
 
 
 
