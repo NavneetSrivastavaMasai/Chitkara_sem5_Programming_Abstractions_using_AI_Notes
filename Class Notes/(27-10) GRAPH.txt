@@ -2380,6 +2380,109 @@ class Solution {
 
 - 1334
 ========
+class Solution {
+    public int findTheCity(int n, int[][] roads, int distanceThreshold) {
+        List<List<int[]>> adjL = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            adjL.add(new ArrayList<>());
+        }
+        for(int[] road : roads){
+            int src = road[0];
+            int des = road[1];
+            int dis = road[2];
+            adjL.get(src).add(new int[]{des,dis});
+            adjL.get(des).add(new int[]{src,dis});
+        }
+        int resVertex = -1;
+        int minCount = Integer.MAX_VALUE;
+        for(int i=0; i<n; i++){
+            int src = i;
+            
+            long[] disArr = new long[n];
+            Arrays.fill(disArr,Long.MAX_VALUE);
+            disArr[src] = 0;
+
+            PriorityQueue<long[]> queue = new PriorityQueue<>((a,b) -> Long.compare(a[1],b[1]));
+            queue.offer(new long[]{src,0});
+            while(!queue.isEmpty()){
+                long[] curr = queue.poll();
+                int start = (int)curr[0];
+                for(int[] e : adjL.get(start)){
+                    int end = e[0];
+                    int eDis = e[1];
+                    long oldDis = disArr[end];
+                    long newDis = eDis + disArr[start];
+
+                    if(curr[1] > disArr[start]){
+                        continue;
+                    }
+                    if(oldDis > newDis){
+                        disArr[end] = newDis;
+                        queue.offer(new long[]{end, newDis});
+                    } 
+                }
+            }
+            int count = 0;
+            for(int j=0; j<n; j++){
+                if(j != src && disArr[j] <= distanceThreshold){
+                    count++;
+                }
+            }
+            if(count <= minCount){
+                resVertex = src;
+                minCount = count;
+            }
+
+        }
+        return resVertex;
+    }
+}
+
+
+- 127 
+======
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> set = new HashSet<>(wordList);
+        if(!set.contains(endWord)){
+            return 0;
+        }
+
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        set.remove(beginWord);
+
+        int count = 1;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for(int i=0; i<size; i++){
+                String word = queue.poll();
+                if(word.equals(endWord)){
+                    return count;
+                }
+                char []arr = word.toCharArray();
+                for(int j=0; j<arr.length; j++){
+                    char orig = arr[j];
+                    for(char ch = 'a'; ch<= 'z'; ch++){
+                        arr[j] = ch;
+                        String newWord = new String(arr);
+                        if(set.contains(newWord)){
+                            queue.offer(newWord);
+                            set.remove(newWord);
+                        }
+                    }
+                    arr[j] = orig;
+                }
+            }
+            count++;
+        }
+        return 0;
+
+    }
+}
+
+
+
 
 
 
